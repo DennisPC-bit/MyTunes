@@ -8,9 +8,23 @@ public class Playlist {
     private int playlistId;
     private final List<Song> songList;
 
+    public void addSong(Song song){
+        songList.add(song);
+    }
 
-    public Playlist() {
+    public void removeSong(Song song){
+        songList.remove(song);
+    }
+
+    public void editSong(Song newSong,Song oldSong){
+        removeSong(oldSong);
+        addSong(newSong);
+    }
+
+
+    public Playlist(String playListName) {
         this.songList = new ArrayList();
+        this.playListName = playListName;
     }
 
     public String getPlayListName() {
