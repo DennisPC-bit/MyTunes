@@ -14,15 +14,15 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<AnchorPane prefHeight="500.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane prefHeight="500.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.Controller">
    <children>
       <GridPane prefHeight="500.0" prefWidth="700.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <columnConstraints>
             <ColumnConstraints hgrow="SOMETIMES" maxWidth="5000.0" minWidth="500.0" prefWidth="700.0" />
          </columnConstraints>
          <rowConstraints>
-            <RowConstraints maxHeight="80.0" minHeight="80.0" prefHeight="80.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="5000.0" minHeight="100.0" prefHeight="400.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="100.0" minHeight="100.0" prefHeight="100.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="5000.0" minHeight="100.0" prefHeight="401.0" vgrow="SOMETIMES" />
          </rowConstraints>
          <children>
             <AnchorPane GridPane.rowIndex="1">
@@ -43,8 +43,7 @@
                      <children>
                         <Label text="Playlists" />
                         <Label text="Songs on Playlist" GridPane.columnIndex="2" />
-                        <Label text="Songs" GridPane.columnIndex="4" />
-                        <TableView fx:id="PlaylistTable" prefWidth="150.0" GridPane.rowIndex="1">
+                        <TableView fx:id="playlistTable" prefWidth="150.0" GridPane.rowIndex="1">
                           <columns>
                             <TableColumn fx:id="playlistNameColumn" maxWidth="75.0" minWidth="75.0" prefWidth="75.0" text="Name" />
                               <TableColumn fx:id="playlistAmountOfSongsColumn" maxWidth="75.0" minWidth="75.0" prefWidth="75.0" text="Songs" />
@@ -79,17 +78,17 @@
                            <children>
                               <AnchorPane>
                                  <children>
-                                    <Button fx:id="addPlayListButton" mnemonicParsing="false" text="Add..." AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                    <Button alignment="CENTER" mnemonicParsing="false" onAction="#addPlayListButton" pickOnBounds="false" text="Add..." textAlignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                                  </children>
                               </AnchorPane>
                               <AnchorPane GridPane.columnIndex="1">
                                  <children>
-                                    <Button fx:id="editPlaylistButton" mnemonicParsing="false" text="Edit..." AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                    <Button alignment="CENTER" mnemonicParsing="false" onAction="#editPlaylistButton" pickOnBounds="false" text="Edit..." textAlignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                                  </children>
                               </AnchorPane>
                               <AnchorPane GridPane.columnIndex="2">
                                  <children>
-                                    <Button fx:id="deletePlaylistButton" mnemonicParsing="false" text="Delete" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                    <Button fx:id="useDeletePlaylistButton" alignment="CENTER" mnemonicParsing="false" pickOnBounds="false" text="Delete" textAlignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                                  </children>
                               </AnchorPane>
                            </children>
@@ -106,17 +105,17 @@
                            <children>
                               <AnchorPane>
                                  <children>
-                                    <Button fx:id="moveSongUpOnPlaylistButton" mnemonicParsing="false" text="Up" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                    <Button alignment="CENTER" mnemonicParsing="false" onAction="#moveSongUpOnPlaylistButton" pickOnBounds="false" text="Up" textAlignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                                  </children>
                               </AnchorPane>
                               <AnchorPane GridPane.columnIndex="1">
                                  <children>
-                                    <Button fx:id="moveSongDownOnPlaylistButton" mnemonicParsing="false" text="Down" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                    <Button alignment="CENTER" mnemonicParsing="false" onAction="#moveSongDownOnPlaylistButton" pickOnBounds="false" text="Down" textAlignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                                  </children>
                               </AnchorPane>
                               <AnchorPane GridPane.columnIndex="2">
                                  <children>
-                                    <Button fx:id="removeFromPlaylist" mnemonicParsing="false" text="Remove" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                    <Button alignment="CENTER" mnemonicParsing="false" onAction="#removeFromPlaylistButton" pickOnBounds="false" text="Remove" textAlignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                                  </children>
                               </AnchorPane>
                            </children>
@@ -135,57 +134,82 @@
                            <children>
                               <AnchorPane>
                                  <children>
-                                    <Button fx:id="newSongButton" mnemonicParsing="false" text="New..." AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                    <Button alignment="CENTER" mnemonicParsing="false" onAction="#newSongButton" pickOnBounds="false" text="New..." textAlignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                                  </children>
                               </AnchorPane>
                               <AnchorPane GridPane.columnIndex="1">
                                  <children>
-                                    <Button fx:id="editSongButton" mnemonicParsing="false" text="Edit..." AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                    <Button alignment="CENTER" mnemonicParsing="false" onAction="#editSongButton" pickOnBounds="false" text="Edit..." textAlignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                                  </children>
                               </AnchorPane>
                               <AnchorPane GridPane.columnIndex="2">
                                  <children>
-                                    <Button fx:id="deleteSongButton" mnemonicParsing="false" text="Delete..." AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                    <Button alignment="CENTER" mnemonicParsing="false" onAction="#deleteSongButton" pickOnBounds="false" text="Delete..." textAlignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                                  </children>
                               </AnchorPane>
                               <AnchorPane GridPane.columnIndex="4">
                                  <children>
-                                    <Button fx:id="closeButton" mnemonicParsing="false" text="Close" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                    <Button alignment="CENTER" mnemonicParsing="false" onAction="#closeButton" pickOnBounds="false" text="Close" textAlignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                                  </children>
                               </AnchorPane>
                            </children>
                         </GridPane>
-                        <Button fx:id="addToPlaylist" mnemonicParsing="false" text="&lt;-" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="TOP" />
+                        <Button mnemonicParsing="false" onAction="#addToPlaylistButton" text="&lt;-" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="TOP" />
+                        <GridPane GridPane.columnIndex="4" GridPane.halignment="RIGHT">
+                          <columnConstraints>
+                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="80.0" minWidth="80.0" prefWidth="80.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="45.0" minWidth="45.0" prefWidth="45.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="150.0" minWidth="150.0" prefWidth="150.0" />
+                              <ColumnConstraints halignment="RIGHT" hgrow="NEVER" maxWidth="60.0" minWidth="60.0" prefWidth="60.0" />
+                          </columnConstraints>
+                          <rowConstraints>
+                            <RowConstraints maxHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+                          </rowConstraints>
+                           <children>
+                              <AnchorPane GridPane.columnIndex="1">
+                                 <GridPane.margin>
+                                    <Insets left="5.0" />
+                                 </GridPane.margin>
+                                 <children>
+                                    <Label prefHeight="17.0" prefWidth="15.0" text="Filter:" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                 </children>
+                              </AnchorPane>
+                              <TextField fx:id="searchField" onKeyTyped="#search" prefHeight="25.0" prefWidth="177.0" GridPane.columnIndex="2">
+                                 <GridPane.margin>
+                                    <Insets />
+                                 </GridPane.margin>
+                              </TextField>
+                              <AnchorPane GridPane.columnIndex="3">
+                                 <children>
+                                    <Button alignment="CENTER" mnemonicParsing="false" onAction="#clearSearchButton" pickOnBounds="false" text="Clear" textAlignment="CENTER" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0" />
+                                 </children>
+                              </AnchorPane>
+                              <Label text="Songs" />
+                           </children>
+                        </GridPane>
                      </children>
                   </GridPane>
                </children>
             </AnchorPane>
             <GridPane>
               <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="250.0" minWidth="250.0" prefWidth="250.0" />
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="200.0" minWidth="200.0" prefWidth="200.0" />
+                <ColumnConstraints hgrow="SOMETIMES" />
               </columnConstraints>
               <rowConstraints>
-                <RowConstraints maxHeight="80.0" minHeight="80.0" prefHeight="80.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="80.0" minHeight="80.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <AnchorPane GridPane.columnIndex="1">
-                     <children>
-                        <Label fx:id="currentSongPlayingLabel" alignment="CENTER" contentDisplay="CENTER" textAlignment="CENTER" textOverrun="CENTER_WORD_ELLIPSIS" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                     </children>
-                  </AnchorPane>
-                  <GridPane>
+                  <GridPane GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                     <columnConstraints>
-                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="250.0" minWidth="250.0" prefWidth="250.0" />
+                      <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" />
                     </columnConstraints>
                     <rowConstraints>
-                        <RowConstraints maxHeight="5.0" minHeight="5.0" prefHeight="5.0" vgrow="NEVER" />
-                      <RowConstraints maxHeight="45.0" minHeight="45.0" prefHeight="45.0" vgrow="NEVER" />
+                        <RowConstraints maxHeight="25.0" minHeight="25.0" prefHeight="25.0" vgrow="NEVER" />
+                      <RowConstraints maxHeight="45.0" minHeight="37.0" prefHeight="37.0" vgrow="NEVER" />
                       <RowConstraints maxHeight="25.0" minHeight="25.0" prefHeight="25.0" vgrow="NEVER" />
                     </rowConstraints>
                      <children>
-                        <BorderPane GridPane.rowIndex="2">
+                        <BorderPane maxWidth="300.0" minWidth="300.0" prefWidth="300.0" GridPane.rowIndex="2">
                            <center>
                               <Slider fx:id="volumeSlider" />
                            </center>
@@ -196,45 +220,30 @@
                               <Label fx:id="volumeSliverLabel" text="(0%)" BorderPane.alignment="CENTER" />
                            </right>
                         </BorderPane>
-                        <GridPane GridPane.rowIndex="1">
+                        <GridPane GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
                           <columnConstraints>
-                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" />
+                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="100.0" minWidth="100.0" prefWidth="100.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" />
                           </columnConstraints>
                           <rowConstraints>
                             <RowConstraints maxHeight="50.0" minHeight="50.0" prefHeight="50.0" vgrow="SOMETIMES" />
                           </rowConstraints>
                            <children>
-                              <Button fx:id="lastButton" mnemonicParsing="false" text="Last" GridPane.halignment="RIGHT" GridPane.valignment="CENTER" />
+                              <Button alignment="CENTER" mnemonicParsing="false" onAction="#previousButton" pickOnBounds="false" text="Last" textAlignment="CENTER" GridPane.halignment="RIGHT" GridPane.valignment="CENTER" />
                               <AnchorPane GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                                  <children>
-                                    <Button fx:id="playButton" alignment="CENTER" blendMode="DARKEN" contentDisplay="CENTER" mnemonicParsing="false" text="Play" textAlignment="CENTER" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0" />
+                                    <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#playButton" pickOnBounds="false" text="Play" textAlignment="CENTER" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0" />
                                  </children>
                               </AnchorPane>
-                              <Button fx:id="nextButton" mnemonicParsing="false" text="Next" GridPane.columnIndex="2" GridPane.halignment="LEFT" GridPane.valignment="CENTER" />
+                              <Button alignment="CENTER" mnemonicParsing="false" onAction="#nextButton" pickOnBounds="false" text="Next" textAlignment="CENTER" GridPane.columnIndex="2" GridPane.halignment="LEFT" GridPane.valignment="CENTER" />
                            </children>
                         </GridPane>
-                     </children>
-                  </GridPane>
-                  <GridPane GridPane.columnIndex="2">
-                    <columnConstraints>
-                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="35.0" minWidth="35.0" prefWidth="35.0" />
-                      <ColumnConstraints hgrow="SOMETIMES" />
-                    </columnConstraints>
-                    <rowConstraints>
-                      <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
-                    </rowConstraints>
-                     <children>
-                        <Label text="Filter:">
-                           <GridPane.margin>
-                              <Insets left="5.0" />
-                           </GridPane.margin></Label>
-                        <TextField fx:id="searchField" GridPane.columnIndex="1">
-                           <GridPane.margin>
-                              <Insets right="5.0" />
-                           </GridPane.margin>
-                        </TextField>
+                        <AnchorPane>
+                           <children>
+                              <Label fx:id="currentSong" alignment="CENTER" contentDisplay="CENTER" text="Song Title" textOverrun="CENTER_WORD_ELLIPSIS" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                           </children>
+                        </AnchorPane>
                      </children>
                   </GridPane>
                </children>
