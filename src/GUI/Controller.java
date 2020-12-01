@@ -5,10 +5,13 @@ import BE.Song;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import javafx.scene.input.KeyEvent;
 
-public class Controller {
+import java.net.URL;
+import java.util.ResourceBundle;
+
+public class Controller implements Initializable {
     @FXML
     private Slider volumeSlider;
     @FXML
@@ -46,11 +49,12 @@ public class Controller {
     /**
      * listens to whatever happens in the window and acts accordingly.
      */
-    private void initialize(){
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
         this.songsTable.setItems(songs);
         this.songsOnPlaylistTable.setItems(playlistSongs);
         this.playlistTable.setItems(playlists);
-        
+
         // Makes the volume slider change when the volume field is changed.
         volumeSliderField.textProperty().addListener(
                 (observableValue, oldValue, newValue) -> {
@@ -71,6 +75,7 @@ public class Controller {
                     volumeSliderField.setText(String.format("%.0f",volumePercentage));
                 }
         );
+
     }
 
     /**
@@ -139,6 +144,7 @@ public class Controller {
 
     public void previousButton(ActionEvent actionEvent) {
     }
+
 
 
 }
