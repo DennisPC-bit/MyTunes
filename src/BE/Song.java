@@ -91,6 +91,6 @@ public class Song {
     }
 
     public StringProperty toStringProperty(){
-        return new SimpleStringProperty(this.title.getValue() + " " + this.year.getValue());
+        return new SimpleStringProperty(this.title.getValue());
     }
 }
