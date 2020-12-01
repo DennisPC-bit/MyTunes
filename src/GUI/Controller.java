@@ -2,6 +2,8 @@ package GUI;
 
 import BE.Playlist;
 import BE.Song;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -9,6 +11,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 public class Controller implements Initializable {
@@ -19,23 +22,25 @@ public class Controller implements Initializable {
     @FXML
     private TableView playlistTable;
     @FXML
-    private TableColumn playlistNameColumn;
+    private TableColumn<Playlist, String> playlistNameColumn;
     @FXML
-    private TableColumn playlistAmountOfSongsColumn;
+    private TableColumn<Playlist, String> playlistAmountOfSongsColumn;
     @FXML
     private TableView songsOnPlaylistTable;
     @FXML
-    private TableColumn playlistSongsColumn;
+    private TableColumn<Song, String> playlistSongsColumn;
+    @FXML
+    private TableColumn<Playlist, String> playlistTimeColumn;
     @FXML
     private TableView songsTable;
     @FXML
-    private TableColumn songTableTitleColumn;
+    private TableColumn<Song,String> songTableTitleColumn;
     @FXML
-    private TableColumn songTableArtistColumn;
+    private TableColumn<Song,String> songTableArtistColumn;
     @FXML
-    private TableColumn songTableCategoryColumn;
+    private TableColumn<Song,String> songTableCategoryColumn;
     @FXML
-    private TableColumn songTableTimeColumn;
+    private TableColumn<Song,String> songTableTimeColumn;
     @FXML
     private Label currentSong;
     @FXML
@@ -51,9 +56,16 @@ public class Controller implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        this.songs= FXCollections.observableArrayList(new ArrayList<Song>());
+        this.playlistSongs= FXCollections.observableArrayList(new ArrayList<Song>());
+        this.playlists= FXCollections.observableArrayList(new ArrayList<Playlist>());
         this.songsTable.setItems(songs);
         this.songsOnPlaylistTable.setItems(playlistSongs);
         this.playlistTable.setItems(playlists);
+
+        songs.add(new Song(69,"lol","xd",123));
+        playlistSongs.add(new Song(69,"lol","xd",123));
+        playlists.add(new Playlist("woah thats a nice playlist"));
 
         // Makes the volume slider change when the volume field is changed.
         volumeSliderField.textProperty().addListener(
@@ -76,6 +88,16 @@ public class Controller implements Initializable {
                 }
         );
 
+        songTableTitleColumn.setCellValueFactory(cellData->cellData.getValue().titleProperty());
+        songTableArtistColumn.setCellValueFactory(cellData-> new SimpleStringProperty("123"));
+        songTableCategoryColumn.setCellValueFactory(cellData-> new SimpleStringProperty("456"));
+        songTableTimeColumn.setCellValueFactory(cellData-> new SimpleStringProperty("789"));
+
+        playlistSongsColumn.setCellValueFactory(cellData->cellData.getValue().toStringProperty());
+
+        playlistNameColumn.setCellValueFactory(cellData->cellData.getValue().toStringProperty());
+        playlistAmountOfSongsColumn.setCellValueFactory(cellData-> new SimpleStringProperty("123"));
+        playlistTimeColumn.setCellValueFactory(cellData -> new SimpleStringProperty("123"));
     }
 
     /**

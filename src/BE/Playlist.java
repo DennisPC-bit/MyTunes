@@ -1,6 +1,8 @@
 package BE;
 
-import java.io.ObjectInputStream;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -69,6 +71,10 @@ public class Playlist {
     public void editSong(Song newSong, Song oldSong) {
         removeSong(oldSong);
         addSong(newSong);
+    }
+
+    public StringProperty toStringProperty(){
+        return new SimpleStringProperty(this.playListName);
     }
 
 }

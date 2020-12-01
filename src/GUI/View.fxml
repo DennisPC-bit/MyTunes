@@ -47,7 +47,7 @@
                           <columns>
                             <TableColumn fx:id="playlistNameColumn" maxWidth="200.0" minWidth="50.0" prefWidth="75.0" text="Name" />
                               <TableColumn fx:id="playlistAmountOfSongsColumn" maxWidth="25.0" minWidth="25.0" prefWidth="25.0" text="#" />
-                              <TableColumn maxWidth="75.0" minWidth="25.0" prefWidth="50.0" text="Time" />
+                              <TableColumn fx:id="playlistTimeColumn" maxWidth="75.0" minWidth="25.0" prefWidth="50.0" text="Time" />
                           </columns>
                         </TableView>
                         <TableView fx:id="songsOnPlaylistTable" maxWidth="150.0" minWidth="150.0" prefWidth="150.0" GridPane.columnIndex="2" GridPane.rowIndex="1">

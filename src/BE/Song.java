@@ -83,4 +83,8 @@ public class Song {
     public void setFilePath(String filePath) {
         this.filePath = filePath;
     }
+
+    public StringProperty toStringProperty(){
+        return new SimpleStringProperty(this.title.getValue() + " " + this.year.getValue());
+    }
 }
