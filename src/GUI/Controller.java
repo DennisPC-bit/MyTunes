@@ -5,7 +5,6 @@ import BE.Song;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -174,7 +173,7 @@ public class Controller implements Initializable {
     }
 
     /**
-     * should change songsTable, whenever the searchField changes
+     * should change songsTable, whenever the searchField changes.
      */
     public void search() {
         //TO DO implement this
@@ -188,45 +187,101 @@ public class Controller implements Initializable {
         searchField.setText("");
     }
 
-    public void addPlayListButton(ActionEvent actionEvent) {
+    /**
+     * Adds a new playlist.
+     */
+    public void addPlayListButton() {
+        //TO DO implement this
     }
 
-    public void editPlaylistButton(ActionEvent actionEvent) {
+    /**
+     * Edits the selected playlist.
+     */
+    public void editPlaylistButton() {
+        //TO DO implement this
     }
 
-    public void deletePlaylistButton(ActionEvent actionEvent) {
+    /**
+     * Deletes the selected playlist.
+     */
+    public void deletePlaylistButton() {
+        //TO DO implement this
     }
 
-    public void removeFromPlaylistButton(ActionEvent actionEvent) {
+    /**
+     * Removes the selected song from the current playlist.
+     */
+    public void removeFromPlaylistButton() {
+        //TO DO implement this
     }
 
-    public void addToPlaylistButton(ActionEvent actionEvent) {
+    /**
+     * Adds Song to the current playlist.
+     */
+    public void addToPlaylistButton() {
+        //TO DO implement this
     }
 
-    public void moveSongUpOnPlaylistButton(ActionEvent actionEvent) {
+    /**
+     * Moves a song up on the current playlist.
+     */
+    public void moveSongUpOnPlaylistButton() {
+        //TO DO implement this
     }
 
-    public void moveSongDownOnPlaylistButton(ActionEvent actionEvent) {
+    /**
+     * Moves a song down on the current playlist
+     */
+    public void moveSongDownOnPlaylistButton() {
+        //TO DO implement this
     }
 
-    public void newSongButton(ActionEvent actionEvent) {
+    /**
+     * Adds a new song
+     */
+    public void newSongButton() {
+        //TO DO implement this
     }
 
-    public void editSongButton(ActionEvent actionEvent) {
+    /**
+     * Edits the selected song
+     */
+    public void editSongButton() {
+        //TO DO implement this
     }
 
-    public void deleteSongButton(ActionEvent actionEvent) {
+    /**
+     * Deletes the selected song
+     */
+    public void deleteSongButton() {
+        //TO DO implement this
     }
 
-    public void closeButton(ActionEvent actionEvent) {
+    /**
+     * closes something i dont actually know what this was for.
+     */
+    public void closeButton() {
+        //TO DO implement this
     }
 
-    public void playButton(ActionEvent actionEvent) {
+    /**
+     * Plays from the playlist
+     */
+    public void playButton() {
+        //TO DO implement this
     }
 
-    public void nextButton(ActionEvent actionEvent) {
+    /**
+     * Goes to the next song on the playlist
+     */
+    public void nextButton() {
+        //TO DO implement this
     }
 
-    public void previousButton(ActionEvent actionEvent) {
+    /**
+     * Goes to the last song on the playlist
+     */
+    public void previousButton() {
+        //TO DO implement this
     }
 }
