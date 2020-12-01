@@ -56,37 +56,32 @@ public class Controller implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        load();
+        initTables();
+        volumeFieldControl();
+        volumeSliderControl();
+    }
+
+    /**
+     * should load the lists from the memory, is temporarily almost empty lists
+     */
+    public void load() {
         this.songs= FXCollections.observableArrayList(new ArrayList<Song>());
         this.playlistSongs= FXCollections.observableArrayList(new ArrayList<Song>());
         this.playlists= FXCollections.observableArrayList(new ArrayList<Playlist>());
-        this.songsTable.setItems(songs);
-        this.songsOnPlaylistTable.setItems(playlistSongs);
-        this.playlistTable.setItems(playlists);
 
         songs.add(new Song(69,"lol","xd",123));
         playlistSongs.add(new Song(69,"lol","xd",123));
         playlists.add(new Playlist("woah thats a nice playlist"));
+    }
 
-        // Makes the volume slider change when the volume field is changed.
-        volumeSliderField.textProperty().addListener(
-                (observableValue, oldValue, newValue) -> {
-                    try{
-                        if(newValue.contains(","))
-                            newValue=newValue.replaceAll(",",".");
-                        volumeSlider.setValue(Integer.parseInt(newValue));
-                    }
-                    catch (IllegalArgumentException e){
-                    }
-                }
-        );
-
-        // Makes the volume field change when the volume slider is changed.
-        volumeSlider.valueProperty().addListener(
-                (observableValue, oldValue, newValue) -> {
-                    volumePercentage = newValue.doubleValue();
-                    volumeSliderField.setText(String.format("%.0f",volumePercentage));
-                }
-        );
+    /**
+     * Puts values into the tables
+     */
+    private void initTables() {
+        this.songsTable.setItems(songs);
+        this.songsOnPlaylistTable.setItems(playlistSongs);
+        this.playlistTable.setItems(playlists);
 
         songTableTitleColumn.setCellValueFactory(cellData->cellData.getValue().titleProperty());
         songTableArtistColumn.setCellValueFactory(cellData-> new SimpleStringProperty("123"));
@@ -98,6 +93,35 @@ public class Controller implements Initializable {
         playlistNameColumn.setCellValueFactory(cellData->cellData.getValue().toStringProperty());
         playlistAmountOfSongsColumn.setCellValueFactory(cellData-> new SimpleStringProperty("123"));
         playlistTimeColumn.setCellValueFactory(cellData -> new SimpleStringProperty("123"));
+    }
+
+    /**
+     *  Makes the volume field change when the volume slider is changed.
+     */
+    private void volumeSliderControl() {
+        volumeSlider.valueProperty().addListener(
+                (observableValue, oldValue, newValue) -> {
+                    volumePercentage = newValue.doubleValue();
+                    volumeSliderField.setText(String.format("%.0f",volumePercentage));
+                }
+        );
+    }
+
+    /**
+     * Makes the volume slider change when the volume field is changed.
+     */
+    private void volumeFieldControl() {
+        volumeSliderField.textProperty().addListener(
+                (observableValue, oldValue, newValue) -> {
+                    try{
+                        if(newValue.contains(","))
+                            newValue=newValue.replaceAll(",",".");
+                        volumeSlider.setValue(Integer.parseInt(newValue));
+                    }
+                    catch (IllegalArgumentException e){
+                    }
+                }
+        );
     }
 
     /**
