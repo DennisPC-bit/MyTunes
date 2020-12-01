@@ -2,12 +2,12 @@
   <library name="org.openjfx:javafx-media:15.0.11" type="repository">
     <properties maven-id="org.openjfx:javafx-media:LATEST" />
     <CLASSES>
-      <root url="jar://$PROJECT_DIR$/lib/javafx-media-16-ea+4.jar!/" />
-      <root url="jar://$PROJECT_DIR$/lib/javafx-media-16-ea+4-win.jar!/" />
-      <root url="jar://$PROJECT_DIR$/lib/javafx-graphics-16-ea+4.jar!/" />
-      <root url="jar://$PROJECT_DIR$/lib/javafx-graphics-16-ea+4-win.jar!/" />
-      <root url="jar://$PROJECT_DIR$/lib/javafx-base-16-ea+4.jar!/" />
-      <root url="jar://$PROJECT_DIR$/lib/javafx-base-16-ea+4-win.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/javafx-media-16-ea+5.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/javafx-media-16-ea+5-win.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/javafx-graphics-16-ea+5.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/javafx-graphics-16-ea+5-win.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/javafx-base-16-ea+5.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/javafx-base-16-ea+5-win.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

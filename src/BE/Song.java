@@ -10,7 +10,8 @@ public class Song {
 
     }
 
-    public Song(String title, String filePath) {
+    public Song(int id, String title, String filePath) {
+        this.id = id;
         this.title = title;
         this.filePath = filePath;
         this.visible = true;
