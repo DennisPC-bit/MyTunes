@@ -45,8 +45,10 @@ public class Controller implements Initializable {
     private Label currentSong;
     @FXML
     private TextField volumeSliderField;
+    private Song selectedSong;
+    private Song selectedSongOnPlayList;
+    private Playlist selectedPlaylist;
     private double volumePercentage;
-    private String search;
     private ObservableList<Song> songs;
     private ObservableList<Song> playlistSongs;
     private ObservableList<Playlist> playlists;
@@ -60,6 +62,42 @@ public class Controller implements Initializable {
         initTables();
         volumeFieldControl();
         volumeSliderControl();
+        selectedSong();
+        selectedSongOnPlayList();
+        selectedPlaylist();
+    }
+
+    /**
+     * Changes selected playlist to the playlist clicked in the playlistTable
+     */
+    private void selectedPlaylist() {
+        this.playlistTable.getSelectionModel().selectedItemProperty().addListener(((observableValue, oldValue, newValue) -> {
+            this.selectedPlaylist =(Playlist) newValue;
+            if(selectedPlaylist !=null)
+                System.out.println(selectedPlaylist.getPlayListName());
+        }));
+    }
+
+    /**
+     * Changes selected song  on playlist to the song clicked in the songsOnPlaylistTable
+     */
+    private void selectedSongOnPlayList() {
+        this.songsOnPlaylistTable.getSelectionModel().selectedItemProperty().addListener(((observableValue, oldValue, newValue) -> {
+            this.selectedSongOnPlayList =(Song)newValue;
+            if(selectedSongOnPlayList !=null)
+                System.out.println(selectedSongOnPlayList.getTitle());
+        }));
+    }
+
+    /**
+     * Changes selected song to the song clicked in the songsTable
+     */
+    private void selectedSong() {
+        this.songsTable.getSelectionModel().selectedItemProperty().addListener(((observableValue, oldValue, newValue) -> {
+            this.selectedSong =(Song)newValue;
+            if(selectedSong !=null)
+                System.out.println(selectedSong.getTitle());
+        }));
     }
 
     /**
@@ -71,8 +109,11 @@ public class Controller implements Initializable {
         this.playlists= FXCollections.observableArrayList(new ArrayList<Playlist>());
 
         songs.add(new Song(69,"lol","xd",123));
-        playlistSongs.add(new Song(69,"lol","xd",123));
-        playlists.add(new Playlist("woah thats a nice playlist"));
+        songs.add(new Song(69,"lol2","xd",123));
+        playlistSongs.add(new Song(69,"lol3","xd",123));
+        playlistSongs.add(new Song(69,"lol4","xd",456));
+        playlists.add(new Playlist("woah that's a nice playlist"));
+        playlists.add(new Playlist("woah that's a nice playlist2"));
     }
 
     /**
