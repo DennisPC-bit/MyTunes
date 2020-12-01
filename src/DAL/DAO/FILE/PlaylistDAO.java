@@ -1,4 +1,4 @@
-package DAL.DAO;
+package DAL.DAO.FILE;
 
 import BE.Playlist;
 import BE.Song;
@@ -8,7 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.*;
 import java.util.List;
 
-public class PlayListDAO {
+public class PlaylistDAO {
 
     protected List<Playlist> playlists;
     protected File inputFile;
