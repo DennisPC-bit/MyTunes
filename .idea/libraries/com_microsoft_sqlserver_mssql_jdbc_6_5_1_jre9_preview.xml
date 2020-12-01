@@ -1,8 +1,8 @@
 <component name="libraryTable">
   <library name="com.microsoft.sqlserver:mssql-jdbc:6.5.1.jre9-preview" type="repository">
-    <properties maven-id="com.microsoft.sqlserver:mssql-jdbc:6.5.1.jre9-preview" />
+    <properties maven-id="com.microsoft.sqlserver:mssql-jdbc:LATEST" />
     <CLASSES>
-      <root url="jar://$PROJECT_DIR$/lib/mssql-jdbc-6.5.1.jre9-preview.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/mssql-jdbc-9.1.0.jre15-preview.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />
