@@ -134,8 +134,6 @@ public class Controller implements Initializable {
     public void closeButton(ActionEvent actionEvent) {
     }
 
-
-
     public void playButton(ActionEvent actionEvent) {
     }
 
@@ -144,7 +142,4 @@ public class Controller implements Initializable {
 
     public void previousButton(ActionEvent actionEvent) {
     }
-
-
-
 }
