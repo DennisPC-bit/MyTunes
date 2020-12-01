@@ -1,5 +1,8 @@
 package BE;
 
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+
 public class Song {
     protected int id;
     protected boolean visible;
@@ -15,6 +18,10 @@ public class Song {
         this.title = title;
         this.filePath = filePath;
         this.visible = true;
+    }
+
+    public StringProperty getTitleAsProperty(){
+        return new SimpleStringProperty(title);
     }
 
     public String getFilePath() {

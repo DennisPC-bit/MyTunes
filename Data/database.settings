@@ -1,0 +1,10 @@
+#0 - MSSQL
+#1 - MySQL
+ConnectionType=1
+Server=127.0.0.1
+Database=mrs
+User=root
+Password=
+#1433 - MSSQL
+#3306 - MySQL
+Port=3306
