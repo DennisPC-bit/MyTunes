@@ -88,7 +88,7 @@
                               </AnchorPane>
                               <AnchorPane GridPane.columnIndex="2">
                                  <children>
-                                    <Button fx:id="useDeletePlaylistButton" alignment="CENTER" mnemonicParsing="false" pickOnBounds="false" text="Delete" textAlignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                    <Button alignment="CENTER" mnemonicParsing="false" onAction="#deletePlaylistButton" pickOnBounds="false" text="Delete" textAlignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                                  </children>
                               </AnchorPane>
                            </children>
@@ -217,7 +217,23 @@
                               <Canvas height="25.0" width="25.0" BorderPane.alignment="CENTER" />
                            </left>
                            <right>
-                              <Label fx:id="volumeSliverLabel" text="(0%)" BorderPane.alignment="CENTER" />
+                              <GridPane BorderPane.alignment="CENTER_LEFT">
+                                 <columnConstraints>
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="40.0" minWidth="40.0" prefWidth="40.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="25.0" minWidth="25.0" prefWidth="25.0" />
+                                 </columnConstraints>
+                                 <rowConstraints>
+                                    <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                                 </rowConstraints>
+                                 <children>
+                                    <TextField fx:id="volumeSliderField" alignment="CENTER" maxWidth="40.0" minWidth="40.0" prefWidth="40.0" text="0" />
+                                    <AnchorPane GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                                       <children>
+                                          <Label alignment="CENTER" text="\%" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                       </children>
+                                    </AnchorPane>
+                                 </children>
+                              </GridPane>
                            </right>
                         </BorderPane>
                         <GridPane GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
