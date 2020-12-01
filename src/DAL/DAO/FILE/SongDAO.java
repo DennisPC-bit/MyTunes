@@ -1,7 +1,7 @@
 package DAL.DAO.FILE;
 
 import BE.Song;
-import DAL.DB.ISongDataAccess;
+import DAL.DB.IINTERFACE.ISongDataAccess;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 

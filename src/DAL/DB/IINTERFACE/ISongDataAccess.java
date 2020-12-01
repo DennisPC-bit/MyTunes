@@ -1,4 +1,4 @@
-package DAL.DB;
+package DAL.DB.IINTERFACE;
 
 import BE.Song;
 import com.microsoft.sqlserver.jdbc.SQLServerException;
