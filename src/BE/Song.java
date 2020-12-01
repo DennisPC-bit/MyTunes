@@ -7,25 +7,35 @@ import javafx.beans.property.StringProperty;
 
 public class Song {
     private SimpleIntegerProperty id;
-    private SimpleIntegerProperty year;
     private SimpleBooleanProperty visible;
     private StringProperty title;
-    protected String filePath;
+    protected StringProperty filePath;
+    protected SimpleIntegerProperty categoryId;
 
-    public Song(int id, String title, String filePath, int year){
-        this.year=new SimpleIntegerProperty(id);
-        this.title = new SimpleStringProperty(title);
-        this.year = new SimpleIntegerProperty(year);
-        this.visible= new SimpleBooleanProperty(true);
-        this.filePath=filePath;
+    public Song() {
+
     }
 
-    public Song(int id,String title, String filePath){
-        this.id=new SimpleIntegerProperty(id);
+    public Song(int id, String title, String filePath) {
+        this.id = new SimpleIntegerProperty(id);
         this.title = new SimpleStringProperty(title);
-        this.year = new SimpleIntegerProperty(-1);
-        this.visible= new SimpleBooleanProperty(true);
-        this.filePath=filePath;
+        this.visible = new SimpleBooleanProperty(true);
+        this.filePath = new SimpleStringProperty(filePath);
+    }
+
+    public Song(String title, String filePath) {
+        this.id = new SimpleIntegerProperty(-1);
+        this.title = new SimpleStringProperty(title);
+        this.visible = new SimpleBooleanProperty(true);
+        this.filePath = new SimpleStringProperty(filePath);
+    }
+
+    public Song(int id, String title, String filePath, int categoryId) {
+        this.id = new SimpleIntegerProperty(id);
+        this.title = new SimpleStringProperty(title);
+        this.visible = new SimpleBooleanProperty(true);
+        this.filePath = new SimpleStringProperty(filePath);
+        this.categoryId = new SimpleIntegerProperty(categoryId);
     }
 
     public int getId() {
@@ -38,18 +48,6 @@ public class Song {
 
     public void setId(int id) {
         this.id.set(id);
-    }
-
-    public int getYear() {
-        return year.get();
-    }
-
-    public SimpleIntegerProperty yearProperty() {
-        return year;
-    }
-
-    public void setYear(int year) {
-        this.year.set(year);
     }
 
     public boolean isVisible() {
@@ -77,11 +75,19 @@ public class Song {
     }
 
     public String getFilePath() {
-        return filePath;
+        return filePath.get();
     }
 
     public void setFilePath(String filePath) {
-        this.filePath = filePath;
+        this.filePath.setValue(filePath);
+    }
+
+    public int getCategoryId() {
+        return categoryId.get();
+    }
+
+    public void setCategoryId(int id) {
+        categoryId.set(id);
     }
 
     public StringProperty toStringProperty(){

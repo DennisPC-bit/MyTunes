@@ -2,7 +2,7 @@
 #1 - MySQL
 ConnectionType=1
 Server=127.0.0.1
-Database=mrs
+Database=mytunes
 User=root
 Password=
 #1433 - MSSQL
