@@ -20,8 +20,8 @@ public class Song {
         this.filePath=filePath;
     }
 
-    public Song(String title, String filePath){
-        this.id=new SimpleIntegerProperty(-1);
+    public Song(int id,String title, String filePath){
+        this.id=new SimpleIntegerProperty(id);
         this.title = new SimpleStringProperty(title);
         this.year = new SimpleIntegerProperty(-1);
         this.visible= new SimpleBooleanProperty(true);
