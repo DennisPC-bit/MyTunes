@@ -9,5 +9,7 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="com.microsoft.sqlserver:mssql-jdbc:6.5.1.jre9-preview" level="project" />
     <orderEntry type="library" name="org.openjfx:javafx-fxml:12-ea+5" level="project" />
+    <orderEntry type="library" name="org.openjfx:javafx-media:15.0.11" level="project" />
+    <orderEntry type="library" name="com.fasterxml.jackson.core:jackson-databind:2.0.6" level="project" />
   </component>
 </module>

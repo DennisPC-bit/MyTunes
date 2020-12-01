@@ -1,30 +1,33 @@
 package BE;
 
+import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Playlist {
+
     public String playListName;
     private int playlistId;
-    private final List<Song> songList;
+    private List<Song> songList;
+    public static final String seperator = "|";
 
-    public void addSong(Song song){
-        songList.add(song);
+    public Playlist() {
+        initialize();
     }
-
-    public void removeSong(Song song){
-        songList.remove(song);
-    }
-
-    public void editSong(Song newSong,Song oldSong){
-        removeSong(oldSong);
-        addSong(newSong);
-    }
-
 
     public Playlist(String playListName) {
-        this.songList = new ArrayList();
-        this.playListName = playListName;
+        initialize();
+        setPlayListName(playListName);
+    }
+
+    public Playlist(String playListName, List<Song> songs) {
+        initialize();
+        setPlayListName(playListName);
+        addSongs(songs);
+    }
+
+    private void initialize() {
+        songList = new ArrayList();
     }
 
     public String getPlayListName() {
@@ -46,4 +49,26 @@ public class Playlist {
     public List<Song> getSongList() {
         return songList;
     }
+
+    public void addSong(Song song) {
+        songList.add(song);
+    }
+
+    public void addSongs(List<Song> songs) {
+        for (int i = 0; i < songs.size(); i++) {
+            var song = songs.get(i);
+            if (songList.contains(song))
+                songList.add(song);
+        }
+    }
+
+    public void removeSong(Song song) {
+        songList.remove(song);
+    }
+
+    public void editSong(Song newSong, Song oldSong) {
+        removeSong(oldSong);
+        addSong(newSong);
+    }
+
 }

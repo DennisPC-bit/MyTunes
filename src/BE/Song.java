@@ -1,43 +1,46 @@
 package BE;
 
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
-
 public class Song {
-    private SimpleIntegerProperty id;
-    private SimpleIntegerProperty year;
-    private SimpleBooleanProperty visible;
-    private StringProperty title;
+    protected int id;
+    protected boolean visible;
+    protected String title;
+    protected String filePath;
 
-    public Song(int id, String title, int year){
-        this.year=new SimpleIntegerProperty(id);
-        this.title = new SimpleStringProperty(title);
-        this.year = new SimpleIntegerProperty(year);
-        this.visible= new SimpleBooleanProperty(true);
+    public Song() {
+
     }
 
-    public SimpleIntegerProperty getYear() {
-        return year;
+    public Song(String title, String filePath) {
+        this.title = title;
+        this.filePath = filePath;
+        this.visible = true;
     }
-    public StringProperty getTitle() {
+
+    public String getFilePath() {
+        return filePath;
+    }
+
+    public String getTitle() {
         return title;
     }
+
     public int getId() {
-        return id.get();
+        return id;
     }
+
     public boolean isVisible() {
-        return visible.get();
+        return visible;
+    }
+
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
     }
 
     public void setTitle(String title) {
-        this.title = new SimpleStringProperty(title);
+        this.title = title;
     }
-    public void setYear(int year) {
-        this.year = new SimpleIntegerProperty(year);
-    }
+
     public void setVisible(boolean visible) {
-        this.visible.set(visible);
+        this.visible = visible;
     }
 }
