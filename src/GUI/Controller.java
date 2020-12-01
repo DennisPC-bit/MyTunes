@@ -121,16 +121,15 @@ public class Controller implements Initializable {
      */
     private void initTables() {
         this.songsTable.setItems(songs);
-        this.songsOnPlaylistTable.setItems(playlistSongs);
-        this.playlistTable.setItems(playlists);
-
         songTableTitleColumn.setCellValueFactory(cellData->cellData.getValue().titleProperty());
         songTableArtistColumn.setCellValueFactory(cellData-> new SimpleStringProperty("123"));
         songTableCategoryColumn.setCellValueFactory(cellData-> new SimpleStringProperty("456"));
         songTableTimeColumn.setCellValueFactory(cellData-> new SimpleStringProperty("789"));
 
+        this.songsOnPlaylistTable.setItems(playlistSongs);
         playlistSongsColumn.setCellValueFactory(cellData->cellData.getValue().toStringProperty());
 
+        this.playlistTable.setItems(playlists);
         playlistNameColumn.setCellValueFactory(cellData->cellData.getValue().toStringProperty());
         playlistAmountOfSongsColumn.setCellValueFactory(cellData-> new SimpleStringProperty("123"));
         playlistTimeColumn.setCellValueFactory(cellData -> new SimpleStringProperty("123"));
@@ -149,7 +148,7 @@ public class Controller implements Initializable {
     }
 
     /**
-     * Makes the volume slider change when the volume field is changed.
+     * Makes the volume slider change when the volume field is changed to a valid value.
      */
     private void volumeFieldControl() {
         volumeSliderField.textProperty().addListener(
@@ -160,6 +159,7 @@ public class Controller implements Initializable {
                         volumeSlider.setValue(Integer.parseInt(newValue));
                     }
                     catch (IllegalArgumentException e){
+                        //doesnt do anything if the input is invalid
                     }
                 }
         );
