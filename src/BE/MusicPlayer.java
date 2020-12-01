@@ -6,7 +6,7 @@ import javafx.scene.media.MediaPlayer;
 import java.io.File;
 
 public class MusicPlayer {
-    protected MediaPlayer mediaPalyer;
+    protected MediaPlayer mediaPlayer;
     protected Media media;
     protected Song song;
 
@@ -23,7 +23,7 @@ public class MusicPlayer {
             this.song = song;
             if (!song.getFilePath().isBlank()) {
                 media = new Media(new File(song.getFilePath()).toURI().toString());
-                mediaPalyer = new MediaPlayer(media);
+                mediaPlayer = new MediaPlayer(media);
                 setVolume(100);
             }
         }
@@ -34,28 +34,28 @@ public class MusicPlayer {
     }
 
     public void play() {
-        if (mediaPalyer != null)
-            mediaPalyer.play();
+        if (mediaPlayer != null)
+            mediaPlayer.play();
     }
 
     public void pause() {
-        if (mediaPalyer != null)
-            mediaPalyer.pause();
+        if (mediaPlayer != null)
+            mediaPlayer.pause();
     }
 
     public void stop() {
-        if (mediaPalyer != null)
-            mediaPalyer.stop();
+        if (mediaPlayer != null)
+            mediaPlayer.stop();
     }
 
     public double getVolume() {
-        if (mediaPalyer != null)
-            return mediaPalyer.getVolume();
+        if (mediaPlayer != null)
+            return mediaPlayer.getVolume();
         return 0;
     }
 
     public void setVolume(double volume) {
-        if (mediaPalyer != null)
-            mediaPalyer.setVolume(volume);
+        if (mediaPlayer != null)
+            mediaPlayer.setVolume(volume);
     }
 }
