@@ -12,10 +12,6 @@ public class Song {
     private StringProperty title;
     protected String filePath;
 
-    public Song() {
-
-    }
-
     public Song(int id, String title, String filePath, int year){
         this.year=new SimpleIntegerProperty(id);
         this.title = new SimpleStringProperty(title);
