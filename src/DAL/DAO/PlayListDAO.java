@@ -1,4 +1,4 @@
-package DAL.DB.DAO;
+package DAL.DAO;
 
 import BE.Playlist;
 import BE.Song;

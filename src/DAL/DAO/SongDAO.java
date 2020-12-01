@@ -1,4 +1,4 @@
-package DAL.DB.DAO;
+package DAL.DAO;
 
 import BE.Song;
 import com.fasterxml.jackson.core.type.TypeReference;
