@@ -1,6 +1,7 @@
 package DAL.DAO.DB;
 
 import BE.Song;
+import BLL.SongManager;
 import DAL.DB.DbConnectionHandler;
 
 import java.sql.PreparedStatement;
@@ -13,6 +14,11 @@ import java.util.List;
 public class SongDBDAO {
     protected List<Song> songs;
     protected DbConnectionHandler database;
+    protected SongManager songManager;
+
+    public void setSongManager(SongManager songManager){
+        this.songManager=songManager;
+    }
 
     public SongDBDAO() {
         database = DbConnectionHandler.getInstance();
@@ -25,12 +31,11 @@ public class SongDBDAO {
             ResultSet rs = statement.executeQuery("SELECT * FROM song;");
             while (rs.next()) {
                 int id = rs.getInt("song_id");
-                String name = rs.getString("song_name");
+                String name = rs.getString("song_title");
                 String path = rs.getString("song_filepath");
-                int category = rs.getInt("category_id");
+                int category = rs.getInt("playlist_id");
                 temp.add(new Song(id, name, path, category));
             }
-
             return temp;
         } catch (SQLException ex) {
             ex.printStackTrace();

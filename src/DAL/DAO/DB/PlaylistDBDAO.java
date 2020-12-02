@@ -1,6 +1,7 @@
 package DAL.DAO.DB;
 
 import BE.Playlist;
+import BLL.PlaylistManager;
 import DAL.DB.DbConnectionHandler;
 
 import java.sql.PreparedStatement;
@@ -13,6 +14,11 @@ import java.util.List;
 public class PlaylistDBDAO {
     protected List<Playlist> playlists;
     protected DbConnectionHandler database;
+    protected PlaylistManager playlistManager;
+
+    public void setPlaylistManager(PlaylistManager playlistManager){
+        this.playlistManager=playlistManager;
+    }
 
     public PlaylistDBDAO() {
         database = DbConnectionHandler.getInstance();
@@ -28,7 +34,6 @@ public class PlaylistDBDAO {
                 String name = rs.getString("playlist_name");
                 temp.add(new Playlist(id, name));
             }
-
             return temp;
         } catch (SQLException ex) {
             ex.printStackTrace();

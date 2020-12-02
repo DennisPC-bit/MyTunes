@@ -15,9 +15,10 @@ import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -63,9 +64,14 @@ public class Controller implements Initializable {
     private ObservableList<Song> playlistSongs;
     private ObservableList<Playlist> playlists;
 
-    private final PlaylistManager playlistManager = new PlaylistManager();
-    private final SongManager songManager = new SongManager();
+    private PlaylistManager playlistManager = new PlaylistManager();
+    private SongManager songManager = new SongManager();
     private SongModel songModel;
+
+    public Controller(){
+        playlistManager.setMainController(this);
+        songManager.setMainController(this);
+    }
 
     /**
      * listens to whatever happens in the window and acts accordingly.
@@ -122,30 +128,27 @@ public class Controller implements Initializable {
     }
 
     /**
-     * should load the lists from the memory, is temporarily almost empty lists
+     * should load the lists from the db
      */
     public void load() {
-        this.songs = FXCollections.observableArrayList(SongManager.getSongs());
-        this.playlists = FXCollections.observableArrayList(PlaylistManager.getPlaylists());
+        this.playlists = FXCollections.observableArrayList(PlaylistManager.loadPlaylists());
+        this.playlistTable.setItems(playlists);
+        this.songs = FXCollections.observableArrayList(SongManager.loadSongs());
+        this.songsTable.setItems(songs);
     }
 
     /**
      * Puts values into the tables
      */
     private void initTables() {
-        this.songsTable.setItems(songs);
+        songModel = new SongModel();
         songTableTitleColumn.setCellValueFactory(cellData->cellData.getValue().titleProperty());
         songTableArtistColumn.setCellValueFactory(cellData-> new SimpleStringProperty("123"));
         songTableCategoryColumn.setCellValueFactory(cellData-> new SimpleStringProperty("456"));
         songTableTimeColumn.setCellValueFactory(cellData-> new SimpleStringProperty("789"));
 
-        songModel = new SongModel();
-
-        this.songsTable.setItems(songModel.getSongs());
-        this.songsOnPlaylistTable.setItems(playlistSongs);
         playlistSongsColumn.setCellValueFactory(cellData->cellData.getValue().toStringProperty());
 
-        this.playlistTable.setItems(playlists);
         playlistNameColumn.setCellValueFactory(cellData->cellData.getValue().getPlayListNameProperty());
         playlistAmountOfSongsColumn.setCellValueFactory(cellData-> new SimpleStringProperty("123"));
         playlistTimeColumn.setCellValueFactory(cellData -> new SimpleStringProperty("123"));
@@ -223,7 +226,8 @@ public class Controller implements Initializable {
     }
 
     public void addPlaylist(Playlist playlist){
-        this.playlists.add(playlist);
+        playlistManager.createPlaylist(playlist.getPlayListName());
+        load();
     }
 
     /**
@@ -236,7 +240,9 @@ public class Controller implements Initializable {
     }
 
     public void editPlaylist(String newTitle){
-        this.selectedPlaylist.setPlayListName(newTitle);
+        playlistManager.deletePlaylist(selectedPlaylist.getPlayListName());
+        playlistManager.createPlaylist(newTitle);
+        load();
     }
 
     /**
@@ -267,7 +273,8 @@ public class Controller implements Initializable {
      * Deletes the selected playlist.
      */
     public void deletePlaylistButton() {
-        this.playlists.remove(selectedPlaylist);
+        playlistManager.deletePlaylist(selectedPlaylist.getPlayListName());
+        load();
     }
 
     /**
@@ -302,7 +309,14 @@ public class Controller implements Initializable {
      * Adds a new song
      */
     public void newSongButton() {
-        //TO DO implement this
+        FileChooser fileChooser = new FileChooser();
+        windowStage = new Stage();
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("MP3-Files","*.mp3"));
+        File selectedFile=fileChooser.showOpenDialog(windowStage);
+        if(selectedFile!=null){
+        songManager.createSong(selectedFile.getName().substring(0,selectedFile.getName().indexOf('.')),selectedFile.getPath());
+        load();
+        }
     }
 
     /**
@@ -316,7 +330,8 @@ public class Controller implements Initializable {
      * Deletes the selected song
      */
     public void deleteSongButton() {
-        //TO DO implement this
+        songManager.deleteSong(selectedSong.getTitle());
+        load();
     }
 
     /**

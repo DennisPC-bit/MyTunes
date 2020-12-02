@@ -47,7 +47,6 @@ public class SongDAO implements ISongDataAccess {
 
     }
 
-
     public void loadPlaylist(String path) {
         File file = new File(path);
         if (file.exists()) {

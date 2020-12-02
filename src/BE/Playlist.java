@@ -19,6 +19,7 @@ public class Playlist {
     }
 
     public Playlist(int id, String playListName) {
+        initialize();
         setPlaylistId(id);
         setPlayListName(playListName);
     }
