@@ -2,13 +2,22 @@ package GUI;
 
 import BE.Playlist;
 import BE.Song;
+import BLL.PlaylistManager;
+import BLL.SongManager;
+import GUI.Dialogs.dialogController;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.AnchorPane;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
@@ -42,8 +51,10 @@ public class Controller implements Initializable {
     private TableColumn<Song,String> songTableTimeColumn;
     @FXML
     private Label currentSong;
+    private Song songPlaying;
     @FXML
     private TextField volumeSliderField;
+    private Stage windowStage = new Stage();
     private Song selectedSong;
     private Song selectedSongOnPlayList;
     private Playlist selectedPlaylist;
@@ -51,6 +62,9 @@ public class Controller implements Initializable {
     private ObservableList<Song> songs;
     private ObservableList<Song> playlistSongs;
     private ObservableList<Playlist> playlists;
+
+    private final PlaylistManager playlistManager = new PlaylistManager();
+    private final SongManager songManager = new SongManager();
 
     /**
      * listens to whatever happens in the window and acts accordingly.
@@ -86,8 +100,10 @@ public class Controller implements Initializable {
     private void selectedSongOnPlayList() {
         this.songsOnPlaylistTable.getSelectionModel().selectedItemProperty().addListener(((observableValue, oldValue, newValue) -> {
             this.selectedSongOnPlayList =(Song)newValue;
-            if(selectedSongOnPlayList !=null)
-                System.out.println(selectedSongOnPlayList.getTitle());
+            if(selectedSongOnPlayList !=null){
+                currentSong.setText(selectedSongOnPlayList.getTitle());
+                songPlaying=selectedSongOnPlayList;
+            }
         }));
     }
 
@@ -97,8 +113,10 @@ public class Controller implements Initializable {
     private void selectedSong() {
         this.songsTable.getSelectionModel().selectedItemProperty().addListener(((observableValue, oldValue, newValue) -> {
             this.selectedSong =(Song)newValue;
-            if(selectedSong !=null)
-                System.out.println(selectedSong.getTitle());
+            if(selectedSong !=null){
+                currentSong.setText(selectedSong.getTitle());
+            songPlaying=selectedSong;
+            }
         }));
     }
 
@@ -106,8 +124,8 @@ public class Controller implements Initializable {
      * should load the lists from the memory, is temporarily almost empty lists
      */
     public void load() {
-        this.songs = FXCollections.observableArrayList(new ArrayList<Song>());
-        this.playlists = FXCollections.observableArrayList(new ArrayList<Playlist>());
+        this.songs = FXCollections.observableArrayList(new ArrayList<>());
+        this.playlists = FXCollections.observableArrayList(new ArrayList<>());
         Playlist playlist1 = new Playlist("woah that's a nice playlist");
         Playlist playlist2 = new Playlist("woah that's a nice playlist2");
         songs.add(new Song(69,"lol","xd",123));
@@ -178,6 +196,14 @@ public class Controller implements Initializable {
         return volumeSlider.getValue();
     }
 
+    public Stage getWindowStage() {
+        return windowStage;
+    }
+
+    public void addPlaylist(Playlist playlist){
+        this.playlists.add(playlist);
+    }
+
     /**
      * should change songsTable, whenever the searchField changes.
      */
@@ -196,15 +222,40 @@ public class Controller implements Initializable {
     /**
      * Adds a new playlist.
      */
-    public void addPlayListButton() {
-        //TO DO implement this
+    public void addPlayListButton() throws IOException {
+        dialog("playlist name:","Add playlist","");
+    }
+
+    private void dialog(String labelFieldText,String dialogTitleText,String titleFieldText) throws IOException {
+        FXMLLoader loader = new FXMLLoader(Main.class.getResource("Dialogs/dialog.fxml"));
+        AnchorPane dialog = loader.load();
+        dialogController controller = loader.getController();
+        controller.setMainController(this);
+        controller.setLabelField(labelFieldText);
+        controller.setTitleField(titleFieldText);
+        controller.setDialogTitle(dialogTitleText);
+        windowStage = new Stage();
+        windowStage.setScene(new Scene(dialog));
+        windowStage.initModality(Modality.APPLICATION_MODAL);
+        windowStage.alwaysOnTopProperty();
+        windowStage.show();
     }
 
     /**
      * Edits the selected playlist.
      */
-    public void editPlaylistButton() {
-        //TO DO implement this
+    public void editPlaylistButton() throws IOException {
+        FXMLLoader loader = new FXMLLoader(Main.class.getResource("Dialogs/dialog.fxml"));
+        AnchorPane dialog = loader.load();
+        dialogController controller = loader.getController();
+        controller.setMainController(this);
+        controller.setLabelField("Playlist name:");
+        controller.setDialogTitle("Add Playlist");
+        windowStage = new Stage();
+        windowStage.setScene(new Scene(dialog));
+        windowStage.initModality(Modality.APPLICATION_MODAL);
+        windowStage.alwaysOnTopProperty();
+        windowStage.show();
     }
 
     /**
