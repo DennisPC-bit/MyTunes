@@ -2,6 +2,7 @@ package GUI;
 
 import BE.Playlist;
 import BE.Song;
+import GUI.MODELS.SongModel;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -46,24 +47,27 @@ public class Controller implements Initializable {
     private ObservableList<Song> playlistSongs;
     private ObservableList<Playlist> playlists;
 
+    private SongModel songModel;
+
     /**
      * listens to whatever happens in the window and acts accordingly.
      */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        this.songsTable.setItems(songs);
+        songModel = new SongModel();
+
+        this.songsTable.setItems(songModel.getSongs());
         this.songsOnPlaylistTable.setItems(playlistSongs);
         this.playlistTable.setItems(playlists);
 
         // Makes the volume slider change when the volume field is changed.
         volumeSliderField.textProperty().addListener(
                 (observableValue, oldValue, newValue) -> {
-                    try{
-                        if(newValue.contains(","))
-                            newValue=newValue.replaceAll(",",".");
+                    try {
+                        if (newValue.contains(","))
+                            newValue = newValue.replaceAll(",", ".");
                         volumeSlider.setValue(Integer.parseInt(newValue));
-                    }
-                    catch (IllegalArgumentException e){
+                    } catch (IllegalArgumentException e) {
                     }
                 }
         );
@@ -72,7 +76,7 @@ public class Controller implements Initializable {
         volumeSlider.valueProperty().addListener(
                 (observableValue, oldValue, newValue) -> {
                     volumePercentage = newValue.doubleValue();
-                    volumeSliderField.setText(String.format("%.0f",volumePercentage));
+                    volumeSliderField.setText(String.format("%.0f", volumePercentage));
                 }
         );
 
@@ -80,6 +84,7 @@ public class Controller implements Initializable {
 
     /**
      * gets the value of the volume slider
+     *
      * @return the volume
      */
     public double getVolumePercentage() {
@@ -91,6 +96,7 @@ public class Controller implements Initializable {
      */
     public void search() {
         //TO DO implement this
+        songModel.searchSong(searchField.getText());
         System.out.println(searchField.getText());
     }
 
