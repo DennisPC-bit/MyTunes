@@ -6,6 +6,7 @@ import javafx.scene.media.MediaPlayer;
 import java.io.File;
 
 public class MusicPlayer {
+
     protected MediaPlayer mediaPlayer;
     protected Media media;
     protected Song song;
@@ -24,9 +25,12 @@ public class MusicPlayer {
             if (!song.getFilePath().isBlank()) {
                 media = new Media(new File(song.getFilePath()).toURI().toString());
                 mediaPlayer = new MediaPlayer(media);
-                setVolume(100);
             }
         }
+    }
+
+    public MediaPlayer getMediaPlayer() {
+        return mediaPlayer;
     }
 
     public void mute() {

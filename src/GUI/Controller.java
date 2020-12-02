@@ -1,6 +1,7 @@
 package GUI;
 
 import BE.InputAlert;
+import BE.MusicPlayer;
 import BE.Playlist;
 import BE.Song;
 import BLL.PlaylistManager;
@@ -62,6 +63,7 @@ public class Controller implements Initializable {
     private Song selectedSongOnPlayList;
     private Playlist selectedPlaylist;
     private double volumePercentage;
+    private boolean playing=false;
     private ObservableList<Song> songs;
     private ObservableList<Song> playlistSongs;
     private ObservableList<Playlist> playlists;
@@ -69,6 +71,7 @@ public class Controller implements Initializable {
     private PlaylistManager playlistManager = new PlaylistManager();
     private SongManager songManager = new SongManager();
     private InputAlert inputAlert = new InputAlert();
+    private MusicPlayer musicPlayer = new MusicPlayer();
     private Stage windowStage = new Stage();
     private SongModel songModel;
 
@@ -86,7 +89,6 @@ public class Controller implements Initializable {
         load();
         initTables();
         volumeFieldControl();
-        volumeSliderControl();
         selectedSong();
         selectedSongOnPlayList();
         selectedPlaylist();
@@ -170,18 +172,6 @@ public class Controller implements Initializable {
     }
 
     /**
-     *  Makes the volume field change when the volume slider is changed.
-     */
-    private void volumeSliderControl() {
-        volumeSlider.valueProperty().addListener(
-                (observableValue, oldValue, newValue) -> {
-                    volumePercentage = newValue.doubleValue();
-                    volumeSliderField.setText(String.format("%.0f",volumePercentage));
-                }
-        );
-    }
-
-    /**
      * Makes the volume slider change when the volume field is changed to a valid value.
      */
     private void volumeFieldControl() {
@@ -191,6 +181,8 @@ public class Controller implements Initializable {
                         if (newValue.contains(","))
                             newValue = newValue.replaceAll(",", ".");
                         volumeSlider.setValue(Integer.parseInt(newValue));
+                        musicPlayer.setVolume(volumeSlider.getValue());
+                        musicPlayer.setVolume(volumePercentage/100);
                     } catch (IllegalArgumentException e) {
                     }
                 }
@@ -201,9 +193,9 @@ public class Controller implements Initializable {
                 (observableValue, oldValue, newValue) -> {
                     volumePercentage = newValue.doubleValue();
                     volumeSliderField.setText(String.format("%.0f", volumePercentage));
+                    musicPlayer.setVolume(volumePercentage/100);
                 }
         );
-
     }
 
     /**
@@ -373,7 +365,15 @@ public class Controller implements Initializable {
      * Plays from the playlist
      */
     public void playButton() {
-        //TO DO implement this
+        if(selectedSong!=null&&!playing){
+            musicPlayer.setSong(selectedSong);
+            musicPlayer.play();
+            playing=!playing;
+        }
+        else{
+            musicPlayer.pause();
+            playing=!playing;
+        }
     }
 
     /**
