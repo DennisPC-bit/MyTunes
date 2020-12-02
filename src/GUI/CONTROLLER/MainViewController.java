@@ -169,7 +169,7 @@ public class MainViewController implements Initializable {
         playlistTimeColumn.setCellValueFactory(cellData -> new SimpleStringProperty("123"));
     }
 
-    private void reloadSongTable() {
+    public void reloadSongTable() {
         songs = FXCollections.observableArrayList(SongManager.loadSongs());
     }
 

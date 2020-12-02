@@ -29,6 +29,8 @@ public class AddSongController extends Component {
                 titleTextField.setText(selectedFile.getName());
                 filePathTextField.setText(selectedFile.getAbsolutePath());
                 mainMainViewController.getSongManager().createSong(titleTextField.getText(), filePathTextField.getText());
+                mainMainViewController.reloadSongTable();
+                closeWindow();
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -36,6 +38,10 @@ public class AddSongController extends Component {
     }
 
     public void close(ActionEvent event) {
+        closeWindow();
+    }
+
+    protected void closeWindow() {
         mainMainViewController.getWindowStage().close();
     }
 }
