@@ -221,9 +221,7 @@ public class Controller implements Initializable {
      * should change songsTable, whenever the searchField changes.
      */
     public void search() {
-        //TO DO implement this
-        songModel.searchSong(searchField.getText());
-        System.out.println(searchField.getText());
+        this.songsTable.setItems(FXCollections.observableList(songModel.searchSong(searchField.getText())));
     }
 
     /**
