@@ -1,5 +1,6 @@
 package GUI;
 
+import BE.InputAlert;
 import BE.Playlist;
 import BE.Song;
 import BLL.PlaylistManager;
@@ -18,9 +19,11 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 public class Controller implements Initializable {
@@ -55,7 +58,6 @@ public class Controller implements Initializable {
     private Song songPlaying;
     @FXML
     private TextField volumeSliderField;
-    private Stage windowStage = new Stage();
     private Song selectedSong;
     private Song selectedSongOnPlayList;
     private Playlist selectedPlaylist;
@@ -66,11 +68,14 @@ public class Controller implements Initializable {
 
     private PlaylistManager playlistManager = new PlaylistManager();
     private SongManager songManager = new SongManager();
+    private InputAlert inputAlert = new InputAlert();
+    private Stage windowStage = new Stage();
     private SongModel songModel;
 
     public Controller(){
         playlistManager.setMainController(this);
         songManager.setMainController(this);
+
     }
 
     /**
@@ -131,10 +136,20 @@ public class Controller implements Initializable {
      * should load the lists from the db
      */
     public void load() {
+        try {
         this.playlists = FXCollections.observableArrayList(PlaylistManager.loadPlaylists());
         this.playlistTable.setItems(playlists);
         this.songs = FXCollections.observableArrayList(SongManager.loadSongs());
         this.songsTable.setItems(songs);
+        }
+        catch (Exception e){
+            playlists=FXCollections.observableArrayList(new ArrayList<>());
+            this.playlistTable.setItems(playlists);
+
+            songs=FXCollections.observableArrayList(new ArrayList<>());
+            this.songsTable.setItems(songs);
+            inputAlert.showAlert("You are not connected to the Database. Nothing will be saved !");
+        }
     }
 
     /**
@@ -226,8 +241,12 @@ public class Controller implements Initializable {
     }
 
     public void addPlaylist(Playlist playlist){
-        playlistManager.createPlaylist(playlist.getPlayListName());
-        load();
+        try {
+            playlistManager.createPlaylist(playlist.getPlayListName());
+            load();
+        } catch (Exception e) {
+            playlists.add(new Playlist(playlist.getPlayListName()));
+        }
     }
 
     /**
@@ -240,9 +259,14 @@ public class Controller implements Initializable {
     }
 
     public void editPlaylist(String newTitle){
-        playlistManager.deletePlaylist(selectedPlaylist.getPlayListName());
-        playlistManager.createPlaylist(newTitle);
-        load();
+        try {
+            playlistManager.deletePlaylist(selectedPlaylist.getPlayListName());
+            playlistManager.createPlaylist(newTitle);
+            load();
+        } catch (Exception e) {
+            playlists.add(new Playlist(newTitle,selectedPlaylist.getSongList()));
+            playlists.remove(selectedPlaylist);
+        }
     }
 
     /**
@@ -273,8 +297,12 @@ public class Controller implements Initializable {
      * Deletes the selected playlist.
      */
     public void deletePlaylistButton() {
-        playlistManager.deletePlaylist(selectedPlaylist.getPlayListName());
-        load();
+        try {
+            playlistManager.deletePlaylist(selectedPlaylist.getPlayListName());
+            load();
+        } catch (Exception e) {
+            playlists.remove(selectedPlaylist);
+        }
     }
 
     /**

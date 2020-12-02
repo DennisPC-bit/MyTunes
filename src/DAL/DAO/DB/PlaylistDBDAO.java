@@ -24,7 +24,7 @@ public class PlaylistDBDAO {
         database = DbConnectionHandler.getInstance();
     }
 
-    public List<Playlist> loadPlaylist() {
+    public List<Playlist> loadPlaylist() throws SQLException {
         var temp = new ArrayList<Playlist>();
         var con = database.getConnection();
         try (Statement statement = con.createStatement()) {
@@ -35,26 +35,20 @@ public class PlaylistDBDAO {
                 temp.add(new Playlist(id, name));
             }
             return temp;
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-            return null;
         }
     }
 
-    public boolean createPlaylist(String name) {
+    public boolean createPlaylist(String name) throws SQLException {
         var con = database.getConnection();
         var sql = "INSERT INTO playlist (playlist_name) VALUES(?);";
         try (PreparedStatement st = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             st.setString(1, name);
             st.executeUpdate();
             return true;
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-            return false;
         }
     }
 
-    public Playlist getPlaylist(String name) {
+    public Playlist getPlaylist(String name) throws SQLException {
         var con = database.getConnection();
         var sql = "SELECT FROM playlist WHERE playlist_name = ?;";
         try (PreparedStatement st = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -66,22 +60,16 @@ public class PlaylistDBDAO {
             var playlist = new Playlist(id, name1);
             return playlist;
 
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-            return null;
         }
     }
 
-    public boolean deletePlaylist(String name) {
+    public boolean deletePlaylist(String name) throws SQLException {
         var con = database.getConnection();
         var sql = "DELETE FROM playlist WHERE playlist_name = ?;";
         try (PreparedStatement st = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             st.setString(1, name);
             st.executeUpdate();
             return true;
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-            return false;
         }
     }
 }
