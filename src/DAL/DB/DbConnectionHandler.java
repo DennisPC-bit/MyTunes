@@ -62,6 +62,28 @@ public class DbConnectionHandler implements DAL.DB.IINTERFACE.IDbConnectionProvi
         }
     }
 
+    protected void reconnect() {
+        switch (connectionType) {
+            case 0:
+                try {
+                    if (mssqlConnectionProvider != null && mssqlConnectionProvider.getConnection().isClosed())
+                        mssqlConnectionProvider.connect();
+                    break;
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
+
+            case 1:
+                try {
+                    if (mysqlConnectionProvider != null && mysqlConnectionProvider.getConnection().isClosed())
+                        mysqlConnectionProvider.connect();
+                    break;
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
+        }
+    }
+
     public String getDatabaseSettingsFile() {
         return databaseSettingsFile;
     }
@@ -72,6 +94,7 @@ public class DbConnectionHandler implements DAL.DB.IINTERFACE.IDbConnectionProvi
 
     @Override
     public Connection getConnection() {
+        reconnect();
         return switch (connectionType) {
             case 0 -> mssqlConnectionProvider.getConnection();
             case 1 -> mysqlConnectionProvider.getConnection();

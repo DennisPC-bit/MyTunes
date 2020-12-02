@@ -7,6 +7,7 @@ import BLL.SongManager;
 import GUI.Dialogs.dialogController;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
+import GUI.MODELS.SongModel;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -65,6 +66,7 @@ public class Controller implements Initializable {
 
     private final PlaylistManager playlistManager = new PlaylistManager();
     private final SongManager songManager = new SongManager();
+    private SongModel songModel;
 
     /**
      * listens to whatever happens in the window and acts accordingly.
@@ -149,6 +151,9 @@ public class Controller implements Initializable {
         songTableCategoryColumn.setCellValueFactory(cellData-> new SimpleStringProperty("456"));
         songTableTimeColumn.setCellValueFactory(cellData-> new SimpleStringProperty("789"));
 
+        songModel = new SongModel();
+
+        this.songsTable.setItems(songModel.getSongs());
         this.songsOnPlaylistTable.setItems(playlistSongs);
         playlistSongsColumn.setCellValueFactory(cellData->cellData.getValue().toStringProperty());
 
@@ -176,20 +181,28 @@ public class Controller implements Initializable {
     private void volumeFieldControl() {
         volumeSliderField.textProperty().addListener(
                 (observableValue, oldValue, newValue) -> {
-                    try{
-                        if(newValue.contains(","))
-                            newValue=newValue.replaceAll(",",".");
+                    try {
+                        if (newValue.contains(","))
+                            newValue = newValue.replaceAll(",", ".");
                         volumeSlider.setValue(Integer.parseInt(newValue));
-                    }
-                    catch (IllegalArgumentException e){
-                        //doesnt do anything if the input is invalid
+                    } catch (IllegalArgumentException e) {
                     }
                 }
         );
+
+        // Makes the volume field change when the volume slider is changed.
+        volumeSlider.valueProperty().addListener(
+                (observableValue, oldValue, newValue) -> {
+                    volumePercentage = newValue.doubleValue();
+                    volumeSliderField.setText(String.format("%.0f", volumePercentage));
+                }
+        );
+
     }
 
     /**
      * gets the value of the volume slider
+     *
      * @return the volume
      */
     public double getVolumePercentage() {
@@ -209,6 +222,7 @@ public class Controller implements Initializable {
      */
     public void search() {
         //TO DO implement this
+        songModel.searchSong(searchField.getText());
         System.out.println(searchField.getText());
     }
 
