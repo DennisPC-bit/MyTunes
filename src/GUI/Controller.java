@@ -271,21 +271,21 @@ public class Controller implements Initializable {
      * Deletes the selected playlist.
      */
     public void deletePlaylistButton() {
-        //TO DO implement this
+        this.playlists.remove(selectedPlaylist);
     }
 
     /**
      * Removes the selected song from the current playlist.
      */
     public void removeFromPlaylistButton() {
-        //TO DO implement this
+        selectedPlaylist.removeSong(selectedSongOnPlayList);
     }
 
     /**
      * Adds Song to the current playlist.
      */
     public void addToPlaylistButton() {
-        //TO DO implement this
+        selectedPlaylist.addSong(selectedSong);
     }
 
     /**
