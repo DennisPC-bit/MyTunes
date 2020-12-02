@@ -2,36 +2,36 @@ package BLL;
 
 import BE.Song;
 import DAL.DAO.DB.SongDBDAO;
-import GUI.Controller;
+import GUI.CONTROLLER.MainViewController;
 
 import java.sql.SQLException;
 import java.util.List;
 
 public class SongManager {
     protected static final SongDBDAO songDBDAO = new SongDBDAO();
-    protected Controller mainController;
+    protected MainViewController mainController;
 
-    public SongManager(){
+    public SongManager() {
         songDBDAO.setSongManager(this);
     }
 
-    public void setMainController(Controller mainController){
-        this.mainController=mainController;
+    public void setMainController(MainViewController mainController) {
+        this.mainController = mainController;
     }
 
-    public static List<Song> loadSongs(){
+    public static List<Song> loadSongs() {
         return songDBDAO.loadSongs();
     }
 
     public void createSong(String name, String path) throws SQLException {
-        songDBDAO.createSong(name,path);
+        songDBDAO.createSong(name, path);
     }
 
-    public void getSong(String name){
-        songDBDAO.getSong(name);
+    public Song getSong(String name) {
+        return songDBDAO.getSong(name);
     }
 
-    public void deleteSong(String name){
+    public void deleteSong(String name) {
         songDBDAO.deleteSong(name);
     }
 }

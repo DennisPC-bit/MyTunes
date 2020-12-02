@@ -1,24 +1,23 @@
-package GUI.Dialogs;
+package GUI.CONTROLLER;
 
 import BE.Playlist;
-import GUI.Controller;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
-public class dialogController {
+public class AddPlaylistController {
     @FXML
     private Label labelField;
     @FXML
     private TextField titleField;
     @FXML
     private Label dialogTitle;
-    private Controller mainController;
+    private MainViewController mainMainViewController;
     private int mode;
 
-    public void setMainController(Controller mainController){
-        this.mainController=mainController;
+    public void setMainController(MainViewController mainMainViewController){
+        this.mainMainViewController = mainMainViewController;
     }
     public void setMode(int i){
         this.mode=i;
@@ -40,17 +39,17 @@ public class dialogController {
         if(titleField!=null&&!titleField.getText().isEmpty()){
             switch (mode){
                 case (1) -> {
-                    mainController.addPlaylist(new Playlist(titleField.getText()));
+                    mainMainViewController.addPlaylist(new Playlist(titleField.getText()));
                 }
                 case(2)->{
-                    mainController.editPlaylist(titleField.getText());
+                    mainMainViewController.editPlaylist(titleField.getText());
                 }
             }
-            mainController.getWindowStage().close();
+            mainMainViewController.getWindowStage().close();
         }
     }
 
     public void cancelButton(ActionEvent actionEvent) {
-        mainController.getWindowStage().close();
+        mainMainViewController.getWindowStage().close();
     }
 }

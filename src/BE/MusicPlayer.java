@@ -20,7 +20,7 @@ public class MusicPlayer {
     }
 
     public void setSong(Song song) {
-        if (song != null) {
+        if (song != null && this.song != song) {
             this.song = song;
             if (!song.getFilePath().isBlank()) {
                 media = new Media(new File(song.getFilePath()).toURI().toString());

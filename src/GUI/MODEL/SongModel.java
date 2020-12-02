@@ -1,10 +1,9 @@
-package GUI.MODELS;
+package GUI.MODEL;
 
 import BE.Song;
 import DAL.DB.DbConnectionHandler;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.collections.ObservableListBase;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -31,9 +30,10 @@ public class SongModel {
             while (rs.next()) {
                 int id = rs.getInt("song_id");
                 String name = rs.getString("song_name");
+                String artist = rs.getString("song_artist");
                 String path = rs.getString("song_filepath");
                 int category = rs.getInt("category_id");
-                temp.add(new Song(id, name, path, category));
+                temp.add(new Song(id, name, artist, path, category));
             }
 
             return temp;

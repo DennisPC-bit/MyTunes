@@ -33,7 +33,7 @@ public class SongDBDAO {
                 int id = rs.getInt("song_id");
                 String name = rs.getString("song_title");
                 String path = rs.getString("song_filepath");
-                int category = rs.getInt("playlist_id");
+                int category = rs.getInt("category_id");
                 temp.add(new Song(id, name, path, category));
             }
             return temp;
