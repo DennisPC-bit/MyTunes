@@ -5,9 +5,9 @@ import BE.Song;
 import BLL.PlaylistManager;
 import BLL.SongManager;
 import GUI.Dialogs.dialogController;
+import GUI.MODELS.SongModel;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
-import GUI.MODELS.SongModel;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -20,7 +20,6 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 public class Controller implements Initializable {
@@ -117,7 +116,7 @@ public class Controller implements Initializable {
             this.selectedSong =(Song)newValue;
             if(selectedSong !=null){
                 currentSong.setText(selectedSong.getTitle());
-            songPlaying=selectedSong;
+                songPlaying=selectedSong;
             }
         }));
     }
@@ -126,19 +125,8 @@ public class Controller implements Initializable {
      * should load the lists from the memory, is temporarily almost empty lists
      */
     public void load() {
-        this.songs = FXCollections.observableArrayList(new ArrayList<>());
-        this.playlists = FXCollections.observableArrayList(new ArrayList<>());
-        Playlist playlist1 = new Playlist("woah that's a nice playlist");
-        Playlist playlist2 = new Playlist("woah that's a nice playlist2");
-        songs.add(new Song(69,"lol","xd",123));
-        songs.add(new Song(69,"lol2","xd",123));
-        playlists.add(playlist1);
-        playlists.add(playlist2);
-
-        playlist1.addSong(new Song(69,"lol3","xd",123));
-        playlist1.addSong(new Song(70,"lol4","xd",456));
-        playlist2.addSong(new Song(71,"lol5","xd",123));
-        playlist2.addSong(new Song(72,"lol6","xd",456));
+        this.songs = FXCollections.observableArrayList(SongManager.getSongs());
+        this.playlists = FXCollections.observableArrayList(PlaylistManager.getPlaylists());
     }
 
     /**
@@ -251,6 +239,14 @@ public class Controller implements Initializable {
         this.selectedPlaylist.setPlayListName(newTitle);
     }
 
+    /**
+     * Opens a dialog window
+     * @param labelFieldText
+     * @param dialogTitleText
+     * @param titleFieldText
+     * @param mode
+     * @throws IOException
+     */
     private void dialog(String labelFieldText,String dialogTitleText,String titleFieldText, int mode) throws IOException {
         FXMLLoader loader = new FXMLLoader(Main.class.getResource("Dialogs/dialog.fxml"));
         AnchorPane dialog = loader.load();
