@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/MuTunesOpgave.iml" filepath="$PROJECT_DIR$/MuTunesOpgave.iml" />
+      <module fileurl="file://$PROJECT_DIR$/MyTunesOpgave.iml" filepath="$PROJECT_DIR$/MyTunesOpgave.iml" />
     </modules>
   </component>
 </project>

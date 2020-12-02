@@ -4,6 +4,7 @@ import BE.Song;
 import DAL.DAO.DB.SongDBDAO;
 import GUI.Controller;
 
+import java.sql.SQLException;
 import java.util.List;
 
 public class SongManager {
@@ -22,7 +23,7 @@ public class SongManager {
         return songDBDAO.loadSongs();
     }
 
-    public void createSong(String name, String path){
+    public void createSong(String name, String path) throws SQLException {
         songDBDAO.createSong(name,path);
     }
 

@@ -57,7 +57,7 @@ public class SongDBDAO {
         }
     }
 
-    public boolean createSong(String name, String path, int categoryId) {
+    public boolean createSong(String name, String path, int categoryId) throws SQLException {
         var con = database.getConnection();
         var sql = "INSERT INTO song (song_title, song_filepath, category_id) VALUES(?,?,?);";
         try (PreparedStatement st = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -66,9 +66,6 @@ public class SongDBDAO {
             st.setInt(3, categoryId);
             st.executeUpdate();
             return true;
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-            return false;
         }
     }
 

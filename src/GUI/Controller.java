@@ -25,6 +25,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class Controller implements Initializable {
@@ -332,10 +333,17 @@ public class Controller implements Initializable {
         FileChooser fileChooser = new FileChooser();
         windowStage = new Stage();
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("MP3-Files","*.mp3"));
-        File selectedFile=fileChooser.showOpenDialog(windowStage);
-        if(selectedFile!=null){
-        songManager.createSong(selectedFile.getName().substring(0,selectedFile.getName().indexOf('.')),selectedFile.getPath());
-        load();
+        List<File> selectedFiles = new ArrayList<>();
+        selectedFiles.addAll(fileChooser.showOpenMultipleDialog(windowStage));
+        if(!selectedFiles.isEmpty()){
+            try {
+                for(File selectedFile: selectedFiles)
+                songManager.createSong(selectedFile.getName().substring(0,selectedFile.getName().indexOf('.')),selectedFile.getPath());
+                load();
+            } catch (Exception e) {
+                for(File selectedFile: selectedFiles)
+                songs.add(new Song(selectedFile.getName().substring(0,selectedFile.getName().indexOf('.')),selectedFile.getPath()));
+            }
         }
     }
 
