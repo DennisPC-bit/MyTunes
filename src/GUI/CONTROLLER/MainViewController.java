@@ -22,6 +22,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
@@ -138,6 +139,7 @@ public class MainViewController implements Initializable {
     public void load() {
         try {
             this.playlists = FXCollections.observableArrayList(PlaylistManager.loadPlaylists());
+            reloadPlaylistTable();
             this.songs = FXCollections.observableArrayList(SongManager.loadSongs());
             reloadSongTable();
         } catch (Exception e) {
@@ -170,7 +172,10 @@ public class MainViewController implements Initializable {
     }
 
     public void reloadSongTable() {
-        songs = FXCollections.observableArrayList(SongManager.loadSongs());
+        songsTable.setItems(FXCollections.observableList(songManager.loadSongs()));
+    }
+    private void reloadPlaylistTable() throws SQLException {
+        playlistTable.setItems(FXCollections.observableList(playlistManager.loadPlaylists()));
     }
 
     /**
@@ -312,6 +317,7 @@ public class MainViewController implements Initializable {
      */
     public void addToPlaylistButton() {
         selectedPlaylist.addSong(selectedSong);
+        this.songsOnPlaylistTable.setItems(FXCollections.observableList(selectedPlaylist.getSongList()));
     }
 
     /**

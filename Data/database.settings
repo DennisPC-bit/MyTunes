@@ -1,7 +1,7 @@
 #0 - MSSQL
 #1 - MySQL
 ConnectionType=1
-Server=127.0.0.1
+Server=localhost
 Database=mytunes
 User=root
 Password=

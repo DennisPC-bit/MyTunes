@@ -66,6 +66,7 @@ public class Playlist {
     }
 
     public void addSong(Song song) {
+        if(!songList.contains(song))
         this.songList.add(song);
     }
 
