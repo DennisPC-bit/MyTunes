@@ -34,7 +34,7 @@ public class Playlist {
     }
 
     private void initialize() {
-        songList = new ArrayList();
+        songList = new ArrayList<>();
     }
 
     public String getPlayListName() {

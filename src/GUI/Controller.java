@@ -72,8 +72,11 @@ public class Controller implements Initializable {
     private void selectedPlaylist() {
         this.playlistTable.getSelectionModel().selectedItemProperty().addListener(((observableValue, oldValue, newValue) -> {
             this.selectedPlaylist =(Playlist) newValue;
-            if(selectedPlaylist !=null)
-                System.out.println(selectedPlaylist.getPlayListName());
+            if(selectedPlaylist!=null){
+                this.playlistSongs = FXCollections.observableArrayList(selectedPlaylist.getSongList());
+                this.songsOnPlaylistTable.setItems(playlistSongs);
+                playlistSongsColumn.setCellValueFactory(cellData->cellData.getValue().toStringProperty());
+            }
         }));
     }
 
@@ -103,16 +106,19 @@ public class Controller implements Initializable {
      * should load the lists from the memory, is temporarily almost empty lists
      */
     public void load() {
-        this.songs= FXCollections.observableArrayList(new ArrayList<Song>());
-        this.playlistSongs= FXCollections.observableArrayList(new ArrayList<Song>());
-        this.playlists= FXCollections.observableArrayList(new ArrayList<Playlist>());
-
+        this.songs = FXCollections.observableArrayList(new ArrayList<Song>());
+        this.playlists = FXCollections.observableArrayList(new ArrayList<Playlist>());
+        Playlist playlist1 = new Playlist("woah that's a nice playlist");
+        Playlist playlist2 = new Playlist("woah that's a nice playlist2");
         songs.add(new Song(69,"lol","xd",123));
         songs.add(new Song(69,"lol2","xd",123));
-        playlistSongs.add(new Song(69,"lol3","xd",123));
-        playlistSongs.add(new Song(69,"lol4","xd",456));
-        playlists.add(new Playlist("woah that's a nice playlist"));
-        playlists.add(new Playlist("woah that's a nice playlist2"));
+        playlists.add(playlist1);
+        playlists.add(playlist2);
+
+        playlist1.addSong(new Song(69,"lol3","xd",123));
+        playlist1.addSong(new Song(70,"lol4","xd",456));
+        playlist2.addSong(new Song(71,"lol5","xd",123));
+        playlist2.addSong(new Song(72,"lol6","xd",456));
     }
 
     /**
