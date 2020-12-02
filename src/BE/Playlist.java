@@ -8,10 +8,11 @@ import java.util.List;
 
 public class Playlist {
 
-    public String playListName;
+    private String playListName;
+    private StringProperty playListNameProperty;
     private int playlistId;
     private List<Song> songList;
-    public static final String seperator = "|";
+    private static final String seperator = "|";
 
     public Playlist() {
         initialize();
@@ -35,14 +36,20 @@ public class Playlist {
 
     private void initialize() {
         songList = new ArrayList<>();
+        playListNameProperty = new SimpleStringProperty();
     }
 
     public String getPlayListName() {
         return playListName;
     }
 
+    public StringProperty getPlayListNameProperty() {
+        return playListNameProperty;
+    }
+
     public void setPlayListName(String playListName) {
         this.playListName = playListName;
+        this.playListNameProperty.setValue(playListName);
     }
 
     public int getPlaylistId() {
@@ -50,23 +57,22 @@ public class Playlist {
     }
 
     public void setPlaylistId(int playlistId) {
-        playlistId = playlistId;
+        this.playlistId = playlistId;
     }
 
     public List<Song> getSongList() {
-        return songList;
+        return this.songList;
     }
 
     public void addSong(Song song) {
-        songList.add(song);
+        this.songList.add(song);
     }
 
     public void addSongs(List<Song> songs) {
-        for (int i = 0; i < songs.size(); i++) {
-            var song = songs.get(i);
-            if (songList.contains(song))
-                songList.add(song);
-        }
+        songs.forEach(song->{
+            if(!this.songList.contains(song))
+            songList.add(song);
+        });
     }
 
     public void removeSong(Song song) {
@@ -77,9 +83,4 @@ public class Playlist {
         removeSong(oldSong);
         addSong(newSong);
     }
-
-    public StringProperty toStringProperty(){
-        return new SimpleStringProperty(this.playListName);
-    }
-
 }

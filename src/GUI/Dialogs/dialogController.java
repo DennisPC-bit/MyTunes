@@ -15,9 +15,13 @@ public class dialogController {
     @FXML
     private Label dialogTitle;
     private Controller mainController;
+    private int mode;
 
     public void setMainController(Controller mainController){
         this.mainController=mainController;
+    }
+    public void setMode(int i){
+        this.mode=i;
     }
 
     public void setLabelField(String labelText) {
@@ -34,7 +38,14 @@ public class dialogController {
 
     public void confirmButton(ActionEvent actionEvent) {
         if(titleField!=null&&!titleField.getText().isEmpty()){
-            mainController.addPlaylist(new Playlist(titleField.getText()));
+            switch (mode){
+                case (1) -> {
+                    mainController.addPlaylist(new Playlist(titleField.getText()));
+                }
+                case(2)->{
+                    mainController.editPlaylist(titleField.getText());
+                }
+            }
             mainController.getWindowStage().close();
         }
     }

@@ -158,7 +158,7 @@ public class Controller implements Initializable {
         playlistSongsColumn.setCellValueFactory(cellData->cellData.getValue().toStringProperty());
 
         this.playlistTable.setItems(playlists);
-        playlistNameColumn.setCellValueFactory(cellData->cellData.getValue().toStringProperty());
+        playlistNameColumn.setCellValueFactory(cellData->cellData.getValue().getPlayListNameProperty());
         playlistAmountOfSongsColumn.setCellValueFactory(cellData-> new SimpleStringProperty("123"));
         playlistTimeColumn.setCellValueFactory(cellData -> new SimpleStringProperty("123"));
     }
@@ -213,10 +213,6 @@ public class Controller implements Initializable {
         return windowStage;
     }
 
-    public void addPlaylist(Playlist playlist){
-        this.playlists.add(playlist);
-    }
-
     /**
      * should change songsTable, whenever the searchField changes.
      */
@@ -235,10 +231,27 @@ public class Controller implements Initializable {
      * Adds a new playlist.
      */
     public void addPlayListButton() throws IOException {
-        dialog("playlist name:","Add playlist","");
+        dialog("playlist name:","Add playlist","",1);
     }
 
-    private void dialog(String labelFieldText,String dialogTitleText,String titleFieldText) throws IOException {
+    public void addPlaylist(Playlist playlist){
+        this.playlists.add(playlist);
+    }
+
+    /**
+     * Edits the selected playlist.
+     */
+    public void editPlaylistButton() throws IOException {
+        if(selectedPlaylist!=null){
+        dialog("playlist name:", "Edit playlist",selectedPlaylist.getPlayListName(),2);
+        }
+    }
+
+    public void editPlaylist(String newTitle){
+        this.selectedPlaylist.setPlayListName(newTitle);
+    }
+
+    private void dialog(String labelFieldText,String dialogTitleText,String titleFieldText, int mode) throws IOException {
         FXMLLoader loader = new FXMLLoader(Main.class.getResource("Dialogs/dialog.fxml"));
         AnchorPane dialog = loader.load();
         dialogController controller = loader.getController();
@@ -246,23 +259,7 @@ public class Controller implements Initializable {
         controller.setLabelField(labelFieldText);
         controller.setTitleField(titleFieldText);
         controller.setDialogTitle(dialogTitleText);
-        windowStage = new Stage();
-        windowStage.setScene(new Scene(dialog));
-        windowStage.initModality(Modality.APPLICATION_MODAL);
-        windowStage.alwaysOnTopProperty();
-        windowStage.show();
-    }
-
-    /**
-     * Edits the selected playlist.
-     */
-    public void editPlaylistButton() throws IOException {
-        FXMLLoader loader = new FXMLLoader(Main.class.getResource("Dialogs/dialog.fxml"));
-        AnchorPane dialog = loader.load();
-        dialogController controller = loader.getController();
-        controller.setMainController(this);
-        controller.setLabelField("Playlist name:");
-        controller.setDialogTitle("Add Playlist");
+        controller.setMode(mode);
         windowStage = new Stage();
         windowStage.setScene(new Scene(dialog));
         windowStage.initModality(Modality.APPLICATION_MODAL);
