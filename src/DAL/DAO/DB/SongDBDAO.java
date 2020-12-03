@@ -16,8 +16,8 @@ public class SongDBDAO {
     protected DbConnectionHandler database;
     protected SongManager songManager;
 
-    public void setSongManager(SongManager songManager){
-        this.songManager=songManager;
+    public void setSongManager(SongManager songManager) {
+        this.songManager = songManager;
     }
 
     public SongDBDAO() {
@@ -88,11 +88,26 @@ public class SongDBDAO {
         }
     }
 
-    public boolean deleteSong(String name) {
+    public boolean deleteSong(int id) {
         var con = database.getConnection();
-        var sql = "DELETE FROM song WHERE song_title = ?;";
+        var sql = "DELETE FROM song WHERE song_id = ?;";
         try (PreparedStatement st = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-            st.setString(1, name);
+            st.setInt(1, id);
+            st.executeUpdate();
+            return true;
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean updateSong(int id, Song modified) {
+        var con = database.getConnection();
+        var sql = "UPDATE song SET song_title = ?, song_filepath = ? WHERE song_id = ?;";
+        try (PreparedStatement st = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            st.setString(1, modified.getTitle());
+            st.setString(2, modified.getFilePath());
+            st.setInt(3, id);
             st.executeUpdate();
             return true;
         } catch (SQLException ex) {

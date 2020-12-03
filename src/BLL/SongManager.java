@@ -31,7 +31,11 @@ public class SongManager {
         return songDBDAO.getSong(name);
     }
 
-    public void deleteSong(String name) {
-        songDBDAO.deleteSong(name);
+    public void updateSong(int id, Song modified) {
+        songDBDAO.updateSong(id, modified);
+    }
+
+    public void deleteSong(int id) {
+        songDBDAO.deleteSong(id);
     }
 }

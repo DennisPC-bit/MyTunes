@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class MainViewController implements Initializable {
@@ -174,6 +175,7 @@ public class MainViewController implements Initializable {
     public void reloadSongTable() {
         songsTable.setItems(FXCollections.observableList(songManager.loadSongs()));
     }
+
     private void reloadPlaylistTable() throws SQLException {
         playlistTable.setItems(FXCollections.observableList(playlistManager.loadPlaylists()));
     }
@@ -375,15 +377,40 @@ public class MainViewController implements Initializable {
      * Edits the selected song
      */
     public void editSongButton() {
-        //TO DO implement this
+
+        if (selectedSong != null) {
+            FXMLLoader loader = new FXMLLoader(Main.class.getResource("DIALOGUE/EditSong.fxml"));
+            AnchorPane dialog = null;
+            try {
+                dialog = loader.load();
+                EditSongController controller = loader.getController();
+                controller.setMainController(this);
+                controller.setSelectedSong(selectedSong);
+                windowStage = new Stage();
+                windowStage.setScene(new Scene(dialog));
+                windowStage.initModality(Modality.APPLICATION_MODAL);
+                windowStage.alwaysOnTopProperty();
+                windowStage.show();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            InputAlert.showMessageBox("No song selected", "Cannot modify something that doesn't exist!", "Please select a song.", Alert.AlertType.ERROR);
+        }
     }
 
     /**
      * Deletes the selected song
      */
     public void deleteSongButton() {
-        songManager.deleteSong(selectedSong.getTitle());
-        load();
+        var result = InputAlert.showMessageBox("Are you sure?", String.format("Deleting %s", selectedSong.getTitle()),
+                "You cannot undo this action once it's done!", Alert.AlertType.CONFIRMATION);
+        if (result.get() == ButtonType.OK) {
+            songManager.deleteSong(selectedSong.getId());
+            load();
+        } else {
+            // ... user chose CANCEL or closed the dialog
+        }
     }
 
     /**

@@ -16,11 +16,12 @@ public class AddPlaylistController {
     private MainViewController mainMainViewController;
     private int mode;
 
-    public void setMainController(MainViewController mainMainViewController){
+    public void setMainController(MainViewController mainMainViewController) {
         this.mainMainViewController = mainMainViewController;
     }
-    public void setMode(int i){
-        this.mode=i;
+
+    public void setMode(int i) {
+        this.mode = i;
     }
 
     public void setLabelField(String labelText) {
@@ -36,12 +37,12 @@ public class AddPlaylistController {
     }
 
     public void confirmButton(ActionEvent actionEvent) {
-        if(titleField!=null&&!titleField.getText().isEmpty()){
-            switch (mode){
+        if (titleField != null && !titleField.getText().isEmpty()) {
+            switch (mode) {
                 case (1) -> {
                     mainMainViewController.addPlaylist(new Playlist(titleField.getText()));
                 }
-                case(2)->{
+                case (2) -> {
                     mainMainViewController.editPlaylist(titleField.getText());
                 }
             }
