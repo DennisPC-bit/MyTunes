@@ -3,12 +3,10 @@ package DAL.DAO.DB;
 import BE.Playlist;
 import BE.Song;
 import BLL.PlaylistManager;
+import DAL.DB.DBConnector;
 import DAL.DB.DbConnectionHandler;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,8 +15,8 @@ public class PlaylistDBDAO {
     protected DbConnectionHandler database;
     protected PlaylistManager playlistManager;
 
-    public void setPlaylistManager(PlaylistManager playlistManager){
-        this.playlistManager=playlistManager;
+    public void setPlaylistManager(PlaylistManager playlistManager) {
+        this.playlistManager = playlistManager;
     }
 
     public PlaylistDBDAO() {
@@ -111,6 +109,15 @@ public class PlaylistDBDAO {
             st.setInt(2,song_id);
             st.executeUpdate();
             return true;
+    public void updatePlaylist(Playlist playlist) throws Exception {
+        try (Connection con = DBConnector.getConnection()) {
+            String sql = "UPDATE playlist SET playlist_name=?  WHERE playlist_id=?;";
+            PreparedStatement preparedStatement = con.prepareStatement(sql);
+            preparedStatement.setString(1, playlist.getPlayListName());
+            preparedStatement.setInt(2, playlist.getPlaylistId());
+            if (preparedStatement.executeUpdate() != 1) {
+                throw new Exception("Could not update Movie: " + playlist.toString());
+            }
         }
     }
 }
