@@ -310,11 +310,15 @@ public class MainViewController implements Initializable {
      * Deletes the selected playlist.
      */
     public void deletePlaylistButton() {
+        var result = InputAlert.showMessageBox("Are you sure?", String.format("Deleting %s", selectedPlaylist.getPlayListName()),
+                "You cannot undo this action once it's done!", Alert.AlertType.CONFIRMATION);
+        if (result.get() == ButtonType.OK) {
         try {
             playlistManager.deletePlaylist(selectedPlaylist.getPlayListName());
             load();
         } catch (Exception e) {
             playlists.remove(selectedPlaylist);
+        }
         }
     }
 
