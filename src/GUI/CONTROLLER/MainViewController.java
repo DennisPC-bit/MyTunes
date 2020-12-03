@@ -335,12 +335,14 @@ public class MainViewController implements Initializable {
      * Adds Song to the current playlist.
      */
     public void addToPlaylistButton() {
+        if(selectedPlaylist!=null){
         try {
             playlistManager.addSongsToPlaylist(selectedPlaylist.getPlaylistId(),selectedSong.getId());
             relaodSongsOnPlaylist();
         } catch (Exception e) {
             selectedPlaylist.addSong(selectedSong);
             this.songsOnPlaylistTable.setItems(FXCollections.observableList(selectedPlaylist.getSongList()));
+        }
         }
     }
 
@@ -399,7 +401,6 @@ public class MainViewController implements Initializable {
      * Edits the selected song
      */
     public void editSongButton() {
-
         if (selectedSong != null) {
             FXMLLoader loader = new FXMLLoader(Main.class.getResource("DIALOGUE/EditSong.fxml"));
             AnchorPane dialog = null;
