@@ -27,8 +27,8 @@ public class PlaylistDBDAO {
 
     public List<Playlist> loadPlaylist() throws SQLException {
         var temp = new ArrayList<Playlist>();
-        var con = database.getConnection();
-        try (Statement statement = con.createStatement()) {
+        try (var con = database.getConnection();
+             Statement statement = con.createStatement()) {
             ResultSet rs = statement.executeQuery("SELECT * FROM playlist;");
             while (rs.next()) {
                 int id = rs.getInt("playlist_id");
@@ -40,9 +40,9 @@ public class PlaylistDBDAO {
     }
 
     public boolean createPlaylist(String name) throws SQLException {
-        var con = database.getConnection();
         var sql = "INSERT INTO playlist (playlist_name) VALUES(?);";
-        try (PreparedStatement st = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+        try (var con = database.getConnection();
+             PreparedStatement st = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             st.setString(1, name);
             st.executeUpdate();
             return true;
@@ -50,9 +50,9 @@ public class PlaylistDBDAO {
     }
 
     public Playlist getPlaylist(String name) throws SQLException {
-        var con = database.getConnection();
         var sql = "SELECT FROM playlist WHERE playlist_name = ?;";
-        try (PreparedStatement st = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+        try (var con = database.getConnection();
+             PreparedStatement st = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             st.setString(1, name);
             st.executeUpdate();
             var resultSet = st.getResultSet();
@@ -65,9 +65,9 @@ public class PlaylistDBDAO {
     }
 
     public boolean deletePlaylist(String name) throws SQLException {
-        var con = database.getConnection();
+
         var sql = "DELETE FROM playlist WHERE playlist_name = ?;";
-        try (PreparedStatement st = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+        try (var con = database.getConnection(); PreparedStatement st = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             st.setString(1, name);
             st.executeUpdate();
             return true;
@@ -76,9 +76,9 @@ public class PlaylistDBDAO {
 
     public List<Song> loadSongsFromPlaylist(int playlist_id) throws SQLException {
         var temp = new ArrayList<Song>();
-        var con = database.getConnection();
         var sql = "SELECT song.song_id,song.song_title,song.song_filepath FROM playlist_song,song WHERE playlist_song.playlist_id=? AND playlist_song.song_id=song.song_id;";
-        try (PreparedStatement st = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+        try (var con = database.getConnection();
+             PreparedStatement st = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             st.setInt(1,playlist_id);
             st.execute();
             ResultSet rs = st.getResultSet();
@@ -93,9 +93,9 @@ public class PlaylistDBDAO {
     }
 
     public boolean AddSongToPlaylist(int playlist_id,int song_id) throws SQLException {
-        var con = database.getConnection();
         var sql = "INSERT INTO playlist_song (playlist_id,song_id) VALUES (?,?);";
-        try (PreparedStatement st = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+        try (var con = database.getConnection();
+             PreparedStatement st = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             st.setInt(1,playlist_id);
             st.setInt(2,song_id);
             st.executeUpdate();
@@ -104,9 +104,9 @@ public class PlaylistDBDAO {
     }
 
     public boolean deleteFromPlaylist(int playlist_id,int song_id) throws SQLException {
-        var con = database.getConnection();
         var sql = "DELETE FROM playlist_song WHERE playlist_id=? AND song_id=?;";
-        try (PreparedStatement st = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+        try (var con = database.getConnection();
+             PreparedStatement st = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             st.setInt(1, playlist_id);
             st.setInt(2,song_id);
             st.executeUpdate();
@@ -115,9 +115,9 @@ public class PlaylistDBDAO {
     }
 
     public void updatePlaylist(Playlist playlist) throws Exception {
-        var con = database.getConnection();
         String sql = "UPDATE playlist SET playlist_name=?  WHERE playlist_id=?;";
-        try (PreparedStatement preparedStatement = con.prepareStatement(sql)) {
+        try (var con = database.getConnection();
+             PreparedStatement preparedStatement = con.prepareStatement(sql)) {
             preparedStatement.setString(1, playlist.getPlayListName());
             preparedStatement.setInt(2, playlist.getPlaylistId());
             if (preparedStatement.executeUpdate() != 1) {

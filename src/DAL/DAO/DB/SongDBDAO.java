@@ -26,8 +26,8 @@ public class SongDBDAO {
 
     public List<Song> loadSongs() {
         var temp = new ArrayList<Song>();
-        var con = database.getConnection();
-        try (Statement statement = con.createStatement()) {
+        try (var con = database.getConnection();
+             Statement statement = con.createStatement()) {
             ResultSet rs = statement.executeQuery("SELECT * FROM song;");
             while (rs.next()) {
                 int id = rs.getInt("song_id");
@@ -44,9 +44,9 @@ public class SongDBDAO {
     }
 
     public boolean createSong(String name, String path) {
-        var con = database.getConnection();
         var sql = "INSERT INTO song (song_title, song_filepath) VALUES(?,?);";
-        try (PreparedStatement st = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+        try (var con = database.getConnection();
+             PreparedStatement st = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             st.setString(1, name);
             st.setString(2, path);
             st.executeUpdate();
@@ -58,9 +58,9 @@ public class SongDBDAO {
     }
 
     public boolean createSong(String name, String path, int categoryId) throws SQLException {
-        var con = database.getConnection();
         var sql = "INSERT INTO song (song_title, song_filepath, category_id) VALUES(?,?,?);";
-        try (PreparedStatement st = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+        try (var con = database.getConnection();
+             PreparedStatement st = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             st.setString(1, name);
             st.setString(2, path);
             st.setInt(3, categoryId);
@@ -70,9 +70,9 @@ public class SongDBDAO {
     }
 
     public Song getSong(String name) {
-        var con = database.getConnection();
         var sql = "SELECT FROM song WHERE song_name = ?;";
-        try (PreparedStatement st = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+        try (var con = database.getConnection();
+             PreparedStatement st = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             st.setString(1, name);
             st.executeUpdate();
             var resultSet = st.getResultSet();
@@ -89,9 +89,9 @@ public class SongDBDAO {
     }
 
     public boolean deleteSong(int id) {
-        var con = database.getConnection();
         var sql = "DELETE FROM song WHERE song_id = ?;";
-        try (PreparedStatement st = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+        try (var con = database.getConnection();
+             PreparedStatement st = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             st.setInt(1, id);
             st.executeUpdate();
             return true;
@@ -102,9 +102,9 @@ public class SongDBDAO {
     }
 
     public boolean updateSong(int id, Song modified) {
-        var con = database.getConnection();
         var sql = "UPDATE song SET song_title = ?, song_filepath = ? WHERE song_id = ?;";
-        try (PreparedStatement st = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+        try (var con = database.getConnection();
+             PreparedStatement st = con.prepareStatement(sql)) {
             st.setString(1, modified.getTitle());
             st.setString(2, modified.getFilePath());
             st.setInt(3, id);

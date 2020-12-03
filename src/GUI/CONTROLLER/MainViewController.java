@@ -17,13 +17,16 @@ import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class MainViewController implements Initializable {
@@ -101,10 +104,10 @@ public class MainViewController implements Initializable {
             if (selectedPlaylist != null) {
                 try{
                     this.playlistSongs=FXCollections.observableArrayList(playlistManager.loadSongsOnPlaylist(selectedPlaylist.getPlaylistId()));
-                    this.songsOnPlaylistTable.setItems(playlistSongs);
+                    songsOnPlaylistTable.setItems(playlistSongs);
                 }
                 catch(Exception e){
-                this.playlistSongs = FXCollections.observableArrayList(selectedPlaylist.getSongList());
+                playlistSongs = FXCollections.observableArrayList(selectedPlaylist.getSongList());
                 this.songsOnPlaylistTable.setItems(playlistSongs);
                 playlistSongsColumn.setCellValueFactory(cellData -> cellData.getValue().toStringProperty());}
             }
@@ -177,14 +180,14 @@ public class MainViewController implements Initializable {
     }
 
     public void reloadSongTable() {
-        songsTable.setItems(FXCollections.observableList(songManager.loadSongs()));
+        this.songsTable.setItems(FXCollections.observableList(songManager.loadSongs()));
     }
 
     private void reloadPlaylistTable() throws SQLException {
-        playlistTable.setItems(FXCollections.observableList(playlistManager.loadPlaylists()));
+        this.playlistTable.setItems(FXCollections.observableList(playlistManager.loadPlaylists()));
     }
 
-    private void relaodSongsOnPlaylist() throws SQLException {
+    private void reloadSongsOnPlaylist() throws SQLException {
         this.songsOnPlaylistTable.setItems(FXCollections.observableList(playlistManager.loadSongsOnPlaylist(selectedPlaylist.getPlaylistId())));
     }
 
@@ -321,7 +324,7 @@ public class MainViewController implements Initializable {
     public void removeFromPlaylistButton() {
         try{
         playlistManager.deleteSongFromPlaylist(selectedPlaylist.getPlaylistId(),selectedSongOnPlayList.getId());
-        relaodSongsOnPlaylist();
+        reloadSongsOnPlaylist();
         }
         catch (Exception e){
         selectedPlaylist.removeSong(selectedSongOnPlayList);
@@ -339,7 +342,7 @@ public class MainViewController implements Initializable {
                     if(song.getId()==selectedSong.getId())
                         return;
                 playlistManager.addSongsToPlaylist(selectedPlaylist.getPlaylistId(),selectedSong.getId());
-                relaodSongsOnPlaylist();
+                reloadSongsOnPlaylist();
             } catch (Exception e) {
                 selectedPlaylist.addSong(selectedSong);
                 this.songsOnPlaylistTable.setItems(FXCollections.observableList(selectedPlaylist.getSongList()));
@@ -365,22 +368,6 @@ public class MainViewController implements Initializable {
      * Adds a new song
      */
     public void newSongButton() {
-/*        FileChooser fileChooser = new FileChooser();
-        windowStage = new Stage();
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("MP3-Files", "*.mp3"));
-        List<File> selectedFiles = new ArrayList<>();
-
-        selectedFiles.addAll(fileChooser.showOpenMultipleDialog(windowStage));
-        if (!selectedFiles.isEmpty()) {
-            try {
-                for (File selectedFile : selectedFiles)
-                    songManager.createSong(selectedFile.getName().substring(0, selectedFile.getName().indexOf('.')), selectedFile.getPath());
-                load();
-            } catch (Exception e) {
-                for(File selectedFile: selectedFiles)
-                    songs.add(new Song(selectedFile.getName().substring(0,selectedFile.getName().indexOf('.')),selectedFile.getPath()));
-            }
-        }*/
 
         FXMLLoader loader = new FXMLLoader(Main.class.getResource("DIALOGUE/AddSong.fxml"));
         AnchorPane dialog = null;
@@ -438,10 +425,25 @@ public class MainViewController implements Initializable {
     }
 
     /**
-     * closes something i dont actually know what this was for.
+     * Adds multiple songs at once.
      */
-    public void closeButton() {
-        //TO DO implement this
+    public void bulkAddButton() {
+        FileChooser fileChooser = new FileChooser();
+        windowStage = new Stage();
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("MP3-Files", "*.mp3"));
+        List<File> selectedFiles = new ArrayList<>();
+
+        selectedFiles.addAll(fileChooser.showOpenMultipleDialog(windowStage));
+        if (!selectedFiles.isEmpty()) {
+            try {
+                for (File selectedFile : selectedFiles)
+                    songManager.createSong(selectedFile.getName().substring(0, selectedFile.getName().indexOf('.')), selectedFile.getPath());
+                load();
+            } catch (Exception e) {
+                for(File selectedFile: selectedFiles)
+                    songs.add(new Song(selectedFile.getName().substring(0,selectedFile.getName().indexOf('.')),selectedFile.getPath()));
+            }
+        }
     }
 
     /**

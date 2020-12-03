@@ -65,7 +65,6 @@ public class Song {
     }
 
     public void getMeta() {
-
         var file = new File(getFilePath());
         if (file.exists()) {
             media = new Media(file.toURI().toString());
@@ -132,7 +131,6 @@ public class Song {
     public void setArtist(String artist) {
         this.artist.set(artist);
     }
-
 
     public String getTitle() {
         return title.get();
