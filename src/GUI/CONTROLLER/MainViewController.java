@@ -24,7 +24,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class MainViewController implements Initializable {
@@ -101,12 +100,18 @@ public class MainViewController implements Initializable {
         this.playlistTable.getSelectionModel().selectedItemProperty().addListener(((observableValue, oldValue, newValue) -> {
             this.selectedPlaylist = (Playlist) newValue;
             if (selectedPlaylist != null) {
+                try{
+                    this.playlistSongs=FXCollections.observableArrayList(playlistManager.loadSongsOnPlaylist(selectedPlaylist.getPlaylistId()));
+                    this.songsOnPlaylistTable.setItems(playlistSongs);
+                }
+                catch(Exception e){
                 this.playlistSongs = FXCollections.observableArrayList(selectedPlaylist.getSongList());
                 this.songsOnPlaylistTable.setItems(playlistSongs);
-                playlistSongsColumn.setCellValueFactory(cellData -> cellData.getValue().toStringProperty());
+                playlistSongsColumn.setCellValueFactory(cellData -> cellData.getValue().toStringProperty());}
             }
         }));
     }
+
 
     /**
      * Changes selected song  on playlist to the song clicked in the songsOnPlaylistTable
@@ -178,6 +183,10 @@ public class MainViewController implements Initializable {
 
     private void reloadPlaylistTable() throws SQLException {
         playlistTable.setItems(FXCollections.observableList(playlistManager.loadPlaylists()));
+    }
+
+    private void relaodSongsOnPlaylist() throws SQLException {
+        this.songsOnPlaylistTable.setItems(FXCollections.observableList(playlistManager.loadSongsOnPlaylist(selectedPlaylist.getPlaylistId())));
     }
 
     /**
@@ -311,15 +320,27 @@ public class MainViewController implements Initializable {
      * Removes the selected song from the current playlist.
      */
     public void removeFromPlaylistButton() {
+        try{
+        playlistManager.deleteSongFromPlaylist(selectedPlaylist.getPlaylistId(),selectedSong.getId());
+        relaodSongsOnPlaylist();
+        }
+        catch (Exception e){
         selectedPlaylist.removeSong(selectedSongOnPlayList);
+            this.songsOnPlaylistTable.setItems(FXCollections.observableList(selectedPlaylist.getSongList()));
+        }
     }
 
     /**
      * Adds Song to the current playlist.
      */
     public void addToPlaylistButton() {
-        selectedPlaylist.addSong(selectedSong);
-        this.songsOnPlaylistTable.setItems(FXCollections.observableList(selectedPlaylist.getSongList()));
+        try {
+            playlistManager.addSongsToPlaylist(selectedPlaylist.getPlaylistId(),selectedSong.getId());
+            relaodSongsOnPlaylist();
+        } catch (Exception e) {
+            selectedPlaylist.addSong(selectedSong);
+            this.songsOnPlaylistTable.setItems(FXCollections.observableList(selectedPlaylist.getSongList()));
+        }
     }
 
     /**

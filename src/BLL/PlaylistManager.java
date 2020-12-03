@@ -1,6 +1,7 @@
 package BLL;
 
 import BE.Playlist;
+import BE.Song;
 import DAL.DAO.DB.PlaylistDBDAO;
 import GUI.CONTROLLER.MainViewController;
 
@@ -33,5 +34,17 @@ public class PlaylistManager {
 
     public void deletePlaylist(String name) throws SQLException {
         playlistDBDAO.deletePlaylist(name);
+    }
+
+    public List<Song> loadSongsOnPlaylist(int playlist_id) throws SQLException {
+        return playlistDBDAO.loadSongsFromPlaylist(playlist_id);
+    }
+
+    public void addSongsToPlaylist(int playlist_id,int song_id) throws SQLException {
+        playlistDBDAO.AddSongToPlaylist(playlist_id,song_id);
+    }
+
+    public void deleteSongFromPlaylist(int playlist_id,int song_id) throws SQLException {
+        playlistDBDAO.deleteFromPlaylist(playlist_id, song_id);
     }
 }
