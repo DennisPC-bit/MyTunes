@@ -377,20 +377,25 @@ public class MainViewController implements Initializable {
      * Edits the selected song
      */
     public void editSongButton() {
-        FXMLLoader loader = new FXMLLoader(Main.class.getResource("DIALOGUE/EditSong.fxml"));
-        AnchorPane dialog = null;
-        try {
-            dialog = loader.load();
-            EditSongController controller = loader.getController();
-            controller.setMainController(this);
-            controller.setSelectedSong(selectedSong);
-            windowStage = new Stage();
-            windowStage.setScene(new Scene(dialog));
-            windowStage.initModality(Modality.APPLICATION_MODAL);
-            windowStage.alwaysOnTopProperty();
-            windowStage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
+
+        if (selectedSong != null) {
+            FXMLLoader loader = new FXMLLoader(Main.class.getResource("DIALOGUE/EditSong.fxml"));
+            AnchorPane dialog = null;
+            try {
+                dialog = loader.load();
+                EditSongController controller = loader.getController();
+                controller.setMainController(this);
+                controller.setSelectedSong(selectedSong);
+                windowStage = new Stage();
+                windowStage.setScene(new Scene(dialog));
+                windowStage.initModality(Modality.APPLICATION_MODAL);
+                windowStage.alwaysOnTopProperty();
+                windowStage.show();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+
         }
     }
 
@@ -398,12 +403,8 @@ public class MainViewController implements Initializable {
      * Deletes the selected song
      */
     public void deleteSongButton() {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Are you sure?");
-        alert.setHeaderText(String.format("Deleting %s", selectedSong.getTitle()));
-        alert.setContentText("You cannot undo this action!");
-
-        Optional<ButtonType> result = alert.showAndWait();
+        var result = InputAlert.showMessageBox("Are you sure?", String.format("Deleting %s", selectedSong.getTitle()),
+                "You cannot undo this action once it's done!", Alert.AlertType.CONFIRMATION);
         if (result.get() == ButtonType.OK) {
             songManager.deleteSong(selectedSong.getId());
             load();
