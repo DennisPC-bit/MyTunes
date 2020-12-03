@@ -164,8 +164,6 @@ public class MainViewController implements Initializable {
      */
     private void initTables() {
         songModel = new SongModel();
-        this.playlistTable.setItems(playlists);
-        this.songsTable.setItems(songs);
         songTableTitleColumn.setCellValueFactory(cellData -> cellData.getValue().titleProperty());
         songTableArtistColumn.setCellValueFactory(cellData -> cellData.getValue().artistProperty());
         songTableCategoryColumn.setCellValueFactory(cellData -> new SimpleStringProperty("456"));
@@ -335,15 +333,18 @@ public class MainViewController implements Initializable {
      * Adds Song to the current playlist.
      */
     public void addToPlaylistButton() {
-        if(selectedPlaylist!=null){
-        try {
-            playlistManager.addSongsToPlaylist(selectedPlaylist.getPlaylistId(),selectedSong.getId());
-            relaodSongsOnPlaylist();
-        } catch (Exception e) {
-            selectedPlaylist.addSong(selectedSong);
-            this.songsOnPlaylistTable.setItems(FXCollections.observableList(selectedPlaylist.getSongList()));
-        }
-        }
+            if(selectedPlaylist!=null){
+                try {
+                for(Song song : playlistManager.loadSongsOnPlaylist(selectedPlaylist.getPlaylistId()))
+                    if(song.getId()==selectedSong.getId())
+                        return;
+                playlistManager.addSongsToPlaylist(selectedPlaylist.getPlaylistId(),selectedSong.getId());
+                relaodSongsOnPlaylist();
+            } catch (Exception e) {
+                selectedPlaylist.addSong(selectedSong);
+                this.songsOnPlaylistTable.setItems(FXCollections.observableList(selectedPlaylist.getSongList()));
+            }
+            }
     }
 
     /**
