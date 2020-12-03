@@ -77,7 +77,6 @@ public class MainViewController implements Initializable {
     public MainViewController() {
         playlistManager.setMainController(this);
         songManager.setMainController(this);
-
     }
 
     /**
@@ -122,6 +121,7 @@ public class MainViewController implements Initializable {
             if (selectedSongOnPlayList != null) {
                 currentSong.setText(selectedSongOnPlayList.getTitle());
                 songPlaying = selectedSongOnPlayList;
+                this.songsTable.getSelectionModel().clearSelection();
             }
         }));
     }
@@ -135,6 +135,7 @@ public class MainViewController implements Initializable {
             if (selectedSong != null) {
                 currentSong.setText(selectedSong.getTitle());
                 songPlaying = selectedSong;
+                this.songsOnPlaylistTable.getSelectionModel().clearSelection();
             }
         }));
     }
@@ -270,8 +271,8 @@ public class MainViewController implements Initializable {
 
     public void editPlaylist(String newTitle) {
         try {
-            playlistManager.deletePlaylist(selectedPlaylist.getPlayListName());
-            playlistManager.createPlaylist(newTitle);
+            selectedPlaylist.setPlayListName(newTitle);
+            playlistManager.updatePlaylist(selectedPlaylist);
             load();
         } catch (Exception e) {
             playlists.add(new Playlist(newTitle, selectedPlaylist.getSongList()));
@@ -321,7 +322,7 @@ public class MainViewController implements Initializable {
      */
     public void removeFromPlaylistButton() {
         try{
-        playlistManager.deleteSongFromPlaylist(selectedPlaylist.getPlaylistId(),selectedSong.getId());
+        playlistManager.deleteSongFromPlaylist(selectedPlaylist.getPlaylistId(),selectedSongOnPlayList.getId());
         relaodSongsOnPlaylist();
         }
         catch (Exception e){
@@ -445,7 +446,13 @@ public class MainViewController implements Initializable {
      * Plays from the playlist
      */
     public void playButton() {
-        if (selectedSong != null && !playing) {
+        if(selectedSongOnPlayList!= null && !playing)
+        {
+            musicPlayer.setSong(selectedSongOnPlayList);
+            musicPlayer.setVolume(volumePercentage);
+            musicPlayer.play();
+        }
+        else if (selectedSong != null && !playing) {
             musicPlayer.setSong(selectedSong);
             musicPlayer.setVolume(volumePercentage);
             musicPlayer.play();
@@ -459,14 +466,34 @@ public class MainViewController implements Initializable {
      * Goes to the next song on the playlist
      */
     public void nextButton() {
-        //TO DO implement this
+        if(selectedSongOnPlayList!=null){
+            this.songsOnPlaylistTable.getSelectionModel().selectBelowCell();
+            setSong(selectedSongOnPlayList);
+        }
+        if(selectedSong!=null){
+            this.songsTable.getSelectionModel().selectBelowCell();
+            setSong(selectedSong);
+        }
+    }
+
+    private void setSong(Song selectedSong) {
+        musicPlayer.pause();
+        musicPlayer.setSong(selectedSong);
+        musicPlayer.play();
     }
 
     /**
      * Goes to the last song on the playlist
      */
     public void previousButton() {
-        //TO DO implement this
+        if(selectedSongOnPlayList!=null){
+            this.songsOnPlaylistTable.getSelectionModel().selectAboveCell();
+            setSong(selectedSongOnPlayList);
+        }
+        if(selectedSong!=null){
+            this.songsTable.getSelectionModel().selectAboveCell();
+            setSong(selectedSong);
+        }
     }
 
     public SongManager getSongManager() {

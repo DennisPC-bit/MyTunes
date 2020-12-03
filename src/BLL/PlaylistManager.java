@@ -47,4 +47,8 @@ public class PlaylistManager {
     public void deleteSongFromPlaylist(int playlist_id,int song_id) throws SQLException {
         playlistDBDAO.deleteFromPlaylist(playlist_id, song_id);
     }
+
+    public void updatePlaylist(Playlist playlist) throws Exception {
+        playlistDBDAO.updatePlaylist(playlist);
+    }
 }

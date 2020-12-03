@@ -23,7 +23,7 @@ public class DBConnector
             dataSource.setServerName(props.getProperty("server"));
         }
 
-        public static Connection getConnection() throws SQLServerException
+        public Connection getConnection() throws SQLServerException
         {
             return dataSource.getConnection();
         }
