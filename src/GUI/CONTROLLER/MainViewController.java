@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class MainViewController implements Initializable {
@@ -174,6 +175,7 @@ public class MainViewController implements Initializable {
     public void reloadSongTable() {
         songsTable.setItems(FXCollections.observableList(songManager.loadSongs()));
     }
+
     private void reloadPlaylistTable() throws SQLException {
         playlistTable.setItems(FXCollections.observableList(playlistManager.loadPlaylists()));
     }
@@ -375,15 +377,39 @@ public class MainViewController implements Initializable {
      * Edits the selected song
      */
     public void editSongButton() {
-        //TO DO implement this
+        FXMLLoader loader = new FXMLLoader(Main.class.getResource("DIALOGUE/EditSong.fxml"));
+        AnchorPane dialog = null;
+        try {
+            dialog = loader.load();
+            EditSongController controller = loader.getController();
+            controller.setMainController(this);
+            controller.setSelectedSong(selectedSong);
+            windowStage = new Stage();
+            windowStage.setScene(new Scene(dialog));
+            windowStage.initModality(Modality.APPLICATION_MODAL);
+            windowStage.alwaysOnTopProperty();
+            windowStage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
      * Deletes the selected song
      */
     public void deleteSongButton() {
-        songManager.deleteSong(selectedSong.getTitle());
-        load();
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Are you sure?");
+        alert.setHeaderText(String.format("Deleting %s", selectedSong.getTitle()));
+        alert.setContentText("You cannot undo this action!");
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == ButtonType.OK) {
+            songManager.deleteSong(selectedSong.getTitle());
+            load();
+        } else {
+            // ... user chose CANCEL or closed the dialog
+        }
     }
 
     /**
