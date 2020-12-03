@@ -395,7 +395,7 @@ public class MainViewController implements Initializable {
                 e.printStackTrace();
             }
         } else {
-
+            InputAlert.showMessageBox("No song selected", "Cannot modify something that doesn't exist!", "Please select a song.", Alert.AlertType.ERROR);
         }
     }
 
