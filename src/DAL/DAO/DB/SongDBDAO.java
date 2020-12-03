@@ -88,11 +88,11 @@ public class SongDBDAO {
         }
     }
 
-    public boolean deleteSong(String name) {
+    public boolean deleteSong(int id) {
         var con = database.getConnection();
-        var sql = "DELETE FROM song WHERE song_title = ?;";
+        var sql = "DELETE FROM song WHERE song_id = ?;";
         try (PreparedStatement st = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-            st.setString(1, name);
+            st.setInt(1, id);
             st.executeUpdate();
             return true;
         } catch (SQLException ex) {
