@@ -46,7 +46,7 @@ public class EditSongController extends Component {
         }
     }
 
-    public void save(ActionEvent event) {
+    public void save(ActionEvent event) throws Exception {
         if (selectedSong != null) {
             selectedSong.setTitle(titleTextField.getText());
             selectedSong.setFilePath(filePathTextField.getText());

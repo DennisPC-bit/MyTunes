@@ -2,6 +2,7 @@ package DAL.DAO.DB;
 
 import BE.Song;
 import BLL.SongManager;
+import DAL.DAO.SongDAOInterface;
 import DAL.DB.DbConnectionHandler;
 
 import java.sql.PreparedStatement;
@@ -11,11 +12,12 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SongDBDAO {
+public class SongDBDAO implements SongDAOInterface {
     protected List<Song> songs;
     protected DbConnectionHandler database;
     protected SongManager songManager;
 
+    @Override
     public void setSongManager(SongManager songManager) {
         this.songManager = songManager;
     }
@@ -24,6 +26,7 @@ public class SongDBDAO {
         database = DbConnectionHandler.getInstance();
     }
 
+    @Override
     public List<Song> loadSongs() {
         var temp = new ArrayList<Song>();
         try (var con = database.getConnection();
@@ -43,6 +46,7 @@ public class SongDBDAO {
         }
     }
 
+    @Override
     public boolean createSong(String name, String path) {
         var sql = "INSERT INTO song (song_title, song_filepath) VALUES(?,?);";
         try (var con = database.getConnection();
@@ -57,6 +61,7 @@ public class SongDBDAO {
         }
     }
 
+    @Override
     public boolean createSong(String name, String path, int categoryId) throws SQLException {
         var sql = "INSERT INTO song (song_title, song_filepath, category_id) VALUES(?,?,?);";
         try (var con = database.getConnection();
@@ -69,6 +74,7 @@ public class SongDBDAO {
         }
     }
 
+    @Override
     public Song getSong(String name) {
         var sql = "SELECT FROM song WHERE song_name = ?;";
         try (var con = database.getConnection();
@@ -88,6 +94,7 @@ public class SongDBDAO {
         }
     }
 
+    @Override
     public boolean deleteSong(int id) {
         var sql = "DELETE FROM song WHERE song_id = ?;";
         try (var con = database.getConnection();
@@ -101,6 +108,7 @@ public class SongDBDAO {
         }
     }
 
+    @Override
     public boolean updateSong(int id, Song modified) {
         var sql = "UPDATE song SET song_title = ?, song_filepath = ? WHERE song_id = ?;";
         try (var con = database.getConnection();

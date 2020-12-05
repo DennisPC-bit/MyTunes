@@ -2,40 +2,41 @@ package BLL;
 
 import BE.Song;
 import DAL.DAO.DB.SongDBDAO;
+import DAL.DAO.FILE.SongLocalDAO;
+import DAL.DAO.SongDAOInterface;
 import GUI.CONTROLLER.MainViewController;
 
-import java.sql.SQLException;
 import java.util.List;
 
 public class SongManager {
-    protected static final SongDBDAO songDBDAO = new SongDBDAO();
+    protected static SongDAOInterface songDAO = new SongLocalDAO();
     protected MainViewController mainController;
 
     public SongManager() {
-        songDBDAO.setSongManager(this);
+        songDAO.setSongManager(this);
     }
 
     public void setMainController(MainViewController mainController) {
         this.mainController = mainController;
     }
 
-    public static List<Song> loadSongs() {
-        return songDBDAO.loadSongs();
+    public static List<Song> loadSongs() throws Exception{
+        return songDAO.loadSongs();
     }
 
-    public void createSong(String name, String path) throws SQLException {
-        songDBDAO.createSong(name, path);
+    public void createSong(String name, String path) throws Exception {
+        songDAO.createSong(name, path);
     }
 
-    public Song getSong(String name) {
-        return songDBDAO.getSong(name);
+    public Song getSong(String name) throws Exception{
+        return songDAO.getSong(name);
     }
 
-    public void updateSong(int id, Song modified) {
-        songDBDAO.updateSong(id, modified);
+    public void updateSong(int id, Song modified) throws Exception{
+        songDAO.updateSong(id, modified);
     }
 
-    public void deleteSong(int id) {
-        songDBDAO.deleteSong(id);
+    public void deleteSong(int id) throws Exception {
+        songDAO.deleteSong(id);
     }
 }

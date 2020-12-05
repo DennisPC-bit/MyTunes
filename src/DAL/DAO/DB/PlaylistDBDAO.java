@@ -3,6 +3,7 @@ package DAL.DAO.DB;
 import BE.Playlist;
 import BE.Song;
 import BLL.PlaylistManager;
+import DAL.DAO.PlaylistDAOInterface;
 import DAL.DB.DbConnectionHandler;
 
 import java.sql.PreparedStatement;
@@ -12,11 +13,12 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PlaylistDBDAO {
+public class PlaylistDBDAO implements PlaylistDAOInterface {
     protected List<Playlist> playlists;
     protected DbConnectionHandler database;
     protected PlaylistManager playlistManager;
 
+    @Override
     public void setPlaylistManager(PlaylistManager playlistManager) {
         this.playlistManager = playlistManager;
     }
@@ -25,6 +27,7 @@ public class PlaylistDBDAO {
         database = DbConnectionHandler.getInstance();
     }
 
+    @Override
     public List<Playlist> loadPlaylist() throws SQLException {
         var temp = new ArrayList<Playlist>();
         try (var con = database.getConnection();
@@ -39,16 +42,17 @@ public class PlaylistDBDAO {
         }
     }
 
-    public boolean createPlaylist(String name) throws SQLException {
+    @Override
+    public void createPlaylist(String name) throws SQLException {
         var sql = "INSERT INTO playlist (playlist_name) VALUES(?);";
         try (var con = database.getConnection();
              PreparedStatement st = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             st.setString(1, name);
             st.executeUpdate();
-            return true;
         }
     }
 
+    @Override
     public Playlist getPlaylist(String name) throws SQLException {
         var sql = "SELECT FROM playlist WHERE playlist_name = ?;";
         try (var con = database.getConnection();
@@ -64,16 +68,18 @@ public class PlaylistDBDAO {
         }
     }
 
-    public boolean deletePlaylist(String name) throws SQLException {
+    @Override
+    public void deletePlaylist(String name) throws SQLException {
 
         var sql = "DELETE FROM playlist WHERE playlist_name = ?;";
         try (var con = database.getConnection(); PreparedStatement st = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             st.setString(1, name);
             st.executeUpdate();
-            return true;
+            return;
         }
     }
 
+    @Override
     public List<Song> loadSongsFromPlaylist(int playlist_id) throws SQLException {
         var temp = new ArrayList<Song>();
         var sql = "SELECT song.song_id,song.song_title,song.song_filepath FROM playlist_song,song WHERE playlist_song.playlist_id=? AND playlist_song.song_id=song.song_id;";
@@ -92,28 +98,29 @@ public class PlaylistDBDAO {
         }
     }
 
-    public boolean AddSongToPlaylist(int playlist_id,int song_id) throws SQLException {
+    @Override
+    public void AddSongToPlaylist(int playlist_id,int song_id) throws SQLException {
         var sql = "INSERT INTO playlist_song (playlist_id,song_id) VALUES (?,?);";
         try (var con = database.getConnection();
              PreparedStatement st = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             st.setInt(1,playlist_id);
             st.setInt(2,song_id);
             st.executeUpdate();
-            return true;
         }
     }
 
-    public boolean deleteFromPlaylist(int playlist_id,int song_id) throws SQLException {
+    @Override
+    public void deleteFromPlaylist(int playlist_id,int song_id) throws SQLException {
         var sql = "DELETE FROM playlist_song WHERE playlist_id=? AND song_id=?;";
         try (var con = database.getConnection();
              PreparedStatement st = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             st.setInt(1, playlist_id);
             st.setInt(2,song_id);
             st.executeUpdate();
-            return true;
         }
     }
 
+    @Override
     public void updatePlaylist(Playlist playlist) throws Exception {
         String sql = "UPDATE playlist SET playlist_name=?  WHERE playlist_id=?;";
         try (var con = database.getConnection();

@@ -6,6 +6,9 @@ import BE.Playlist;
 import BE.Song;
 import BLL.PlaylistManager;
 import BLL.SongManager;
+import DAL.DAO.DB.PlaylistDBDAO;
+import DAL.DAO.FILE.PlaylistLocalDAO;
+import DAL.DAO.FILE.SongLocalDAO;
 import GUI.MODEL.SongModel;
 import GUI.Main;
 import javafx.beans.property.SimpleStringProperty;
@@ -22,7 +25,9 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -69,7 +74,6 @@ public class MainViewController implements Initializable {
     private ObservableList<Song> songs;
     private ObservableList<Song> playlistSongs;
     private ObservableList<Playlist> playlists;
-
     private PlaylistManager playlistManager = new PlaylistManager();
     private SongManager songManager = new SongManager();
     private InputAlert inputAlert = new InputAlert();
@@ -153,12 +157,15 @@ public class MainViewController implements Initializable {
             this.songs = FXCollections.observableArrayList(SongManager.loadSongs());
             reloadSongTable();
         } catch (Exception e) {
+
+            /*
             playlists = FXCollections.observableArrayList(new ArrayList<>());
             this.playlistTable.setItems(playlists);
 
             songs = FXCollections.observableArrayList(new ArrayList<>());
             this.songsTable.setItems(songs);
             inputAlert.showAlert("You are not connected to the Database. Nothing will be saved!");
+            */
         }
     }
 
@@ -179,15 +186,15 @@ public class MainViewController implements Initializable {
         playlistTimeColumn.setCellValueFactory(cellData -> new SimpleStringProperty("123"));
     }
 
-    public void reloadSongTable() {
+    public void reloadSongTable() throws Exception {
         this.songsTable.setItems(FXCollections.observableList(songManager.loadSongs()));
     }
 
-    private void reloadPlaylistTable() throws SQLException {
+    private void reloadPlaylistTable() throws Exception {
         this.playlistTable.setItems(FXCollections.observableList(playlistManager.loadPlaylists()));
     }
 
-    private void reloadSongsOnPlaylist() throws SQLException {
+    private void reloadSongsOnPlaylist() throws Exception {
         this.songsOnPlaylistTable.setItems(FXCollections.observableList(playlistManager.loadSongsOnPlaylist(selectedPlaylist.getPlaylistId())));
     }
 
@@ -257,7 +264,7 @@ public class MainViewController implements Initializable {
             playlistManager.createPlaylist(playlist.getPlayListName());
             load();
         } catch (Exception e) {
-            playlists.add(new Playlist(playlist.getPlayListName()));
+            //playlists.add(new Playlist(playlist.getPlayListName()));
         }
     }
 
@@ -276,8 +283,8 @@ public class MainViewController implements Initializable {
             playlistManager.updatePlaylist(selectedPlaylist);
             load();
         } catch (Exception e) {
-            playlists.add(new Playlist(newTitle, selectedPlaylist.getSongList()));
-            playlists.remove(selectedPlaylist);
+            //playlists.add(new Playlist(newTitle, selectedPlaylist.getSongList()));
+            //playlists.remove(selectedPlaylist);
         }
     }
 
@@ -317,7 +324,7 @@ public class MainViewController implements Initializable {
             playlistManager.deletePlaylist(selectedPlaylist.getPlayListName());
             load();
         } catch (Exception e) {
-            playlists.remove(selectedPlaylist);
+            //playlists.remove(selectedPlaylist);
         }
         }
     }
@@ -332,7 +339,7 @@ public class MainViewController implements Initializable {
         }
         catch (Exception e){
         selectedPlaylist.removeSong(selectedSongOnPlayList);
-            this.songsOnPlaylistTable.setItems(FXCollections.observableList(selectedPlaylist.getSongList()));
+        this.songsOnPlaylistTable.setItems(FXCollections.observableList(selectedPlaylist.getSongList()));
         }
     }
 
@@ -421,7 +428,11 @@ public class MainViewController implements Initializable {
         var result = InputAlert.showMessageBox("Are you sure?", String.format("Deleting %s", selectedSong.getTitle()),
                 "You cannot undo this action once it's done!", Alert.AlertType.CONFIRMATION);
         if (result.get() == ButtonType.OK) {
-            songManager.deleteSong(selectedSong.getId());
+            try {
+                songManager.deleteSong(selectedSong.getId());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             load();
         } else {
             // ... user chose CANCEL or closed the dialog
