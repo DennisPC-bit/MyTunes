@@ -12,8 +12,6 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("View.fxml"));
         primaryStage.setTitle("MyTunes");
-        if(true)
-        root.getStylesheets().add("GUI/modena_dark.css");
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
     }

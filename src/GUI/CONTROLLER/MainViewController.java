@@ -20,6 +20,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -443,17 +444,22 @@ public class MainViewController implements Initializable {
         windowStage = new Stage();
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("MP3-Files", "*.mp3"));
         List<File> selectedFiles = new ArrayList<>();
-
+        try{
         selectedFiles.addAll(fileChooser.showOpenMultipleDialog(windowStage));
-        if (!selectedFiles.isEmpty()) {
-            try {
-                for (File selectedFile : selectedFiles)
-                    songManager.createSong(selectedFile.getName().substring(0, selectedFile.getName().indexOf('.')), selectedFile.getPath());
-                load();
+        try {
+                if(!selectedFiles.isEmpty()){
+                    for (File selectedFile : selectedFiles)
+                        songManager.createSong(selectedFile.getName().substring(0, selectedFile.getName().indexOf('.')), selectedFile.getPath());
+                    load();
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
+        catch(Exception e){
+            System.out.println( "selected files is empty: " + selectedFiles.isEmpty());
+        }
+
     }
 
     /**
