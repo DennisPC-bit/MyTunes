@@ -2,6 +2,7 @@ package DAL.DAO.DB;
 
 import BE.Song;
 import BLL.SongManager;
+import DAL.DAO.FILE.SongLocalDAO;
 import DAL.DAO.SongDAOInterface;
 import DAL.DB.DbConnectionHandler;
 
@@ -13,7 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SongDBDAO implements SongDAOInterface {
-    protected List<Song> songs;
     protected DbConnectionHandler database;
     protected SongManager songManager;
 
@@ -22,8 +22,12 @@ public class SongDBDAO implements SongDAOInterface {
         this.songManager = songManager;
     }
 
-    public SongDBDAO() {
+    public SongDBDAO() throws SQLException {
         database = DbConnectionHandler.getInstance();
+        if(database.getConnection()==null){
+            songManager.setSongDAO(new SongLocalDAO());
+            throw new SQLException("could not connect to database");
+        }
     }
 
     @Override

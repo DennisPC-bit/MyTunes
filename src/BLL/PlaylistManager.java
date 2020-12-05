@@ -11,9 +11,22 @@ import GUI.CONTROLLER.MainViewController;
 import java.util.List;
 
 public class PlaylistManager{
-    protected static PlaylistDAOInterface playlistDAO = new PlaylistDBDAO();
+    protected static PlaylistDAOInterface playlistDAO;
+
+    static {
+        try {
+            playlistDAO = new PlaylistDBDAO();
+        } catch (Exception e) {
+            playlistDAO = new PlaylistLocalDAO();
+        }
+    }
+
     protected MainViewController mainController;
     private static InputAlert inputAlert = new InputAlert();
+
+    public void setPlaylistDAO(PlaylistDAOInterface playlistDAO) {
+        PlaylistManager.playlistDAO = playlistDAO;
+    }
 
     public PlaylistManager(){
         playlistDAO.setPlaylistManager(this);
@@ -27,22 +40,8 @@ public class PlaylistManager{
      * loads the playlists, if it cannot connect to the database, it saves locally
      * @return Playlists
      */
-    public static List<Playlist> loadPlaylists() {
-        try {
+    public static List<Playlist> loadPlaylists() throws Exception {
             return playlistDAO.loadPlaylist();
-        } catch (NullPointerException e) {
-            inputAlert.showAlert("You cannot connect to the database, so everything will be saved locally.");
-            playlistDAO = new PlaylistLocalDAO();
-            try {
-                return playlistDAO.loadPlaylist();
-            } catch (Exception exception) {
-                exception.printStackTrace();
-                return null;
-            }
-        }catch (Exception exception) {
-            exception.printStackTrace();
-            return null;
-        }
     }
 
     public void createPlaylist(String name) throws Exception {

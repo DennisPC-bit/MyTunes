@@ -68,8 +68,8 @@ public class MainViewController implements Initializable {
     private ObservableList<Song> songs;
     private ObservableList<Song> playlistSongs;
     private ObservableList<Playlist> playlists;
-    private PlaylistManager playlistManager = new PlaylistManager();
-    private SongManager songManager = new SongManager();
+    private static final PlaylistManager playlistManager = new PlaylistManager();
+    private static final SongManager songManager = new SongManager();
     private InputAlert inputAlert = new InputAlert();
     private MusicPlayer musicPlayer = new MusicPlayer();
     private Stage windowStage = new Stage();
@@ -150,14 +150,6 @@ public class MainViewController implements Initializable {
             reloadSongTable();
         } catch (Exception e) {
             e.printStackTrace();
-            /*
-            playlists = FXCollections.observableArrayList(new ArrayList<>());
-            this.playlistTable.setItems(playlists);
-
-            songs = FXCollections.observableArrayList(new ArrayList<>());
-            this.songsTable.setItems(songs);
-            inputAlert.showAlert("You are not connected to the Database. Nothing will be saved!");
-            */
         }
     }
 
@@ -178,16 +170,28 @@ public class MainViewController implements Initializable {
         playlistTimeColumn.setCellValueFactory(cellData -> new SimpleStringProperty("123"));
     }
 
-    public void reloadSongTable() throws Exception {
-        this.songsTable.setItems(FXCollections.observableList(songManager.loadSongs()));
+    public void reloadSongTable() {
+        try {
+            this.songsTable.setItems(FXCollections.observableList(songManager.loadSongs()));
+        }catch (Exception exception) {
+            System.out.println("could not load songs locally");
+        }
     }
 
-    private void reloadPlaylistTable() throws Exception {
-        this.playlistTable.setItems(FXCollections.observableList(playlistManager.loadPlaylists()));
+    private void reloadPlaylistTable() {
+        try {
+            this.playlistTable.setItems(FXCollections.observableList(playlistManager.loadPlaylists()));
+        } catch (Exception exception) {
+            System.out.println("could not load playlistTable locally");
+        }
     }
 
-    private void reloadSongsOnPlaylist() throws Exception {
-        this.songsOnPlaylistTable.setItems(FXCollections.observableList(playlistManager.loadSongsOnPlaylist(selectedPlaylist.getPlaylistId())));
+    private void reloadSongsOnPlaylist() {
+        try {
+            this.songsOnPlaylistTable.setItems(FXCollections.observableList(playlistManager.loadSongsOnPlaylist(selectedPlaylist.getPlaylistId())));
+        } catch (Exception exception) {
+            System.out.println("could not load playlistTable locally");
+        }
     }
 
     /**

@@ -3,6 +3,7 @@ package DAL.DAO.DB;
 import BE.Playlist;
 import BE.Song;
 import BLL.PlaylistManager;
+import DAL.DAO.FILE.PlaylistLocalDAO;
 import DAL.DAO.PlaylistDAOInterface;
 import DAL.DB.DbConnectionHandler;
 
@@ -13,8 +14,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PlaylistDBDAO implements PlaylistDAOInterface {
-    protected List<Playlist> playlists;
+public class PlaylistDBDAO implements PlaylistDAOInterface{
     protected DbConnectionHandler database;
     protected PlaylistManager playlistManager;
 
@@ -23,8 +23,12 @@ public class PlaylistDBDAO implements PlaylistDAOInterface {
         this.playlistManager = playlistManager;
     }
 
-    public PlaylistDBDAO() {
+    public PlaylistDBDAO() throws SQLException {
         database = DbConnectionHandler.getInstance();
+        if(database.getConnection()==null){
+            playlistManager.setPlaylistDAO(new PlaylistLocalDAO());
+            throw new SQLException("could not connect to database");
+        }
     }
 
     @Override
@@ -121,14 +125,14 @@ public class PlaylistDBDAO implements PlaylistDAOInterface {
     }
 
     @Override
-    public void updatePlaylist(Playlist playlist) throws Exception {
+    public void updatePlaylist(Playlist playlist) throws SQLException {
         String sql = "UPDATE playlist SET playlist_name=?  WHERE playlist_id=?;";
         try (var con = database.getConnection();
              PreparedStatement preparedStatement = con.prepareStatement(sql)) {
             preparedStatement.setString(1, playlist.getPlayListName());
             preparedStatement.setInt(2, playlist.getPlaylistId());
             if (preparedStatement.executeUpdate() != 1) {
-                throw new Exception("Could not update Movie: " + playlist.toString());
+                System.out.println("Could not update Movie: " + playlist.toString());
             }
         }
     }

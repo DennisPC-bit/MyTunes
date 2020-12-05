@@ -3,7 +3,9 @@ package DAL.DAO.FILE;
 import BE.Song;
 import BLL.SongManager;
 import DAL.DAO.SongDAOInterface;
+
 import java.io.File;
+import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +24,7 @@ public class SongLocalDAO implements SongDAOInterface {
     }
 
     @Override
-    public List<Song> loadSongs() throws Exception{
+    public List<Song> loadSongs() throws IOException {
         List<Song> tmp = new ArrayList<>();
         try(RandomAccessFile raf = new RandomAccessFile(new File(LOCAL_SONG_PATH),"r")){
             while(raf.getFilePointer()<raf.length())
@@ -42,7 +44,7 @@ public class SongLocalDAO implements SongDAOInterface {
     }
 
     @Override
-    public boolean createSong(String name, String path) throws Exception {
+    public boolean createSong(String name, String path) throws IOException {
         String formattedName = String.format("%-" + SONG_NAME_SIZE + "s",name).substring(0,SONG_NAME_SIZE);
         String formattedPath = String.format("%-" + SONG_PATH_SIZE + "s",path).substring(0,SONG_PATH_SIZE);
         try(RandomAccessFile raf = new RandomAccessFile(new File(LOCAL_SONG_PATH),"rw")){
@@ -83,7 +85,7 @@ public class SongLocalDAO implements SongDAOInterface {
     }
 
     @Override
-    public Song getSong(String name) throws Exception {
+    public Song getSong(String name) throws IOException {
         try(RandomAccessFile raf = new RandomAccessFile(new File(LOCAL_SONG_PATH),"r")){
             while(raf.getFilePointer()<raf.length())
             {
@@ -101,7 +103,7 @@ public class SongLocalDAO implements SongDAOInterface {
         }
     }
 
-    public Song getSong(int id) throws Exception {
+    public Song getSong(int id) throws IOException {
         try(RandomAccessFile raf = new RandomAccessFile(new File(LOCAL_SONG_PATH),"r")){
             while(raf.getFilePointer()<raf.length())
             {
@@ -120,7 +122,7 @@ public class SongLocalDAO implements SongDAOInterface {
     }
 
     @Override
-    public boolean deleteSong(int id) throws Exception {
+    public boolean deleteSong(int id) throws IOException {
         try(RandomAccessFile raf = new RandomAccessFile(new File(LOCAL_SONG_PATH),"rw")){
             while(raf.getFilePointer()<raf.length()){
                 if(raf.readInt()==id){
@@ -135,7 +137,7 @@ public class SongLocalDAO implements SongDAOInterface {
     }
 
     @Override
-    public boolean updateSong(int id, Song modified) throws Exception {
+    public boolean updateSong(int id, Song modified) throws IOException {
         String formattedName = String.format("%-" + SONG_NAME_SIZE + "s",modified.getTitle().substring(0,SONG_NAME_SIZE));
         String formattedPath = String.format("%-" + SONG_PATH_SIZE + "s",modified.getFilePath().substring(0,SONG_PATH_SIZE));
         try(RandomAccessFile raf = new RandomAccessFile(new File(LOCAL_SONG_PATH),"rw")){
