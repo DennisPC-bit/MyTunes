@@ -5,6 +5,7 @@ import BE.Song;
 import BLL.PlaylistManager;
 import DAL.DAO.PlaylistDAOInterface;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.List;
@@ -116,11 +117,10 @@ public class PlaylistLocalDAO implements PlaylistDAOInterface {
 
     @Override
     public List<Song> loadSongsFromPlaylist(int playlist_id) throws Exception {
+        File file = new File(LOCAL_PLAYLIST_SONG);
         SongLocalDAO songLocalDAO = new SongLocalDAO();
         List<Song> tmp = new ArrayList<>();
-        try(RandomAccessFile raf = new RandomAccessFile(new File(LOCAL_PLAYLIST_SONG),"r")){
-            if(raf.length()==0)
-                return tmp;
+        try(RandomAccessFile raf = new RandomAccessFile(file,"r")){
             while (raf.getFilePointer()<raf.length()) {
                 if(raf.readInt()==playlist_id)
                     tmp.add(songLocalDAO.getSong(raf.readInt()));
@@ -129,16 +129,16 @@ public class PlaylistLocalDAO implements PlaylistDAOInterface {
             }
             return tmp;
         }
+        catch (FileNotFoundException e){
+            file.createNewFile();
+            return tmp;
+        }
     }
 
     @Override
     public void AddSongToPlaylist(int playlist_id, int song_id) throws Exception {
-        try(RandomAccessFile raf = new RandomAccessFile(new File(LOCAL_PLAYLIST_SONG),"rw")){
-            if(raf.length()==0) {
-                raf.writeInt(playlist_id);
-                raf.writeInt(song_id);
-                return;
-            }
+        File file = new File(LOCAL_PLAYLIST_SONG);
+        try(RandomAccessFile raf = new RandomAccessFile(file,"rw")){
             while(raf.getFilePointer()<raf.length()){
                 if(raf.readInt()==-1){
                     raf.seek(raf.getFilePointer()-4);

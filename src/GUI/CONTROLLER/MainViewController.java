@@ -6,9 +6,6 @@ import BE.Playlist;
 import BE.Song;
 import BLL.PlaylistManager;
 import BLL.SongManager;
-import DAL.DAO.DB.PlaylistDBDAO;
-import DAL.DAO.FILE.PlaylistLocalDAO;
-import DAL.DAO.FILE.SongLocalDAO;
 import GUI.MODEL.SongModel;
 import GUI.Main;
 import javafx.beans.property.SimpleStringProperty;
@@ -25,11 +22,8 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.RandomAccessFile;
 import java.net.URL;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -111,9 +105,7 @@ public class MainViewController implements Initializable {
                     songsOnPlaylistTable.setItems(playlistSongs);
                 }
                 catch(Exception e){
-                playlistSongs = FXCollections.observableArrayList(selectedPlaylist.getSongList());
-                this.songsOnPlaylistTable.setItems(playlistSongs);
-                playlistSongsColumn.setCellValueFactory(cellData -> cellData.getValue().toStringProperty());}
+                    e.printStackTrace();}
             }
         }));
     }
@@ -148,7 +140,7 @@ public class MainViewController implements Initializable {
     }
 
     /**
-     * should load the lists from the db
+     * should load the lists from the db, if it cannot load from db, it will load from local storage.
      */
     public void load() {
         try {
@@ -157,7 +149,7 @@ public class MainViewController implements Initializable {
             this.songs = FXCollections.observableArrayList(SongManager.loadSongs());
             reloadSongTable();
         } catch (Exception e) {
-
+            e.printStackTrace();
             /*
             playlists = FXCollections.observableArrayList(new ArrayList<>());
             this.playlistTable.setItems(playlists);

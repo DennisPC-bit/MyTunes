@@ -1,5 +1,6 @@
 package BLL;
 
+import BE.InputAlert;
 import BE.Playlist;
 import BE.Song;
 import DAL.DAO.DB.PlaylistDBDAO;
@@ -10,8 +11,9 @@ import GUI.CONTROLLER.MainViewController;
 import java.util.List;
 
 public class PlaylistManager{
-    protected static PlaylistDAOInterface playlistDAO = new PlaylistLocalDAO();
+    protected static PlaylistDAOInterface playlistDAO = new PlaylistDBDAO();
     protected MainViewController mainController;
+    private static InputAlert inputAlert = new InputAlert();
 
     public PlaylistManager(){
         playlistDAO.setPlaylistManager(this);
@@ -21,8 +23,26 @@ public class PlaylistManager{
         this.mainController=mainController;
     }
 
-    public static List<Playlist> loadPlaylists() throws Exception {
-        return playlistDAO.loadPlaylist();
+    /**
+     * loads the playlists, if it cannot connect to the database, it saves locally
+     * @return Playlists
+     */
+    public static List<Playlist> loadPlaylists() {
+        try {
+            return playlistDAO.loadPlaylist();
+        } catch (NullPointerException e) {
+            inputAlert.showAlert("You cannot connect to the database, so everything will be saved locally.");
+            playlistDAO = new PlaylistLocalDAO();
+            try {
+                return playlistDAO.loadPlaylist();
+            } catch (Exception exception) {
+                exception.printStackTrace();
+                return null;
+            }
+        }catch (Exception exception) {
+            exception.printStackTrace();
+            return null;
+        }
     }
 
     public void createPlaylist(String name) throws Exception {

@@ -6,10 +6,11 @@ import DAL.DAO.FILE.SongLocalDAO;
 import DAL.DAO.SongDAOInterface;
 import GUI.CONTROLLER.MainViewController;
 
+import java.sql.SQLException;
 import java.util.List;
 
 public class SongManager {
-    protected static SongDAOInterface songDAO = new SongLocalDAO();
+    protected static SongDAOInterface songDAO = new SongDBDAO();
     protected MainViewController mainController;
 
     public SongManager() {
@@ -20,8 +21,21 @@ public class SongManager {
         this.mainController = mainController;
     }
 
-    public static List<Song> loadSongs() throws Exception{
-        return songDAO.loadSongs();
+    public static List<Song> loadSongs() {
+        try {
+            return songDAO.loadSongs();
+        } catch (NullPointerException e) {
+            songDAO=new SongLocalDAO();
+            try {
+                return songDAO.loadSongs();
+            } catch (Exception exception) {
+                exception.printStackTrace();
+                return null;
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
     }
 
     public void createSong(String name, String path) throws Exception {

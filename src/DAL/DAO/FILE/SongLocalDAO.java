@@ -113,7 +113,7 @@ public class SongLocalDAO implements SongDAOInterface {
                 for(int i=0;i<SONG_PATH_SIZE;i++)
                     songPath+=raf.readChar();
                 if(song_id==id)
-                    return new Song(song_id,songName,songPath);
+                    return new Song(song_id,songName.trim(),songPath.trim());
             }
             return null;
         }
