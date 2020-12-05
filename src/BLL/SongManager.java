@@ -1,5 +1,6 @@
 package BLL;
 
+import BE.InputAlert;
 import BE.Song;
 import DAL.DAO.DB.SongDBDAO;
 import DAL.DAO.FILE.SongLocalDAO;
@@ -9,6 +10,7 @@ import GUI.CONTROLLER.MainViewController;
 import java.util.List;
 
 public class SongManager {
+    private static InputAlert inputAlert = new InputAlert();
     protected static SongDAOInterface songDAO;
 
     static {

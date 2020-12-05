@@ -4,10 +4,8 @@ import BE.Playlist;
 import BE.Song;
 import BLL.PlaylistManager;
 import DAL.DAO.PlaylistDAOInterface;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.RandomAccessFile;
+
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -90,6 +88,7 @@ public class PlaylistLocalDAO implements PlaylistDAOInterface {
         String formattedName = String.format("%-" + PLAYLISTNAMESIZE + "s",name);
         try(RandomAccessFile raf = new RandomAccessFile(new File(LOCAL_PLAYLIST_PATH),"rw")){
             while(raf.getFilePointer()<raf.length()){
+                raf.skipBytes(4);
                 String playlistName="";
                 for(int i=0;i<PLAYLISTNAMESIZE;i++){
                     playlistName+=raf.readChar();
@@ -100,12 +99,14 @@ public class PlaylistLocalDAO implements PlaylistDAOInterface {
                     raf.writeChars(emptyValue);
                 }
             }
+        }catch (EOFException e){
+            System.out.println("Could not delete playlist " + name);
         }
     }
 
     @Override
     public void updatePlaylist(Playlist playlist) throws IOException {
-        String formattedName = String.format("%-" + PLAYLISTNAMESIZE + "s",playlist.getPlayListName().substring(0,PLAYLISTNAMESIZE));
+        String formattedName = String.format("%-" + PLAYLISTNAMESIZE + "s",playlist.getPlayListName()).substring(0,PLAYLISTNAMESIZE);
         try(RandomAccessFile raf = new RandomAccessFile(new File(LOCAL_PLAYLIST_PATH),"rw")){
             while(raf.getFilePointer()<raf.length()){
                 if(raf.readInt()==playlist.getPlaylistId()){
@@ -123,7 +124,8 @@ public class PlaylistLocalDAO implements PlaylistDAOInterface {
         List<Song> tmp = new ArrayList<>();
         try(RandomAccessFile raf = new RandomAccessFile(file,"r")){
             while (raf.getFilePointer()<raf.length()) {
-                if(raf.readInt()==playlist_id)
+                int playlistId=raf.readInt();
+                if(playlistId==playlist_id)
                     tmp.add(songLocalDAO.getSong(raf.readInt()));
                 else
                     raf.skipBytes(4);
@@ -159,14 +161,18 @@ public class PlaylistLocalDAO implements PlaylistDAOInterface {
     public void deleteFromPlaylist(int playlist_id, int song_id) throws IOException {
         try(RandomAccessFile raf = new RandomAccessFile(new File(LOCAL_PLAYLIST_SONG),"rw")){
             while (raf.getFilePointer()<raf.length()){
-                if(raf.readInt()==playlist_id&&raf.readInt()==song_id){
+                int playlistId = raf.readInt();
+                int songId=raf.readInt();
+                if(playlistId==playlist_id && songId==song_id){
                     raf.seek(raf.getFilePointer()-8);
                     raf.writeInt(-1);
                     raf.writeInt(-1);
+                    break;
                 }
         }
-    }
+    }catch (EOFException e){
         System.out.println("Could not delete playlist " + playlist_id);
+        }
     }
 
     private void deleteAllFromPlaylist(int playlist_id) throws IOException {

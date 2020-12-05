@@ -20,7 +20,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -163,7 +162,7 @@ public class MainViewController implements Initializable {
         songTableCategoryColumn.setCellValueFactory(cellData -> new SimpleStringProperty("456"));
         songTableTimeColumn.setCellValueFactory(cellData -> cellData.getValue().durationProperty());
 
-        playlistSongsColumn.setCellValueFactory(cellData -> cellData.getValue().toStringProperty());
+        playlistSongsColumn.setCellValueFactory(cellData -> cellData.getValue()==null?new SimpleStringProperty(""):cellData.getValue().toStringProperty());
 
         playlistNameColumn.setCellValueFactory(cellData -> cellData.getValue().getPlayListNameProperty());
         playlistAmountOfSongsColumn.setCellValueFactory(cellData -> new SimpleStringProperty("123"));
@@ -260,7 +259,7 @@ public class MainViewController implements Initializable {
             playlistManager.createPlaylist(playlist.getPlayListName());
             load();
         } catch (Exception e) {
-            //playlists.add(new Playlist(playlist.getPlayListName()));
+            e.printStackTrace();
         }
     }
 
@@ -279,8 +278,7 @@ public class MainViewController implements Initializable {
             playlistManager.updatePlaylist(selectedPlaylist);
             load();
         } catch (Exception e) {
-            //playlists.add(new Playlist(newTitle, selectedPlaylist.getSongList()));
-            //playlists.remove(selectedPlaylist);
+            e.printStackTrace();
         }
     }
 
@@ -320,7 +318,7 @@ public class MainViewController implements Initializable {
             playlistManager.deletePlaylist(selectedPlaylist.getPlayListName());
             load();
         } catch (Exception e) {
-            //playlists.remove(selectedPlaylist);
+            e.printStackTrace();
         }
         }
     }
@@ -329,13 +327,14 @@ public class MainViewController implements Initializable {
      * Removes the selected song from the current playlist.
      */
     public void removeFromPlaylistButton() {
+        if(selectedPlaylist!=null&&selectedSongOnPlayList!=null){
         try{
         playlistManager.deleteSongFromPlaylist(selectedPlaylist.getPlaylistId(),selectedSongOnPlayList.getId());
         reloadSongsOnPlaylist();
         }
         catch (Exception e){
-        selectedPlaylist.removeSong(selectedSongOnPlayList);
-        this.songsOnPlaylistTable.setItems(FXCollections.observableList(selectedPlaylist.getSongList()));
+            e.printStackTrace();
+        }
         }
     }
 
@@ -343,18 +342,18 @@ public class MainViewController implements Initializable {
      * Adds Song to the current playlist.
      */
     public void addToPlaylistButton() {
-            if(selectedPlaylist!=null){
-                try {
-                for(Song song : playlistManager.loadSongsOnPlaylist(selectedPlaylist.getPlaylistId()))
+        if(selectedPlaylist!=null){
+            try {
+                for(Song song : playlistManager.loadSongsOnPlaylist(selectedPlaylist.getPlaylistId())){
                     if(song.getId()==selectedSong.getId())
                         return;
+                }
                 playlistManager.addSongsToPlaylist(selectedPlaylist.getPlaylistId(),selectedSong.getId());
                 reloadSongsOnPlaylist();
             } catch (Exception e) {
-                selectedPlaylist.addSong(selectedSong);
-                this.songsOnPlaylistTable.setItems(FXCollections.observableList(selectedPlaylist.getSongList()));
+                e.printStackTrace();
             }
-            }
+        }
     }
 
     /**
@@ -426,6 +425,7 @@ public class MainViewController implements Initializable {
         if (result.get() == ButtonType.OK) {
             try {
                 songManager.deleteSong(selectedSong.getId());
+                reloadSongsOnPlaylist();
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -451,8 +451,7 @@ public class MainViewController implements Initializable {
                     songManager.createSong(selectedFile.getName().substring(0, selectedFile.getName().indexOf('.')), selectedFile.getPath());
                 load();
             } catch (Exception e) {
-                for(File selectedFile: selectedFiles)
-                    songs.add(new Song(selectedFile.getName().substring(0,selectedFile.getName().indexOf('.')),selectedFile.getPath()));
+                e.printStackTrace();
             }
         }
     }

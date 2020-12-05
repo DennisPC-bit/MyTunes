@@ -12,17 +12,19 @@ import java.util.List;
 
 public class PlaylistManager{
     protected static PlaylistDAOInterface playlistDAO;
+    private static InputAlert inputAlert = new InputAlert();
 
     static {
         try {
             playlistDAO = new PlaylistDBDAO();
         } catch (Exception e) {
             playlistDAO = new PlaylistLocalDAO();
+            inputAlert.showAlert(e.getMessage());
         }
     }
 
+
     protected MainViewController mainController;
-    private static InputAlert inputAlert = new InputAlert();
 
     public void setPlaylistDAO(PlaylistDAOInterface playlistDAO) {
         PlaylistManager.playlistDAO = playlistDAO;

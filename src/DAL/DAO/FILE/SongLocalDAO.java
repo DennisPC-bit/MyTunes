@@ -5,6 +5,7 @@ import BLL.SongManager;
 import DAL.DAO.SongDAOInterface;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
@@ -17,6 +18,7 @@ public class SongLocalDAO implements SongDAOInterface {
     private static final int SONG_PATH_SIZE=100;
     private static final String emptyNameValue = String.format("%-" + SONG_NAME_SIZE + "s",-1);
     private static final String emptyPathValue = String.format("%-" + SONG_PATH_SIZE + "s",-1);
+    private static final String LOCAL_PLAYLIST_SONG = "Data/localPlaylist_song.data";
 
     @Override
     public void setSongManager(SongManager songManager) {
@@ -25,8 +27,9 @@ public class SongLocalDAO implements SongDAOInterface {
 
     @Override
     public List<Song> loadSongs() throws IOException {
+        File file = new File(LOCAL_SONG_PATH);
         List<Song> tmp = new ArrayList<>();
-        try(RandomAccessFile raf = new RandomAccessFile(new File(LOCAL_SONG_PATH),"r")){
+        try(RandomAccessFile raf = new RandomAccessFile(file,"r")){
             while(raf.getFilePointer()<raf.length())
             {
                 int song_id = raf.readInt();
@@ -39,6 +42,9 @@ public class SongLocalDAO implements SongDAOInterface {
                 if(!songName.equals(emptyNameValue) && !path.equals(emptyPathValue))
                 tmp.add(new Song(song_id,songName.trim(),path.trim()));
             }
+            return tmp;
+        }catch (FileNotFoundException e){
+            file.createNewFile();
             return tmp;
         }
     }
@@ -128,18 +134,28 @@ public class SongLocalDAO implements SongDAOInterface {
                 if(raf.readInt()==id){
                     raf.writeChars(emptyNameValue);
                     raf.writeChars(emptyPathValue);
-                    return true;
                 }
                 else raf.skipBytes(SONG_NAME_SIZE*2+SONG_PATH_SIZE*2);
                 }
-            return false;
         }
+
+        try(RandomAccessFile raf = new RandomAccessFile(new File(LOCAL_PLAYLIST_SONG),"rw")){
+            while (raf.getFilePointer()<raf.length()){
+                raf.skipBytes(4);
+                if(raf.readInt()==id){
+                    raf.seek(raf.getFilePointer()-8);
+                    raf.writeInt(-1);
+                    raf.writeInt(-1);
+                }
+            }
+        }
+        return true;
     }
 
     @Override
     public boolean updateSong(int id, Song modified) throws IOException {
-        String formattedName = String.format("%-" + SONG_NAME_SIZE + "s",modified.getTitle().substring(0,SONG_NAME_SIZE));
-        String formattedPath = String.format("%-" + SONG_PATH_SIZE + "s",modified.getFilePath().substring(0,SONG_PATH_SIZE));
+        String formattedName = String.format("%-" + SONG_NAME_SIZE + "s",modified.getTitle()).substring(0,SONG_NAME_SIZE);
+        String formattedPath = String.format("%-" + SONG_PATH_SIZE + "s",modified.getFilePath()).substring(0,SONG_PATH_SIZE);
         try(RandomAccessFile raf = new RandomAccessFile(new File(LOCAL_SONG_PATH),"rw")){
             while(raf.getFilePointer()<raf.length()){
                 if(raf.readInt()==id){

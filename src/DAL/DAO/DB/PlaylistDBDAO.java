@@ -3,7 +3,6 @@ package DAL.DAO.DB;
 import BE.Playlist;
 import BE.Song;
 import BLL.PlaylistManager;
-import DAL.DAO.FILE.PlaylistLocalDAO;
 import DAL.DAO.PlaylistDAOInterface;
 import DAL.DB.DbConnectionHandler;
 
@@ -26,7 +25,6 @@ public class PlaylistDBDAO implements PlaylistDAOInterface{
     public PlaylistDBDAO() throws SQLException {
         database = DbConnectionHandler.getInstance();
         if(database.getConnection()==null){
-            playlistManager.setPlaylistDAO(new PlaylistLocalDAO());
             throw new SQLException("could not connect to database");
         }
     }
