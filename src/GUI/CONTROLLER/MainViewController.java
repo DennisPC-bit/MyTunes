@@ -227,9 +227,9 @@ public class MainViewController implements Initializable {
                         if (newValue.contains(","))
                             newValue = newValue.replaceAll(",", ".");
                         volumeSlider.setValue(Integer.parseInt(newValue));
-                        musicPlayer.setVolume(volumeSlider.getValue());
                         musicPlayer.setVolume(volumePercentage / 100);
                     } catch (IllegalArgumentException e) {
+                        //Does nothing when the input is invalid.
                     }
                 }
         );
