@@ -12,24 +12,24 @@ public class MusicPlayer {
     protected Song song;
 
     /**
-     *
-     * @return
+     * Get the value of Media.
+     * @return the value of Media.
      */
     public Media getMedia() {
         return media;
     }
 
     /**
-     *
-     * @return
+     * Get the id of song
+     * @return the value of song.
      */
     public Song getSong() {
         return song;
     }
 
     /**
-     *
-     * @param song
+     * Set the value of song
+     * @param song new value of song
      */
     public void setSong(Song song) {
         if (song != null && this.song != song) {
@@ -42,22 +42,22 @@ public class MusicPlayer {
     }
 
     /**
-     *
-     * @return
+     * Get the id of Media player
+     * @return the value of Media player
      */
     public MediaPlayer getMediaPlayer() {
         return mediaPlayer;
     }
 
     /**
-     *
+     * Sets the standard volume to 0.
      */
     public void mute() {
         setVolume(0);
     }
 
     /**
-     *
+     * If possible, make it play.
      */
     public void play() {
         if (mediaPlayer != null)
@@ -81,8 +81,8 @@ public class MusicPlayer {
     }
 
     /**
-     *
-     * @return
+     * Get the value of Volume.
+     * @return the value of Volume.
      */
     public double getVolume() {
         if (mediaPlayer != null)
@@ -91,8 +91,8 @@ public class MusicPlayer {
     }
 
     /**
-     *
-     * @param volume
+     * Set the value of Volume
+     * @param volume new value of volume
      */
     public void setVolume(double volume) {
         if (mediaPlayer != null)

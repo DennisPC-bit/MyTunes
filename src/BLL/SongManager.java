@@ -31,16 +31,16 @@ public class SongManager {
     }
 
     /**
-     *
-     * @param songDAO
+     * Set the value of songDAO
+     * @param songDAO new value of songDAO
      */
     public void setSongDAO(SongDAOInterface songDAO) {
         SongManager.songDAO = songDAO;
     }
 
     /**
-     *
-     * @param mainController
+     * Set he value of MainController
+     * @param mainController new value of MainController
      */
     public void setMainController(MainViewController mainController) {
         this.mainController = mainController;
@@ -56,7 +56,7 @@ public class SongManager {
     }
 
     /**
-     *
+     * Sends information to create a song
      * @param name
      * @param path
      * @throws Exception
@@ -66,9 +66,9 @@ public class SongManager {
     }
 
     /**
-     *
-     * @param name
-     * @return
+     * Get the value of song name
+     * @param name new value of song name
+     * @return the value of song name
      * @throws Exception
      */
     public Song getSong(String name) throws Exception{
@@ -76,7 +76,7 @@ public class SongManager {
     }
 
     /**
-     *
+     * Sends information to update song
      * @param id
      * @param modified
      * @throws Exception
@@ -86,7 +86,7 @@ public class SongManager {
     }
 
     /**
-     *
+     * Sends information to delete song
      * @param id
      * @throws Exception
      */
