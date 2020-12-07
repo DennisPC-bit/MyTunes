@@ -8,6 +8,7 @@ package BE;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
+import javafx.stage.StageStyle;
 
 import java.util.Optional;
 
@@ -17,6 +18,7 @@ import java.util.Optional;
 public class InputAlert {
     public void showAlert(String message) {
         javafx.scene.control.Alert alert = new javafx.scene.control.Alert(AlertType.ERROR);
+        alert.initStyle(StageStyle.UNIFIED);
         alert.setTitle(message);
         alert.setHeaderText(message);
         alert.setContentText(message);

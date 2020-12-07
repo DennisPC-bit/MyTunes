@@ -15,18 +15,31 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.GridPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class MainViewController implements Initializable {
+    @FXML
+    private GridPane borderGridPane;
+    @FXML
+    private ImageView playPauseImg;
+    @FXML
+    private ImageView mbtn;
+    @FXML
+    private GridPane menuBar;
     @FXML
     private Slider volumeSlider;
     @FXML
@@ -70,6 +83,8 @@ public class MainViewController implements Initializable {
     private static final SongManager songManager = new SongManager();
     private final InputAlert inputAlert = new InputAlert();
     private final MusicPlayer musicPlayer = new MusicPlayer();
+    private boolean isMaximized=false;
+    private Main main;
     private Stage windowStage = new Stage();
 
     public MainViewController() {
@@ -88,6 +103,7 @@ public class MainViewController implements Initializable {
         selectedSong();
         selectedSongOnPlayList();
         selectedPlaylist();
+        move();
     }
 
     /**
@@ -233,7 +249,7 @@ public class MainViewController implements Initializable {
      * @return the volume
      */
     public double getVolumePercentage() {
-        return volumeSlider.getValue();
+        return volumeSlider.getValue()/100;
     }
 
     public Stage getWindowStage() {
@@ -386,7 +402,6 @@ public class MainViewController implements Initializable {
      * Adds a new song
      */
     public void newSongButton() {
-
         FXMLLoader loader = new FXMLLoader(Main.class.getResource("DIALOGUE/AddSong.fxml"));
         AnchorPane dialog = null;
         try {
@@ -480,17 +495,22 @@ public class MainViewController implements Initializable {
         if(selectedSongOnPlayList!= null && !playing)
         {
             musicPlayer.setSong(selectedSongOnPlayList);
-            musicPlayer.setVolume(volumePercentage);
+            musicPlayer.setVolume(getVolumePercentage());
             musicPlayer.play();
+            playPauseImg.setImage(new Image("GUI/IMG/Button-Play-icon-removebg-preview.png"));
+            playing = !playing;
         }
         else if (selectedSong != null && !playing) {
             musicPlayer.setSong(selectedSong);
-            musicPlayer.setVolume(volumePercentage);
+            musicPlayer.setVolume(getVolumePercentage());
             musicPlayer.play();
-        } else {
+            playPauseImg.setImage(new Image("GUI/IMG/Button-Play-icon-removebg-preview.png"));
+            playing = !playing;
+        } else if (selectedSong != null && playing || selectedSongOnPlayList!= null && playing){
             musicPlayer.pause();
+            playPauseImg.setImage(new Image("GUI/IMG/Button-Pause-icon.png"));
+            playing = !playing;
         }
-        playing = !playing;
     }
 
     /**
@@ -510,7 +530,9 @@ public class MainViewController implements Initializable {
     private void setSong(Song selectedSong) {
         musicPlayer.pause();
         musicPlayer.setSong(selectedSong);
-        musicPlayer.play();
+        musicPlayer.setVolume(getVolumePercentage());
+        if(playing)
+            musicPlayer.play();
     }
 
     /**
@@ -529,5 +551,42 @@ public class MainViewController implements Initializable {
 
     public SongManager getSongManager() {
         return songManager;
+    }
+
+    public void setMain(Main main){
+        this.main = main;
+    }
+
+    public void closeButton() {
+        main.getPrimaryStage().close();
+    }
+
+    public void maximizeButton() {
+        if(!isMaximized){
+            main.getPrimaryStage().setFullScreen(true);
+            mbtn.setImage(new Image("GUI/IMG/User-Interface-Restore-Window-icon.png"));
+            isMaximized=true;
+        }
+        else{
+            main.getPrimaryStage().setFullScreen(false);
+            mbtn.setImage(new Image("GUI/IMG/Programming-Maximize-Window-icon.png"));
+            isMaximized=false;
+        }
+    }
+
+    public void minimizeButton() {
+        main.getPrimaryStage().toBack();
+    }
+
+    public void move() {
+        AtomicReference<Double> x = new AtomicReference<>((double) 0);
+        AtomicReference<Double> y = new AtomicReference<>((double) 0);
+        menuBar.setOnMousePressed(mouseEvent -> {
+            x.set(mouseEvent.getSceneX());
+            y.set(mouseEvent.getY());});
+        menuBar.setOnMouseDragged(mouseEvent -> {main.getPrimaryStage().setX(mouseEvent.getScreenX()-x.get());
+        main.getPrimaryStage().setY(mouseEvent.getScreenY()-y.get());
+        }
+        );
     }
 }
