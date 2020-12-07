@@ -17,11 +17,18 @@ public class SongModel {
     protected ObservableList<Song> songs;
     protected DbConnectionHandler database;
 
+    /**
+     *
+     */
     public SongModel() {
         songs = FXCollections.observableArrayList();
         database = DbConnectionHandler.getInstance();
     }
 
+    /**
+     *
+     * @return
+     */
     public List<Song> loadSongs() {
         var temp = new ArrayList<Song>();
         var con = database.getConnection();
@@ -43,6 +50,12 @@ public class SongModel {
         }
     }
 
+    /**
+     *
+     * @param name
+     * @param path
+     * @return
+     */
     public boolean createSong(String name, String path) {
         var con = database.getConnection();
         var sql = "INSERT INTO song (song_title, song_filepath) VALUES(?,?);";
@@ -57,6 +70,13 @@ public class SongModel {
         }
     }
 
+    /**
+     *
+     * @param name
+     * @param path
+     * @param categoryId
+     * @return
+     */
     public boolean createSong(String name, String path, int categoryId) {
         var con = database.getConnection();
         var sql = "INSERT INTO song (song_title, song_filepath, category_id) VALUES(?,?,?);";
@@ -72,6 +92,11 @@ public class SongModel {
         }
     }
 
+    /**
+     *
+     * @param name
+     * @return
+     */
     public Song getSong(String name) {
         var con = database.getConnection();
         var sql = "SELECT FROM song WHERE song_name = ?;";
@@ -91,6 +116,11 @@ public class SongModel {
         }
     }
 
+    /**
+     *
+     * @param name
+     * @return
+     */
     public boolean deleteSong(String name) {
         var con = database.getConnection();
         var sql = "DELETE FROM song WHERE song_title = ?;";
@@ -104,7 +134,11 @@ public class SongModel {
         }
     }
 
-
+    /**
+     *
+     * @param name
+     * @return
+     */
     public List<Song> searchSong(String name) {
         try (var connection = database.getConnection()) {
             List<Song> resultSongs = new ArrayList<>();
@@ -132,6 +166,10 @@ public class SongModel {
         return null;
     }
 
+    /**
+     *
+     * @return
+     */
     public ObservableList<Song> getSongs() {
         return songs;
     }

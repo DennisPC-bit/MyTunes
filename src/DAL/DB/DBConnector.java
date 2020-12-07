@@ -12,6 +12,10 @@ public class DBConnector
     {
         private SQLServerDataSource dataSource;
 
+        /**
+         *
+         * @throws IOException
+         */
         public DBConnector() throws IOException
         {
             Properties props = new Properties();

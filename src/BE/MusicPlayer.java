@@ -11,14 +11,26 @@ public class MusicPlayer {
     protected Media media;
     protected Song song;
 
+    /**
+     *
+     * @return
+     */
     public Media getMedia() {
         return media;
     }
 
+    /**
+     *
+     * @return
+     */
     public Song getSong() {
         return song;
     }
 
+    /**
+     *
+     * @param song
+     */
     public void setSong(Song song) {
         if (song != null && this.song != song) {
             this.song = song;
@@ -29,35 +41,59 @@ public class MusicPlayer {
         }
     }
 
+    /**
+     *
+     * @return
+     */
     public MediaPlayer getMediaPlayer() {
         return mediaPlayer;
     }
 
+    /**
+     *
+     */
     public void mute() {
         setVolume(0);
     }
 
+    /**
+     *
+     */
     public void play() {
         if (mediaPlayer != null)
             mediaPlayer.play();
     }
 
+    /**
+     *
+     */
     public void pause() {
         if (mediaPlayer != null)
             mediaPlayer.pause();
     }
 
+    /**
+     *
+     */
     public void stop() {
         if (mediaPlayer != null)
             mediaPlayer.stop();
     }
 
+    /**
+     *
+     * @return
+     */
     public double getVolume() {
         if (mediaPlayer != null)
             return mediaPlayer.getVolume();
         return 0;
     }
 
+    /**
+     *
+     * @param volume
+     */
     public void setVolume(double volume) {
         if (mediaPlayer != null)
             mediaPlayer.setVolume(volume);

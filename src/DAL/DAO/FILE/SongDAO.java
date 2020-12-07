@@ -19,6 +19,11 @@ public class SongDAO implements ISongDataAccess {
     protected List<Song> songList;
     protected File inputFile;
 
+    /**
+     *
+     * @return
+     * @throws IOException
+     */
     public List<Song> getAllSongs() throws IOException{
         List<Song> allSongs = new ArrayList<>();
 
@@ -47,6 +52,10 @@ public class SongDAO implements ISongDataAccess {
 
     }
 
+    /**
+     *
+     * @param path
+     */
     public void loadPlaylist(String path) {
         File file = new File(path);
         if (file.exists()) {
@@ -62,10 +71,20 @@ public class SongDAO implements ISongDataAccess {
         }
     }
 
+    /**
+     *
+     * @param name
+     * @return
+     */
     public boolean hasSong(String name) {
         return getSong(name) != null;
     }
 
+    /**
+     *
+     * @param name
+     * @return
+     */
     public Song getSong(String name) {
         for (int i = 0; i < songList.size(); i++) {
             var song = songList.get(i);
@@ -74,6 +93,10 @@ public class SongDAO implements ISongDataAccess {
         return null;
     }
 
+    /**
+     *
+     * @param name
+     */
     public void removeSong(String name) {
         for (int i = 0; i < songList.size(); i++) {
             var song = songList.get(i);
@@ -81,10 +104,19 @@ public class SongDAO implements ISongDataAccess {
         }
     }
 
+    /**
+     *
+     * @param title
+     * @param id
+     * @param filePath
+     */
     public void addSong(String title, int id, String filePath) {
         if (!hasSong(title)) songList.add(new Song(id, title, filePath));
     }
 
+    /**
+     *
+     */
     public void save() {
         try {
             ObjectMapper objectMapper = new ObjectMapper();
@@ -94,6 +126,10 @@ public class SongDAO implements ISongDataAccess {
         }
     }
 
+    /**
+     *
+     * @param path
+     */
     public void save(String path) {
         var file = new File(path);
         try {
@@ -104,10 +140,18 @@ public class SongDAO implements ISongDataAccess {
         }
     }
 
+    /**
+     *
+     * @return
+     */
     public List<Song> getSongList() {
         return songList;
     }
 
+    /**
+     *
+     * @return
+     */
     public File getInputFile() {
         return inputFile;
     }

@@ -20,11 +20,20 @@ public class SongLocalDAO implements SongDAOInterface {
     private static final String emptyPathValue = String.format("%-" + SONG_PATH_SIZE + "s",-1);
     private static final String LOCAL_PLAYLIST_SONG = "Data/localPlaylist_song.data";
 
+    /**
+     *
+     * @param songManager
+     */
     @Override
     public void setSongManager(SongManager songManager) {
         this.songManager=songManager;
     }
 
+    /**
+     *
+     * @return
+     * @throws IOException
+     */
     @Override
     public List<Song> loadSongs() throws IOException {
         File file = new File(LOCAL_SONG_PATH);
@@ -49,6 +58,13 @@ public class SongLocalDAO implements SongDAOInterface {
         }
     }
 
+    /**
+     *
+     * @param name
+     * @param path
+     * @return
+     * @throws IOException
+     */
     @Override
     public boolean createSong(String name, String path) throws IOException {
         String formattedName = String.format("%-" + SONG_NAME_SIZE + "s",name).substring(0,SONG_NAME_SIZE);
@@ -84,12 +100,24 @@ public class SongLocalDAO implements SongDAOInterface {
             }
         }
 
-
+    /**
+     *
+     * @param name
+     * @param path
+     * @param categoryId
+     * @return
+     */
     @Override
     public boolean createSong(String name, String path, int categoryId) {
     return false;
     }
 
+    /**
+     *
+     * @param name
+     * @return
+     * @throws IOException
+     */
     @Override
     public Song getSong(String name) throws IOException {
         try(RandomAccessFile raf = new RandomAccessFile(new File(LOCAL_SONG_PATH),"r")){
@@ -109,6 +137,12 @@ public class SongLocalDAO implements SongDAOInterface {
         }
     }
 
+    /**
+     *
+     * @param id
+     * @return
+     * @throws IOException
+     */
     public Song getSong(int id) throws IOException {
         try(RandomAccessFile raf = new RandomAccessFile(new File(LOCAL_SONG_PATH),"r")){
             while(raf.getFilePointer()<raf.length())
@@ -127,6 +161,12 @@ public class SongLocalDAO implements SongDAOInterface {
         }
     }
 
+    /**
+     *
+     * @param id
+     * @return
+     * @throws IOException
+     */
     @Override
     public boolean deleteSong(int id) throws IOException {
         try(RandomAccessFile raf = new RandomAccessFile(new File(LOCAL_SONG_PATH),"rw")){
@@ -152,6 +192,13 @@ public class SongLocalDAO implements SongDAOInterface {
         return true;
     }
 
+    /**
+     *
+     * @param id
+     * @param modified
+     * @return
+     * @throws IOException
+     */
     @Override
     public boolean updateSong(int id, Song modified) throws IOException {
         String formattedName = String.format("%-" + SONG_NAME_SIZE + "s",modified.getTitle()).substring(0,SONG_NAME_SIZE);

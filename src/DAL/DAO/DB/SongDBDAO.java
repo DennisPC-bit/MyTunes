@@ -32,7 +32,8 @@ public class SongDBDAO implements SongDAOInterface {
     public List<Song> loadSongs() {
         var temp = new ArrayList<Song>();
         try (var con = database.getConnection();
-             Statement statement = con.createStatement()) {
+             Statement statement = con.createStatement())
+        {
             ResultSet rs = statement.executeQuery("SELECT * FROM song;");
             while (rs.next()) {
                 int id = rs.getInt("song_id");
