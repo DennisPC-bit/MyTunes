@@ -68,8 +68,8 @@ public class MainViewController implements Initializable {
     private ObservableList<Playlist> playlists;
     private static final PlaylistManager playlistManager = new PlaylistManager();
     private static final SongManager songManager = new SongManager();
-    private InputAlert inputAlert = new InputAlert();
-    private MusicPlayer musicPlayer = new MusicPlayer();
+    private final InputAlert inputAlert = new InputAlert();
+    private final MusicPlayer musicPlayer = new MusicPlayer();
     private Stage windowStage = new Stage();
 
     public MainViewController() {
@@ -98,6 +98,7 @@ public class MainViewController implements Initializable {
             this.selectedPlaylist = (Playlist) newValue;
             if (selectedPlaylist != null) {
                 try{
+                    if(playlistManager.loadSongsOnPlaylist(selectedPlaylist.getPlaylistId())!=null)
                     this.playlistSongs=FXCollections.observableArrayList(playlistManager.loadSongsOnPlaylist(selectedPlaylist.getPlaylistId()));
                     songsOnPlaylistTable.setItems(playlistSongs);
                 }
@@ -141,12 +142,21 @@ public class MainViewController implements Initializable {
      */
     public void load() {
         try {
-            this.playlists = FXCollections.observableArrayList(PlaylistManager.loadPlaylists());
+            this.playlists = FXCollections.observableArrayList(playlistManager.loadPlaylists());
             reloadPlaylistTable();
-            this.songs = FXCollections.observableArrayList(SongManager.loadSongs());
+            this.songs = FXCollections.observableArrayList(songManager.loadSongs());
             reloadSongTable();
         } catch (Exception e) {
-            e.printStackTrace();
+            try {
+                playlistManager.goLocal();
+                songManager.goLocal();
+                this.playlists = FXCollections.observableArrayList(playlistManager.loadPlaylists());
+                reloadPlaylistTable();
+                this.songs = FXCollections.observableArrayList(songManager.loadSongs());
+                reloadSongTable();
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
         }
     }
 
@@ -170,7 +180,7 @@ public class MainViewController implements Initializable {
         try {
             this.songsTable.setItems(FXCollections.observableList(songManager.loadSongs()));
         }catch (Exception exception) {
-            System.out.println("could not load songs locally");
+            System.out.println("could not load songs");
         }
     }
 
@@ -178,7 +188,7 @@ public class MainViewController implements Initializable {
         try {
             this.playlistTable.setItems(FXCollections.observableList(playlistManager.loadPlaylists()));
         } catch (Exception exception) {
-            System.out.println("could not load playlistTable locally");
+            System.out.println("could not load playlistTable");
         }
     }
 
@@ -186,7 +196,7 @@ public class MainViewController implements Initializable {
         try {
             this.songsOnPlaylistTable.setItems(FXCollections.observableList(playlistManager.loadSongsOnPlaylist(selectedPlaylist.getPlaylistId())));
         } catch (Exception exception) {
-            System.out.println("could not load playlistTable locally");
+            System.out.println("could not load playlistTable");
         }
     }
 

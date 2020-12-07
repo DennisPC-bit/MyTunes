@@ -5,14 +5,12 @@ import BE.Song;
 import BLL.PlaylistManager;
 import DAL.DAO.PlaylistDAOInterface;
 import DAL.DB.DbConnectionHandler;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PlaylistDBDAO implements PlaylistDAOInterface{
+public class PlaylistDBDAO implements PlaylistDAOInterface {
     protected DbConnectionHandler database;
     protected PlaylistManager playlistManager;
 
@@ -27,12 +25,14 @@ public class PlaylistDBDAO implements PlaylistDAOInterface{
 
     /**
      * Tries to connect to the database.
-     * @throws SQLException when it cannot connect to the database.
      */
-    public PlaylistDBDAO() throws SQLException {
+    public PlaylistDBDAO() {
         database = DbConnectionHandler.getInstance();
-        if(database.getConnection()==null){
-            throw new SQLException("could not connect to database");
+        try {
+            if(database.getConnection().isClosed())
+                playlistManager.goLocal();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
         }
     }
 
@@ -53,6 +53,9 @@ public class PlaylistDBDAO implements PlaylistDAOInterface{
                 temp.add(new Playlist(id, name));
             }
             return temp;
+        }catch (SQLNonTransientConnectionException e){
+            playlistManager.goLocal();
+            return temp;
         }
     }
 
@@ -68,6 +71,8 @@ public class PlaylistDBDAO implements PlaylistDAOInterface{
              PreparedStatement st = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             st.setString(1, name);
             st.executeUpdate();
+        }catch (SQLNonTransientConnectionException e){
+            playlistManager.goLocal();
         }
     }
 
@@ -89,7 +94,9 @@ public class PlaylistDBDAO implements PlaylistDAOInterface{
             var name1 = resultSet.getString("playlist_name");
             var playlist = new Playlist(id, name1);
             return playlist;
-
+        }catch (SQLNonTransientConnectionException e){
+            playlistManager.goLocal();
+            return null;
         }
     }
 
@@ -100,12 +107,13 @@ public class PlaylistDBDAO implements PlaylistDAOInterface{
      */
     @Override
     public void deletePlaylist(String name) throws SQLException {
-
         var sql = "DELETE FROM playlist WHERE playlist_name = ?;";
         try (var con = database.getConnection(); PreparedStatement st = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             st.setString(1, name);
             st.executeUpdate();
             return;
+        }catch (SQLNonTransientConnectionException e){
+            playlistManager.goLocal();
         }
     }
 
@@ -131,6 +139,9 @@ public class PlaylistDBDAO implements PlaylistDAOInterface{
                 temp.add(new Song(song_id,song_title,song_filepath));
             }
             return temp;
+        }catch (SQLNonTransientConnectionException e){
+            playlistManager.goLocal();
+            return temp;
         }
     }
 
@@ -149,6 +160,8 @@ public class PlaylistDBDAO implements PlaylistDAOInterface{
             st.setInt(1,playlist_id);
             st.setInt(2,song_id);
             st.executeUpdate();
+        }catch (SQLNonTransientConnectionException e){
+            playlistManager.goLocal();
         }
     }
 
@@ -166,6 +179,8 @@ public class PlaylistDBDAO implements PlaylistDAOInterface{
             st.setInt(1, playlist_id);
             st.setInt(2,song_id);
             st.executeUpdate();
+        }catch (SQLNonTransientConnectionException e){
+            playlistManager.goLocal();
         }
     }
 
@@ -177,6 +192,7 @@ public class PlaylistDBDAO implements PlaylistDAOInterface{
      */
     @Override
     public void updatePlaylist(Playlist playlist) throws SQLException {
+
         String sql = "UPDATE playlist SET playlist_name=?  WHERE playlist_id=?;";
         try (var con = database.getConnection();
              PreparedStatement preparedStatement = con.prepareStatement(sql)) {
@@ -185,6 +201,8 @@ public class PlaylistDBDAO implements PlaylistDAOInterface{
             if (preparedStatement.executeUpdate() != 1) {
                 System.out.println("Could not update Movie: " + playlist.toString());
             }
+        }catch (SQLNonTransientConnectionException e){
+            playlistManager.goLocal();
         }
     }
 }

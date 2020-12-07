@@ -13,6 +13,7 @@ import java.util.List;
 public class PlaylistManager{
     protected static PlaylistDAOInterface playlistDAO;
     private static InputAlert inputAlert = new InputAlert();
+    protected MainViewController mainController;
 
 
     /**
@@ -23,12 +24,15 @@ public class PlaylistManager{
             playlistDAO = new PlaylistDBDAO();
         } catch (Exception e) {
             playlistDAO = new PlaylistLocalDAO();
-            inputAlert.showAlert(e.getMessage());
+            inputAlert.showAlert("you lost connection, restart to try to reconnect. changes will now only be saved locally");
         }
     }
 
-
-    protected MainViewController mainController;
+    public void goLocal() {
+        inputAlert.showAlert("you lost connection, restart to try to reconnect. changes will now only be saved locally");
+        playlistDAO = new PlaylistLocalDAO();
+        mainController.load();
+    }
 
     /**
      * Set the value of PlaylistDAO
@@ -57,8 +61,8 @@ public class PlaylistManager{
      * loads the playlists, if it cannot connect to the database, it saves locally
      * @return Playlists
      */
-    public static List<Playlist> loadPlaylists() throws Exception {
-            return playlistDAO.loadPlaylist();
+    public List<Playlist> loadPlaylists() throws Exception {
+        return playlistDAO.loadPlaylist();
     }
 
     /**

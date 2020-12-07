@@ -21,6 +21,11 @@ public class SongManager {
         }
     }
 
+    public void goLocal(){
+        songDAO = new SongLocalDAO();
+        mainController.load();
+    }
+
     protected MainViewController mainController;
 
     /**
@@ -51,8 +56,8 @@ public class SongManager {
      * @return
      * @throws Exception
      */
-    public static List<Song> loadSongs() throws Exception {
-            return songDAO.loadSongs();
+    public List<Song> loadSongs() throws Exception{
+        return songDAO.loadSongs();
     }
 
     /**
