@@ -93,7 +93,7 @@ public class Song {
 
 
     /**
-     *
+     * Get the value of meta.
      */
     public void getMeta() {
         var file = new File(getFilePath());
@@ -116,8 +116,8 @@ public class Song {
     }
 
     /**
-     *
-     * @return
+     * Get the value of id
+     * @return the value of id
      */
     public int getId() {
         return id.get();
@@ -140,8 +140,8 @@ public class Song {
     }
 
     /**
-     *
-     * @return
+     * Set the value of isVisible.
+     * @return the value of isVisible
      */
     public boolean isVisible() {
         return visible.get();
@@ -156,16 +156,16 @@ public class Song {
     }
 
     /**
-     *
-     * @param visible
+     * Set the value of Visible
+     * @param visible new value of Visible
      */
     public void setVisible(boolean visible) {
         this.visible.set(visible);
     }
 
     /**
-     *
-     * @return
+     * Get the value of Duration
+     * @return the value of Duration.
      */
     public double getDuration() {
         return duration.get();
@@ -180,16 +180,16 @@ public class Song {
     }
 
     /**
-     *
-     * @param duration
+     * Set the value of duration
+     * @param duration new value of duration
      */
     public void setDuration(double duration) {
         this.duration.set(duration);
     }
 
     /**
-     *
-     * @return
+     * Get the value of Artist
+     * @return the value of Artist
      */
     public String getArtist() {
         return artist.get();
@@ -204,16 +204,16 @@ public class Song {
     }
 
     /**
-     *
-     * @param artist
+     * Set the value of Artist
+     * @param artist new value of Artist
      */
     public void setArtist(String artist) {
         this.artist.set(artist);
     }
 
     /**
-     *
-     * @return
+     * Get the value of Title
+     * @return the value of Title
      */
     public String getTitle() {
         return title.get();
@@ -228,40 +228,40 @@ public class Song {
     }
 
     /**
-     *
-     * @param title
+     * Set the value of title
+     * @param title new value of title.
      */
     public void setTitle(String title) {
         this.title.set(title);
     }
 
     /**
-     *
-     * @return
+     * Get the value of filePath
+     * @return the value of filepath
      */
     public String getFilePath() {
         return filePath.get();
     }
 
     /**
-     *
-     * @param filePath
+     * Set the value of filepath
+     * @param filePath new value of filepath
      */
     public void setFilePath(String filePath) {
         this.filePath.setValue(filePath);
     }
 
     /**
-     *
-     * @return
+     * Get the value of CategoryId
+     * @return the value of CategoryId
      */
     public int getCategoryId() {
         return categoryId.get();
     }
 
     /**
-     *
-     * @param id
+     * Set the value of CategoryId
+     * @param id new value of CategoryId
      */
     public void setCategoryId(int id) {
         categoryId.set(id);

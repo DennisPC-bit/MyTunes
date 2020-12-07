@@ -61,24 +61,24 @@ public class Playlist {
     }
 
     /**
-     *
-     * @return
+     * Get the value of name
+     * @return the value of name
      */
     public String getPlayListName() {
         return playListName;
     }
 
     /**
-     *
-     * @return
+     * Get the value of name property
+     * @return the value of name property
      */
     public StringProperty getPlayListNameProperty() {
         return playListNameProperty;
     }
 
     /**
-     *
-     * @param playListName
+     * Set the value of name.
+     * @param playListName new value of name
      */
     public void setPlayListName(String playListName) {
         this.playListName = playListName;
@@ -86,16 +86,16 @@ public class Playlist {
     }
 
     /**
-     *
-     * @return
+     * Get the value of id
+     * @return the value of id
      */
     public int getPlaylistId() {
         return playlistId;
     }
 
     /**
-     *
-     * @param playlistId
+     * Set the value of id
+     * @param playlistId new value of id
      */
     public void setPlaylistId(int playlistId) {
         this.playlistId = playlistId;
@@ -103,7 +103,7 @@ public class Playlist {
 
     /**
      *
-     * @return
+     * @return songList
      */
     public List<Song> getSongList() {
         return this.songList;
@@ -138,7 +138,7 @@ public class Playlist {
     }
 
     /**
-     * 
+     *
      * @param newSong
      * @param oldSong
      */

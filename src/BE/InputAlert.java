@@ -12,7 +12,7 @@ import javafx.scene.control.ButtonType;
 import java.util.Optional;
 
 /**
- *
+ * Makes input alert
  */
 public class InputAlert {
     public void showAlert(String message) {
@@ -24,7 +24,7 @@ public class InputAlert {
     }
 
     /**
-     *
+     * Deletes alert
      * @param deleteConfirmationMessage
      * @return
      */
@@ -41,7 +41,7 @@ public class InputAlert {
     }
 
     /**
-     *
+     * Shows message box
      * @param title
      * @param header
      * @param content

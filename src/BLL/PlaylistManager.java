@@ -31,8 +31,8 @@ public class PlaylistManager{
     protected MainViewController mainController;
 
     /**
-     *
-     * @param playlistDAO
+     * Set the value of PlaylistDAO
+     * @param playlistDAO new value of PlaylistDAO
      */
     public void setPlaylistDAO(PlaylistDAOInterface playlistDAO) {
         PlaylistManager.playlistDAO = playlistDAO;
@@ -46,8 +46,8 @@ public class PlaylistManager{
     }
 
     /**
-     *
-     * @param mainController
+     * Set the value of mainController
+     * @param mainController new value of mainController
      */
     public void setMainController(MainViewController mainController){
         this.mainController=mainController;
@@ -62,7 +62,7 @@ public class PlaylistManager{
     }
 
     /**
-     *
+     * Sends information to create playlist
      * @param name
      * @throws Exception
      */
@@ -71,9 +71,9 @@ public class PlaylistManager{
     }
 
     /**
-     *
-     * @param name
-     * @return
+     * Get the value of playlist name
+     * @param name new value of name
+     * @return the value of name
      * @throws Exception
      */
     public Playlist getPlaylist(String name) throws Exception {
@@ -81,7 +81,7 @@ public class PlaylistManager{
     }
 
     /**
-     *
+     * Sends information to delete playlist
      * @param name
      * @throws Exception
      */
@@ -100,7 +100,7 @@ public class PlaylistManager{
     }
 
     /**
-     *
+     * Sends information to add a song to playlist
      * @param playlist_id
      * @param song_id
      * @throws Exception
@@ -110,7 +110,7 @@ public class PlaylistManager{
     }
 
     /**
-     *
+     * Sends information to delete a song from playlist
      * @param playlist_id
      * @param song_id
      * @throws Exception
@@ -120,7 +120,7 @@ public class PlaylistManager{
     }
 
     /**
-     *
+     * Sends information to update playlist
      * @param playlist
      * @throws Exception
      */
