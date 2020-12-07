@@ -13,6 +13,7 @@ public class PlaylistLocalDAO implements PlaylistDAOInterface {
     private PlaylistManager playlistManager;
     private static final int PLAYLISTNAMESIZE=100;
     private static final String emptyValue=String.format("%-" + PLAYLISTNAMESIZE + "s",-1);
+    private static final int emptyIntValue=-1;
     private static final String LOCAL_PLAYLIST_PATH = "Data/localPlaylists.data";
     private static final String LOCAL_PLAYLIST_SONG = "Data/localPlaylist_song.data";
 
@@ -22,9 +23,9 @@ public class PlaylistLocalDAO implements PlaylistDAOInterface {
     }
 
     /**
-     *
-     * @param name
-     * @throws IOException
+     * Tries to make a playlist with the given name.
+     * @param name the name of the playlist.
+     * @throws IOException if something went wrong.
      */
     @Override
     public void createPlaylist(String name) throws IOException {
@@ -51,9 +52,10 @@ public class PlaylistLocalDAO implements PlaylistDAOInterface {
     }
 
     /**
-     *
-     * @return
-     * @throws IOException
+     * Tries to load playlists, ignores playlists with emptyValue, creates file if the file does not exist,
+     * makes sure there is a file to overwrite, when creating a playlist.
+     * @return A list of playlists, an empty list if no playlists exist.
+     * @throws IOException if something went wrong.
      */
     @Override
     public List<Playlist> loadPlaylist() throws IOException {
@@ -77,10 +79,10 @@ public class PlaylistLocalDAO implements PlaylistDAOInterface {
     }
 
     /**
-     *
-     * @param name
-     * @return
-     * @throws IOException
+     * Tries to get a playlist.
+     * @param name The name of the playlist
+     * @return a playlist or null if none found
+     * @throws IOException if something went wrong.
      */
     @Override
     public Playlist getPlaylist(String name) throws IOException {
@@ -100,9 +102,9 @@ public class PlaylistLocalDAO implements PlaylistDAOInterface {
     }
 
     /**
-     *
-     * @param name
-     * @throws IOException
+     * Tries to overwrite a playlist with emptyValue, and deletes songs all songs from the playlist.
+     * @param name the name of the playlist
+     * @throws IOException if something went wrong.
      */
     @Override
     public void deletePlaylist(String name) throws IOException {
@@ -120,22 +122,20 @@ public class PlaylistLocalDAO implements PlaylistDAOInterface {
                     raf.writeChars(emptyValue);
                 }
             }
-        }catch (EOFException e){
-            System.out.println("Could not delete playlist " + name);
         }
     }
 
     /**
-     *
-     * @param playlist
-     * @throws IOException
+     * Overwrites the old name, with the new modified name from the Playlist
+     * @param modified the modified playlist.
+     * @throws IOException if something went wrong.
      */
     @Override
-    public void updatePlaylist(Playlist playlist) throws IOException {
-        String formattedName = String.format("%-" + PLAYLISTNAMESIZE + "s",playlist.getPlayListName()).substring(0,PLAYLISTNAMESIZE);
+    public void updatePlaylist(Playlist modified) throws IOException {
+        String formattedName = String.format("%-" + PLAYLISTNAMESIZE + "s",modified.getPlayListName()).substring(0,PLAYLISTNAMESIZE);
         try(RandomAccessFile raf = new RandomAccessFile(new File(LOCAL_PLAYLIST_PATH),"rw")){
             while(raf.getFilePointer()<raf.length()){
-                if(raf.readInt()==playlist.getPlaylistId()){
+                if(raf.readInt()==modified.getPlaylistId()){
                     raf.writeChars(formattedName);
                     break;
                 }
@@ -144,10 +144,10 @@ public class PlaylistLocalDAO implements PlaylistDAOInterface {
     }
 
     /**
-     *
-     * @param playlist_id
-     * @return
-     * @throws IOException
+     * Tries to load songs from the playlist with playlist id.
+     * @param playlist_id the id of the playlist you want to load.
+     * @return A list of Songs in the Playlist, a empty list if there and no songs in the playlist.
+     * @throws IOException if something when wrong.
      */
     @Override
     public List<Song> loadSongsFromPlaylist(int playlist_id) throws IOException {
@@ -171,17 +171,17 @@ public class PlaylistLocalDAO implements PlaylistDAOInterface {
     }
 
     /**
-     *
-     * @param playlist_id
-     * @param song_id
-     * @throws IOException
+     * Tries to add a song to a playlist, if it finds an emptyIntValue, it overwrites instead of writing at the file end.
+     * @param playlist_id the id of the playlist
+     * @param song_id the id of the song
+     * @throws IOException if something went wrong.
      */
     @Override
     public void AddSongToPlaylist(int playlist_id, int song_id) throws IOException {
         File file = new File(LOCAL_PLAYLIST_SONG);
         try(RandomAccessFile raf = new RandomAccessFile(file,"rw")){
             while(raf.getFilePointer()<raf.length()){
-                if(raf.readInt()==-1){
+                if(raf.readInt()==emptyIntValue){
                     raf.seek(raf.getFilePointer()-4);
                     raf.writeInt(playlist_id);
                     raf.writeInt(song_id);
@@ -196,10 +196,10 @@ public class PlaylistLocalDAO implements PlaylistDAOInterface {
     }
 
     /**
-     *
-     * @param playlist_id
-     * @param song_id
-     * @throws IOException
+     * Overwrites a song and playlist id with emptyIntValue.
+     * @param playlist_id the id of the playlist
+     * @param song_id the id of the song
+     * @throws IOException if something went wrong.
      */
     @Override
     public void deleteFromPlaylist(int playlist_id, int song_id) throws IOException {
@@ -209,28 +209,26 @@ public class PlaylistLocalDAO implements PlaylistDAOInterface {
                 int songId=raf.readInt();
                 if(playlistId==playlist_id && songId==song_id){
                     raf.seek(raf.getFilePointer()-8);
-                    raf.writeInt(-1);
-                    raf.writeInt(-1);
+                    raf.writeInt(emptyIntValue);
+                    raf.writeInt(emptyIntValue);
                     break;
                 }
         }
-    }catch (EOFException e){
-        System.out.println("Could not delete playlist " + playlist_id);
-        }
+    }
     }
 
     /**
-     *
-     * @param playlist_id
-     * @throws IOException
+     * Tries to overwrite all matches of playlist_id with emptyIntValue
+     * @param playlist_id the id of the playlist you want to clear of songs.
+     * @throws IOException if something went wrong.
      */
     private void deleteAllFromPlaylist(int playlist_id) throws IOException {
         try(RandomAccessFile raf = new RandomAccessFile(new File(LOCAL_PLAYLIST_SONG),"rw")){
             while (raf.getFilePointer()<raf.length()){
                 if(raf.readInt()==playlist_id){
                     raf.seek(raf.getFilePointer()-8);
-                    raf.writeInt(-1);
-                    raf.writeInt(-1);
+                    raf.writeInt(emptyIntValue);
+                    raf.writeInt(emptyIntValue);
                 }
                 else raf.skipBytes(4);
             }

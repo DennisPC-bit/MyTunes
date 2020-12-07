@@ -24,20 +24,18 @@ public interface SongDAOInterface {
      *
      * @param name
      * @param path
-     * @return
      * @throws Exception
      */
-    boolean createSong(String name, String path) throws Exception;
+    void createSong(String name, String path) throws Exception;
 
     /**
      *
      * @param name
      * @param path
      * @param categoryId
-     * @return
      * @throws Exception
      */
-    boolean createSong(String name, String path, int categoryId) throws Exception;
+    void createSong(String name, String path, int categoryId) throws Exception;
 
     /**
      *
@@ -50,18 +48,16 @@ public interface SongDAOInterface {
     /**
      *
      * @param id
-     * @return
      * @throws Exception
      */
-    boolean deleteSong(int id) throws Exception;
+    void deleteSong(int id) throws Exception;
 
     /**
      *
      * @param id
      * @param modified
-     * @return
      * @throws Exception
      */
-    boolean updateSong(int id, Song modified) throws Exception;
+    void updateSong(int id, Song modified) throws Exception;
     List<Song> searchSong(String name) throws IOException;
 }

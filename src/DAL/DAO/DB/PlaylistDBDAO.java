@@ -5,7 +5,6 @@ import BE.Song;
 import BLL.PlaylistManager;
 import DAL.DAO.PlaylistDAOInterface;
 import DAL.DB.DbConnectionHandler;
-
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -18,8 +17,8 @@ public class PlaylistDBDAO implements PlaylistDAOInterface{
     protected PlaylistManager playlistManager;
 
     /**
-     *
-     * @param playlistManager
+     *  Sets the manager.
+     * @param playlistManager the current instance of the manager.
      */
     @Override
     public void setPlaylistManager(PlaylistManager playlistManager) {
@@ -27,8 +26,8 @@ public class PlaylistDBDAO implements PlaylistDAOInterface{
     }
 
     /**
-     *
-     * @throws SQLException
+     * Tries to connect to the database.
+     * @throws SQLException when it cannot connect to the database.
      */
     public PlaylistDBDAO() throws SQLException {
         database = DbConnectionHandler.getInstance();
@@ -38,9 +37,9 @@ public class PlaylistDBDAO implements PlaylistDAOInterface{
     }
 
     /**
-     *
-     * @return
-     * @throws SQLException
+     * Tries to load the songs from the database.
+     * @return A list of the songs in the database or a empty list if the database has no songs.
+     * @throws SQLException if it cant get connection to the database or something went wrong.
      */
     @Override
     public List<Playlist> loadPlaylist() throws SQLException {
@@ -58,9 +57,9 @@ public class PlaylistDBDAO implements PlaylistDAOInterface{
     }
 
     /**
-     *
-     * @param name
-     * @throws SQLException
+     * Tries to create a playlist on the database
+     * @param name the name of the playlist.
+     * @throws SQLException if it cant get connection to the database or something went wrong.
      */
     @Override
     public void createPlaylist(String name) throws SQLException {
@@ -73,10 +72,10 @@ public class PlaylistDBDAO implements PlaylistDAOInterface{
     }
 
     /**
-     *
-     * @param name
-     * @return
-     * @throws SQLException
+     * Searches for a playlist on the database
+     * @param name the name of the playlist you are looking for
+     * @return a playlist with the name
+     * @throws SQLException if it cannot connect to the database or something went wrong.
      */
     @Override
     public Playlist getPlaylist(String name) throws SQLException {
@@ -95,9 +94,9 @@ public class PlaylistDBDAO implements PlaylistDAOInterface{
     }
 
     /**
-     *
-     * @param name
-     * @throws SQLException
+     * Tries to delete a playlist from the database, does nothing if a playlist with name doesnt exist.
+     * @param name the name of the playlist.
+     * @throws SQLException if it cannot connect to the database or something went wrong.
      */
     @Override
     public void deletePlaylist(String name) throws SQLException {
@@ -111,10 +110,10 @@ public class PlaylistDBDAO implements PlaylistDAOInterface{
     }
 
     /**
-     *
-     * @param playlist_id
-     * @return
-     * @throws SQLException
+     * Tries to load songs from a playlist, by looking for id matches
+     * @param playlist_id the id of the playlist whose songs you are looking for.
+     * @return a list of songs if theres a positive match for the playlist, an empty playlist otherwise.
+     * @throws SQLException if it cannot connect to the database or something went wrong.
      */
     @Override
     public List<Song> loadSongsFromPlaylist(int playlist_id) throws SQLException {
@@ -137,10 +136,10 @@ public class PlaylistDBDAO implements PlaylistDAOInterface{
 
 
     /**
-     *
-     * @param playlist_id
-     * @param song_id
-     * @throws SQLException
+     * Tries to add a song to a playlist
+     * @param playlist_id the id of the playlist you want to add a song to.
+     * @param song_id the id of the song you want to add to the playlist.
+     * @throws SQLException if it cannot connect to the database or something went wrong.
      */
     @Override
     public void AddSongToPlaylist(int playlist_id,int song_id) throws SQLException {
@@ -154,10 +153,10 @@ public class PlaylistDBDAO implements PlaylistDAOInterface{
     }
 
     /**
-     *
-     * @param playlist_id
-     * @param song_id
-     * @throws SQLException
+     * Tries to delete a song with song_id from a playlist in the database, does nothing if no match found.
+     * @param playlist_id the id of the playlist you want to remove a song from.
+     * @param song_id the id of the song you want to remove from the playlist.
+     * @throws SQLException if it cannot connect to the database or something went wrong.
      */
     @Override
     public void deleteFromPlaylist(int playlist_id,int song_id) throws SQLException {
@@ -172,9 +171,9 @@ public class PlaylistDBDAO implements PlaylistDAOInterface{
 
 
     /**
-     *
-     * @param playlist
-     * @throws SQLException
+     * Changes the name of the playlist if a match is found.
+     * @param playlist a Playlist with the new name, and the original id.
+     * @throws SQLException if it cannot connect to the database or something went wrong.
      */
     @Override
     public void updatePlaylist(Playlist playlist) throws SQLException {

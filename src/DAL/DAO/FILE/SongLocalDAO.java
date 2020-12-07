@@ -16,12 +16,13 @@ public class SongLocalDAO implements SongDAOInterface {
     private static final String LOCAL_SONG_PATH = "Data/localSongs.data";
     private static final int SONG_NAME_SIZE=100;
     private static final int SONG_PATH_SIZE=100;
-    private static final String emptyNameValue = String.format("%-" + SONG_NAME_SIZE + "s",-1);
-    private static final String emptyPathValue = String.format("%-" + SONG_PATH_SIZE + "s",-1);
+    private static final int emptyIntValue=-1;
+    private static final String emptyNameValue = String.format("%-" + SONG_NAME_SIZE + "s",emptyIntValue);
+    private static final String emptyPathValue = String.format("%-" + SONG_PATH_SIZE + "s",emptyIntValue);
     private static final String LOCAL_PLAYLIST_SONG = "Data/localPlaylist_song.data";
 
     /**
-     *
+     * sets the song manager.
      * @param songManager
      */
     @Override
@@ -30,9 +31,9 @@ public class SongLocalDAO implements SongDAOInterface {
     }
 
     /**
-     *
-     * @return
-     * @throws IOException
+     * Loads all songs in the files, makes sure the songs are not equal to the emptyValue
+     * @return A list of songs if there are any in the file or a empty list if there are no songs in the file.
+     * @throws IOException if something went wrong.
      */
     @Override
     public List<Song> loadSongs() throws IOException {
@@ -59,14 +60,13 @@ public class SongLocalDAO implements SongDAOInterface {
     }
 
     /**
-     *
-     * @param name
-     * @param path
-     * @return
-     * @throws IOException
+     * Tries to create a song, overwrites empty values if such exist. Auto increments and adds song if no emptyValues found.
+     * @param name the name of the song.
+     * @param path the path of the song.
+     * @throws IOException if something went wrong.
      */
     @Override
-    public boolean createSong(String name, String path) throws IOException {
+    public void createSong(String name, String path) throws IOException {
         String formattedName = String.format("%-" + SONG_NAME_SIZE + "s",name).substring(0,SONG_NAME_SIZE);
         String formattedPath = String.format("%-" + SONG_PATH_SIZE + "s",path).substring(0,SONG_PATH_SIZE);
         try(RandomAccessFile raf = new RandomAccessFile(new File(LOCAL_SONG_PATH),"rw")){
@@ -85,7 +85,6 @@ public class SongLocalDAO implements SongDAOInterface {
                     raf.seek(raf.getFilePointer()-SONG_NAME_SIZE*2);
                         raf.writeChars(formattedName);
                         raf.writeChars(formattedPath);
-                        return true;
                     }
                 else raf.skipBytes(SONG_PATH_SIZE*2);
 
@@ -96,27 +95,24 @@ public class SongLocalDAO implements SongDAOInterface {
             raf.writeInt(index);
             raf.writeChars(formattedName);
             raf.writeChars(formattedPath);
-            return true;
             }
         }
 
     /**
-     *
+     * does nothing :)
      * @param name
      * @param path
      * @param categoryId
-     * @return
      */
     @Override
-    public boolean createSong(String name, String path, int categoryId) {
-    return false;
+    public void createSong(String name, String path, int categoryId) {
     }
 
     /**
-     *
-     * @param name
-     * @return
-     * @throws IOException
+     * Finds a song in the file.
+     * @param name the name of the song you want to get
+     * @return A song that has the given name.
+     * @throws IOException if something went wrong.
      */
     @Override
     public Song getSong(String name) throws IOException {
@@ -138,10 +134,10 @@ public class SongLocalDAO implements SongDAOInterface {
     }
 
     /**
-     *
-     * @param id
-     * @return
-     * @throws IOException
+     * Finds a song in the file.
+     * @param id the id of the song you want to get
+     * @return A song that has the given name.
+     * @throws IOException if something went wrong.
      */
     public Song getSong(int id) throws IOException {
         try(RandomAccessFile raf = new RandomAccessFile(new File(LOCAL_SONG_PATH),"r")){
@@ -162,13 +158,12 @@ public class SongLocalDAO implements SongDAOInterface {
     }
 
     /**
-     *
-     * @param id
-     * @return
-     * @throws IOException
+     * Overwrites a song with matching id with emptyValues. Also overwrites the song matches from playlists with emptyIntValue
+     * @param id the id of the song you want to delete.
+     * @throws IOException if something went wrong.
      */
     @Override
-    public boolean deleteSong(int id) throws IOException {
+    public void deleteSong(int id) throws IOException {
         try(RandomAccessFile raf = new RandomAccessFile(new File(LOCAL_SONG_PATH),"rw")){
             while(raf.getFilePointer()<raf.length()){
                 if(raf.readInt()==id){
@@ -184,23 +179,21 @@ public class SongLocalDAO implements SongDAOInterface {
                 raf.skipBytes(4);
                 if(raf.readInt()==id){
                     raf.seek(raf.getFilePointer()-8);
-                    raf.writeInt(-1);
-                    raf.writeInt(-1);
+                    raf.writeInt(emptyIntValue);
+                    raf.writeInt(emptyIntValue);
                 }
             }
         }
-        return true;
     }
 
     /**
-     *
-     * @param id
-     * @param modified
-     * @return
-     * @throws IOException
+     * Overwrites the song with the new values in modified.
+     * @param id the song id
+     * @param modified the modified song
+     * @throws IOException if something went wrong.
      */
     @Override
-    public boolean updateSong(int id, Song modified) throws IOException {
+    public void updateSong(int id, Song modified) throws IOException {
         String formattedName = String.format("%-" + SONG_NAME_SIZE + "s",modified.getTitle()).substring(0,SONG_NAME_SIZE);
         String formattedPath = String.format("%-" + SONG_PATH_SIZE + "s",modified.getFilePath()).substring(0,SONG_PATH_SIZE);
         try(RandomAccessFile raf = new RandomAccessFile(new File(LOCAL_SONG_PATH),"rw")){
@@ -208,14 +201,18 @@ public class SongLocalDAO implements SongDAOInterface {
                 if(raf.readInt()==id){
                     raf.writeChars(formattedName);
                     raf.writeChars(formattedPath);
-                    return true;
                 }
                 else raf.skipBytes(SONG_NAME_SIZE*2+SONG_PATH_SIZE*2);
             }
-            return false;
         }
     }
 
+    /**
+     * Searches for a song in the file
+     * @param search the string you are searching for
+     * @return A list of songs containing all matches, a empty list if no matches.
+     * @throws IOException if something went wrong.
+     */
     @Override
     public List<Song> searchSong(String search) throws IOException{
         if(search.isEmpty())
