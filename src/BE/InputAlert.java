@@ -11,6 +11,9 @@ import javafx.scene.control.ButtonType;
 
 import java.util.Optional;
 
+/**
+ *
+ */
 public class InputAlert {
     public void showAlert(String message) {
         javafx.scene.control.Alert alert = new javafx.scene.control.Alert(AlertType.ERROR);
@@ -20,6 +23,11 @@ public class InputAlert {
         alert.showAndWait();
     }
 
+    /**
+     *
+     * @param deleteConfirmationMessage
+     * @return
+     */
     public boolean deleteAlert(String deleteConfirmationMessage) {
         Alert alert = new Alert(AlertType.CONFIRMATION);
         alert.setContentText(deleteConfirmationMessage);
@@ -32,6 +40,14 @@ public class InputAlert {
             return false;
     }
 
+    /**
+     *
+     * @param title
+     * @param header
+     * @param content
+     * @param alertType
+     * @return
+     */
     public static Optional<ButtonType> showMessageBox(String title, String header, String content, AlertType alertType) {
         Alert alert = new Alert(alertType);
         alert.setTitle(title);

@@ -17,11 +17,19 @@ public class PlaylistDBDAO implements PlaylistDAOInterface{
     protected DbConnectionHandler database;
     protected PlaylistManager playlistManager;
 
+    /**
+     *
+     * @param playlistManager
+     */
     @Override
     public void setPlaylistManager(PlaylistManager playlistManager) {
         this.playlistManager = playlistManager;
     }
 
+    /**
+     *
+     * @throws SQLException
+     */
     public PlaylistDBDAO() throws SQLException {
         database = DbConnectionHandler.getInstance();
         if(database.getConnection()==null){
@@ -29,6 +37,11 @@ public class PlaylistDBDAO implements PlaylistDAOInterface{
         }
     }
 
+    /**
+     *
+     * @return
+     * @throws SQLException
+     */
     @Override
     public List<Playlist> loadPlaylist() throws SQLException {
         var temp = new ArrayList<Playlist>();
@@ -44,6 +57,11 @@ public class PlaylistDBDAO implements PlaylistDAOInterface{
         }
     }
 
+    /**
+     *
+     * @param name
+     * @throws SQLException
+     */
     @Override
     public void createPlaylist(String name) throws SQLException {
         var sql = "INSERT INTO playlist (playlist_name) VALUES(?);";
@@ -54,6 +72,12 @@ public class PlaylistDBDAO implements PlaylistDAOInterface{
         }
     }
 
+    /**
+     *
+     * @param name
+     * @return
+     * @throws SQLException
+     */
     @Override
     public Playlist getPlaylist(String name) throws SQLException {
         var sql = "SELECT FROM playlist WHERE playlist_name = ?;";
@@ -70,6 +94,11 @@ public class PlaylistDBDAO implements PlaylistDAOInterface{
         }
     }
 
+    /**
+     *
+     * @param name
+     * @throws SQLException
+     */
     @Override
     public void deletePlaylist(String name) throws SQLException {
 
@@ -81,6 +110,12 @@ public class PlaylistDBDAO implements PlaylistDAOInterface{
         }
     }
 
+    /**
+     *
+     * @param playlist_id
+     * @return
+     * @throws SQLException
+     */
     @Override
     public List<Song> loadSongsFromPlaylist(int playlist_id) throws SQLException {
         var temp = new ArrayList<Song>();
@@ -100,6 +135,13 @@ public class PlaylistDBDAO implements PlaylistDAOInterface{
         }
     }
 
+
+    /**
+     *
+     * @param playlist_id
+     * @param song_id
+     * @throws SQLException
+     */
     @Override
     public void AddSongToPlaylist(int playlist_id,int song_id) throws SQLException {
         var sql = "INSERT INTO playlist_song (playlist_id,song_id) VALUES (?,?);";
@@ -111,6 +153,12 @@ public class PlaylistDBDAO implements PlaylistDAOInterface{
         }
     }
 
+    /**
+     *
+     * @param playlist_id
+     * @param song_id
+     * @throws SQLException
+     */
     @Override
     public void deleteFromPlaylist(int playlist_id,int song_id) throws SQLException {
         var sql = "DELETE FROM playlist_song WHERE playlist_id=? AND song_id=?;";
@@ -122,6 +170,12 @@ public class PlaylistDBDAO implements PlaylistDAOInterface{
         }
     }
 
+
+    /**
+     *
+     * @param playlist
+     * @throws SQLException
+     */
     @Override
     public void updatePlaylist(Playlist playlist) throws SQLException {
         String sql = "UPDATE playlist SET playlist_name=?  WHERE playlist_id=?;";

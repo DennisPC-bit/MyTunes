@@ -21,10 +21,16 @@ public class DbConnectionHandler implements DAL.DB.IINTERFACE.IDbConnectionProvi
     protected static String databaseSettingsFile = "data/database.settings";
     private static DbConnectionHandler instance;
 
+    /**
+     *
+     */
     public DbConnectionHandler() {
         loadDbSettings();
     }
 
+    /**
+     *
+     */
     protected void loadDbSettings() {
         try {
             databaseProperties = new Properties();
@@ -62,6 +68,9 @@ public class DbConnectionHandler implements DAL.DB.IINTERFACE.IDbConnectionProvi
         }
     }
 
+    /**
+     *
+     */
     protected void reconnect() {
         switch (connectionType) {
             case 0:
@@ -92,6 +101,10 @@ public class DbConnectionHandler implements DAL.DB.IINTERFACE.IDbConnectionProvi
         databaseSettingsFile = file;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public Connection getConnection() {
         reconnect();
@@ -102,6 +115,10 @@ public class DbConnectionHandler implements DAL.DB.IINTERFACE.IDbConnectionProvi
         };
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public String getDatabase() {
         return switch (connectionType) {
@@ -111,6 +128,10 @@ public class DbConnectionHandler implements DAL.DB.IINTERFACE.IDbConnectionProvi
         };
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public String getHost() {
         return switch (connectionType) {
@@ -120,6 +141,10 @@ public class DbConnectionHandler implements DAL.DB.IINTERFACE.IDbConnectionProvi
         };
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public String getUser() {
         return switch (connectionType) {
@@ -129,6 +154,10 @@ public class DbConnectionHandler implements DAL.DB.IINTERFACE.IDbConnectionProvi
         };
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public String getPassword() {
         return switch (connectionType) {
@@ -138,6 +167,10 @@ public class DbConnectionHandler implements DAL.DB.IINTERFACE.IDbConnectionProvi
         };
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public int getPort() {
         return switch (connectionType) {
@@ -147,6 +180,9 @@ public class DbConnectionHandler implements DAL.DB.IINTERFACE.IDbConnectionProvi
         };
     }
 
+    /**
+     *
+     */
     @Override
     public void connect() {
         switch (connectionType) {
@@ -155,6 +191,10 @@ public class DbConnectionHandler implements DAL.DB.IINTERFACE.IDbConnectionProvi
         }
     }
 
+    /**
+     *
+     * @param database
+     */
     @Override
     public void setDatabase(String database) {
         switch (connectionType) {
@@ -163,6 +203,10 @@ public class DbConnectionHandler implements DAL.DB.IINTERFACE.IDbConnectionProvi
         }
     }
 
+    /**
+     *
+     * @param host
+     */
     @Override
     public void setHost(String host) {
         switch (connectionType) {
@@ -171,6 +215,10 @@ public class DbConnectionHandler implements DAL.DB.IINTERFACE.IDbConnectionProvi
         }
     }
 
+    /**
+     *
+     * @param user
+     */
     @Override
     public void setUser(String user) {
         switch (connectionType) {
@@ -179,6 +227,10 @@ public class DbConnectionHandler implements DAL.DB.IINTERFACE.IDbConnectionProvi
         }
     }
 
+    /**
+     *
+     * @param password
+     */
     @Override
     public void setPassword(String password) {
         switch (connectionType) {
@@ -187,6 +239,10 @@ public class DbConnectionHandler implements DAL.DB.IINTERFACE.IDbConnectionProvi
         }
     }
 
+    /**
+     *
+     * @param port
+     */
     @Override
     public void setPort(int port) {
         switch (connectionType) {
@@ -195,12 +251,19 @@ public class DbConnectionHandler implements DAL.DB.IINTERFACE.IDbConnectionProvi
         }
     }
 
+    /**
+     *
+     * @return
+     */
     public static DbConnectionHandler getInstance() {
         if (instance == null)
             instance = new DbConnectionHandler();
         return instance;
     }
 
+    /**
+     *
+     */
     public void close() {
         try {
             switch (connectionType) {

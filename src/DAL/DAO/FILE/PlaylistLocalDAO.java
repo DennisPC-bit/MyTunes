@@ -21,6 +21,11 @@ public class PlaylistLocalDAO implements PlaylistDAOInterface {
         this.playlistManager=playlistManager;
     }
 
+    /**
+     *
+     * @param name
+     * @throws IOException
+     */
     @Override
     public void createPlaylist(String name) throws IOException {
         String formattedName = String.format("%-" + PLAYLISTNAMESIZE + "s",name).substring(0,PLAYLISTNAMESIZE);
@@ -45,6 +50,11 @@ public class PlaylistLocalDAO implements PlaylistDAOInterface {
         }
     }
 
+    /**
+     *
+     * @return
+     * @throws IOException
+     */
     @Override
     public List<Playlist> loadPlaylist() throws IOException {
         List<Playlist> tmp = new ArrayList<>();
@@ -66,6 +76,12 @@ public class PlaylistLocalDAO implements PlaylistDAOInterface {
         }
     }
 
+    /**
+     *
+     * @param name
+     * @return
+     * @throws IOException
+     */
     @Override
     public Playlist getPlaylist(String name) throws IOException {
         String formattedName = String.format("%-" + PLAYLISTNAMESIZE + "s",name);
@@ -83,6 +99,11 @@ public class PlaylistLocalDAO implements PlaylistDAOInterface {
         }
     }
 
+    /**
+     *
+     * @param name
+     * @throws IOException
+     */
     @Override
     public void deletePlaylist(String name) throws IOException {
         String formattedName = String.format("%-" + PLAYLISTNAMESIZE + "s",name);
@@ -104,6 +125,11 @@ public class PlaylistLocalDAO implements PlaylistDAOInterface {
         }
     }
 
+    /**
+     *
+     * @param playlist
+     * @throws IOException
+     */
     @Override
     public void updatePlaylist(Playlist playlist) throws IOException {
         String formattedName = String.format("%-" + PLAYLISTNAMESIZE + "s",playlist.getPlayListName()).substring(0,PLAYLISTNAMESIZE);
@@ -117,6 +143,12 @@ public class PlaylistLocalDAO implements PlaylistDAOInterface {
         }
     }
 
+    /**
+     *
+     * @param playlist_id
+     * @return
+     * @throws IOException
+     */
     @Override
     public List<Song> loadSongsFromPlaylist(int playlist_id) throws IOException {
         File file = new File(LOCAL_PLAYLIST_SONG);
@@ -138,6 +170,12 @@ public class PlaylistLocalDAO implements PlaylistDAOInterface {
         }
     }
 
+    /**
+     *
+     * @param playlist_id
+     * @param song_id
+     * @throws IOException
+     */
     @Override
     public void AddSongToPlaylist(int playlist_id, int song_id) throws IOException {
         File file = new File(LOCAL_PLAYLIST_SONG);
@@ -157,6 +195,12 @@ public class PlaylistLocalDAO implements PlaylistDAOInterface {
         }
     }
 
+    /**
+     *
+     * @param playlist_id
+     * @param song_id
+     * @throws IOException
+     */
     @Override
     public void deleteFromPlaylist(int playlist_id, int song_id) throws IOException {
         try(RandomAccessFile raf = new RandomAccessFile(new File(LOCAL_PLAYLIST_SONG),"rw")){
@@ -175,6 +219,11 @@ public class PlaylistLocalDAO implements PlaylistDAOInterface {
         }
     }
 
+    /**
+     *
+     * @param playlist_id
+     * @throws IOException
+     */
     private void deleteAllFromPlaylist(int playlist_id) throws IOException {
         try(RandomAccessFile raf = new RandomAccessFile(new File(LOCAL_PLAYLIST_SONG),"rw")){
             while (raf.getFilePointer()<raf.length()){
