@@ -168,4 +168,25 @@ public class SongLocalDAO implements SongDAOInterface {
             return false;
         }
     }
+
+    @Override
+    public List<Song> searchSong(String search) throws IOException{
+        if(search.isEmpty())
+            return loadSongs();
+        List<Song> tmp = new ArrayList<>();
+        try(RandomAccessFile raf = new RandomAccessFile(new File(LOCAL_SONG_PATH),"rw")){
+            while(raf.getFilePointer()<raf.length()){
+            int songID = raf.readInt();
+            String songName = "";
+            String songPath = "";
+            for(int i = 0; i<SONG_NAME_SIZE;i++)
+                songName += raf.readChar();
+            for(int i = 0; i<SONG_PATH_SIZE;i++)
+                songPath += raf.readChar();
+            if(songName.trim().toLowerCase().contains(search.trim().toLowerCase()) || songPath.trim().toLowerCase().contains(search.trim().toLowerCase()))
+                tmp.add(new Song(songID,songName.trim(),songPath.trim()));
+            }
+            return tmp;
+        }
+    }
 }

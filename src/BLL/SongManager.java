@@ -54,4 +54,8 @@ public class SongManager {
     public void deleteSong(int id) throws Exception {
         songDAO.deleteSong(id);
     }
+
+    public List<Song> searchSong(String search) throws Exception{
+        return songDAO.searchSong(search);
+    }
 }

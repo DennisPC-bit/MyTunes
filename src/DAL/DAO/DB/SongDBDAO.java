@@ -125,4 +125,36 @@ public class SongDBDAO implements SongDAOInterface {
             return false;
         }
     }
+
+    @Override
+    public List<Song> searchSong(String search) {
+        try (var connection = database.getConnection()) {
+            List<Song> resultSongs = new ArrayList<>();
+            String sql = "SELECT * FROM song WHERE LOWER(song_title) LIKE LOWER(?) OR song_id LIKE LOWER(?) OR LOWER(song_filepath) LIKE LOWER(?) OR LOWER(song_artist) LIKE LOWER(?);";
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, "%" + search + "%");
+            preparedStatement.setString(2, "%" + search + "%");
+            preparedStatement.setString(3, "%" + search + "%");
+            preparedStatement.setString(4, "%" + search + "%");
+            if (preparedStatement.execute()) {
+                ResultSet resultSet = preparedStatement.getResultSet();
+                while (resultSet.next()) {
+                    var id = resultSet.getInt("song_id");
+                    var name = resultSet.getString("song_title");
+                    var artist = resultSet.getString("song_artist");
+                    var path = resultSet.getString("song_filepath");
+                    var song = new Song(id, name,artist, path,-1);
+                    resultSongs.add(song);
+                }
+                return resultSongs;
+            } else {
+                System.out.println(String.format("Couldn't find the song: %s", search));
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return null;
+    }
+
+
 }

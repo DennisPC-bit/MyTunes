@@ -6,7 +6,6 @@ import BE.Playlist;
 import BE.Song;
 import BLL.PlaylistManager;
 import BLL.SongManager;
-import GUI.MODEL.SongModel;
 import GUI.Main;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -73,7 +72,6 @@ public class MainViewController implements Initializable {
     private InputAlert inputAlert = new InputAlert();
     private MusicPlayer musicPlayer = new MusicPlayer();
     private Stage windowStage = new Stage();
-    private SongModel songModel;
 
     public MainViewController() {
         playlistManager.setMainController(this);
@@ -157,7 +155,6 @@ public class MainViewController implements Initializable {
      * Puts values into the tables
      */
     private void initTables() {
-        songModel = new SongModel();
         songTableTitleColumn.setCellValueFactory(cellData -> cellData.getValue().titleProperty());
         songTableArtistColumn.setCellValueFactory(cellData -> cellData.getValue().artistProperty());
         songTableCategoryColumn.setCellValueFactory(cellData -> new SimpleStringProperty("456"));
@@ -238,7 +235,11 @@ public class MainViewController implements Initializable {
      * should change songsTable, whenever the searchField changes.
      */
     public void search() {
-        this.songsTable.setItems(FXCollections.observableList(songModel.searchSong(searchField.getText())));
+        try {
+            this.songsTable.setItems(FXCollections.observableList(songManager.searchSong(searchField.getText())));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -246,6 +247,7 @@ public class MainViewController implements Initializable {
      */
     public void clearSearchButton() {
         searchField.setText("");
+        search();
     }
 
     /**
