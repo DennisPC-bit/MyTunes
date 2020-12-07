@@ -219,6 +219,11 @@
                                           </AnchorPane>
                                        </children>
                                     </GridPane>
+                                    <AnchorPane GridPane.columnIndex="3" GridPane.rowIndex="2">
+                                       <children>
+                                          <Button mnemonicParsing="false" onAction="#savePlaylist" text="Save" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                       </children>
+                                    </AnchorPane>
                                  </children>
                               </GridPane>
                            </children>

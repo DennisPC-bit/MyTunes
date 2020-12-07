@@ -27,6 +27,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.concurrent.atomic.AtomicReference;
@@ -103,7 +104,7 @@ public class MainViewController implements Initializable {
         selectedSong();
         selectedSongOnPlayList();
         selectedPlaylist();
-        move();
+        moveMainView();
     }
 
     /**
@@ -243,6 +244,18 @@ public class MainViewController implements Initializable {
         );
     }
 
+    public void moveMainView() {
+        AtomicReference<Double> x = new AtomicReference<>((double) 0);
+        AtomicReference<Double> y = new AtomicReference<>((double) 0);
+        menuBar.setOnMousePressed(mouseEvent -> {
+            x.set(mouseEvent.getSceneX());
+            y.set(mouseEvent.getY());});
+        menuBar.setOnMouseDragged(mouseEvent -> {main.getPrimaryStage().setX(mouseEvent.getScreenX()-x.get());
+                    main.getPrimaryStage().setY(mouseEvent.getScreenY()-y.get());
+                }
+        );
+    }
+
     /**
      * gets the value of the volume slider
      *
@@ -330,6 +343,7 @@ public class MainViewController implements Initializable {
         controller.setMode(mode);
         windowStage = new Stage();
         windowStage.setScene(new Scene(dialog));
+        windowStage.initOwner(main.getPrimaryStage());
         windowStage.initModality(Modality.APPLICATION_MODAL);
         windowStage.alwaysOnTopProperty();
         windowStage.show();
@@ -388,14 +402,38 @@ public class MainViewController implements Initializable {
      * Moves a song up on the current playlist.
      */
     public void moveSongUpOnPlaylistButton() {
-        //TO DO implement this
+        this.playlistSongs=FXCollections.observableArrayList(moveOnPlaylist(songsOnPlaylistTable.getItems(),selectedSongOnPlayList,-1));
+        this.songsOnPlaylistTable.setItems(playlistSongs);
     }
 
     /**
      * Moves a song down on the current playlist
      */
     public void moveSongDownOnPlaylistButton() {
-        //TO DO implement this
+        this.playlistSongs=FXCollections.observableArrayList(moveOnPlaylist(songsOnPlaylistTable.getItems(),selectedSongOnPlayList,1));
+        this.songsOnPlaylistTable.setItems(playlistSongs);
+    }
+
+    public List<Song> moveOnPlaylist(List<Song> listOfSongs, Song song, int pos){
+        LinkedList<Song> linkedSongs = new LinkedList<>(listOfSongs);
+        int index = linkedSongs.indexOf(song) + pos;
+        if(linkedSongs.size()==2){
+            linkedSongs.addLast(linkedSongs.get(0));
+            linkedSongs.remove(linkedSongs.getFirst());
+        }
+        if(linkedSongs.size()>2){
+        if (index<0){
+            linkedSongs.removeFirstOccurrence(song);
+            linkedSongs.addLast(song);
+        } else if(index>=linkedSongs.size()){
+            linkedSongs.removeLastOccurrence(song);
+            linkedSongs.addFirst(song);
+        }
+        if(index>=0&&index<linkedSongs.size()){
+            linkedSongs.remove(song);
+            linkedSongs.add(index,song);}
+        }
+        return linkedSongs;
     }
 
     /**
@@ -483,7 +521,7 @@ public class MainViewController implements Initializable {
             }
         }
         catch(Exception e){
-            System.out.println( "selected files is empty: " + selectedFiles.isEmpty());
+            System.out.println( "selected files are empty: " + selectedFiles.isEmpty());
         }
 
     }
@@ -506,7 +544,7 @@ public class MainViewController implements Initializable {
             musicPlayer.play();
             playPauseImg.setImage(new Image("GUI/IMG/Button-Play-icon-removebg-preview.png"));
             playing = !playing;
-        } else if (selectedSong != null && playing || selectedSongOnPlayList!= null && playing){
+        } else if (selectedSong != null || selectedSongOnPlayList!= null){
             musicPlayer.pause();
             playPauseImg.setImage(new Image("GUI/IMG/Button-Pause-icon.png"));
             playing = !playing;
@@ -578,15 +616,22 @@ public class MainViewController implements Initializable {
         main.getPrimaryStage().toBack();
     }
 
-    public void move() {
-        AtomicReference<Double> x = new AtomicReference<>((double) 0);
-        AtomicReference<Double> y = new AtomicReference<>((double) 0);
-        menuBar.setOnMousePressed(mouseEvent -> {
-            x.set(mouseEvent.getSceneX());
-            y.set(mouseEvent.getY());});
-        menuBar.setOnMouseDragged(mouseEvent -> {main.getPrimaryStage().setX(mouseEvent.getScreenX()-x.get());
-        main.getPrimaryStage().setY(mouseEvent.getScreenY()-y.get());
+    public void savePlaylist() {
+        if(songsOnPlaylistTable.getItems()!=null){
+        for(Song song :playlistSongs){
+            try {
+                playlistManager.deleteSongFromPlaylist(selectedPlaylist.getPlaylistId(),song.getId());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
-        );
+        for (Song song : playlistSongs){
+            try {
+                playlistManager.addSongsToPlaylist(selectedPlaylist.getPlaylistId(),song.getId());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        }
     }
 }
