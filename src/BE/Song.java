@@ -169,7 +169,7 @@ public class Song {
 
     /**
      *
-     * @return
+     * @return duration
      */
     public SimpleDoubleProperty durationProperty() {
         return duration;
@@ -193,7 +193,7 @@ public class Song {
 
     /**
      *
-     * @return
+     * @return artist
      */
     public StringProperty artistProperty() {
         return artist;
@@ -217,7 +217,7 @@ public class Song {
 
     /**
      *
-     * @return
+     * @return Title
      */
     public StringProperty titleProperty() {
         return title;
@@ -265,7 +265,7 @@ public class Song {
 
     /**
      *
-     * @return
+     * @return value of title
      */
     public StringProperty toStringProperty() {
         return new SimpleStringProperty(this.title.getValue());

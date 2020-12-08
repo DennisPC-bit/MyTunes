@@ -65,7 +65,7 @@ public class MusicPlayer {
     }
 
     /**
-     *
+     * If possible, make it pause.
      */
     public void pause() {
         if (mediaPlayer != null)
@@ -73,7 +73,7 @@ public class MusicPlayer {
     }
 
     /**
-     *
+     * If possible, make it stop.
      */
     public void stop() {
         if (mediaPlayer != null)
