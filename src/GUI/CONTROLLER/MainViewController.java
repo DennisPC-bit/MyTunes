@@ -100,6 +100,7 @@ public class MainViewController implements Initializable {
         selectedSong();
         selectedSongOnPlayList();
         selectedPlaylist();
+        setMainViewSize();
         moveMainView();
     }
 
@@ -246,12 +247,28 @@ public class MainViewController implements Initializable {
         );
     }
 
+    public void setMainViewSize() {
+        AtomicReference<Double> x = new AtomicReference<>((double) 0);
+        AtomicReference<Double> y = new AtomicReference<>((double) 0);
+        borderGridPane.setOnMousePressed(mouseEvent1 -> {
+            x.set(mouseEvent1.getSceneX());
+            y.set(mouseEvent1.getSceneY());
+            int offset = 5;
+            if(y.get()>borderGridPane.getHeight()-offset || x.get()>borderGridPane.getWidth()-offset)
+            {
+                borderGridPane.setOnMouseReleased(mouseEvent2 -> {main.getPrimaryStage().setHeight(borderGridPane.getHeight()+(mouseEvent2.getSceneY()-y.get()));
+                    main.getPrimaryStage().setWidth(borderGridPane.getWidth()+(mouseEvent2.getSceneX()-x.get()));
+                });
+            }
+    });
+    }
+
     public void moveMainView() {
         AtomicReference<Double> x = new AtomicReference<>((double) 0);
         AtomicReference<Double> y = new AtomicReference<>((double) 0);
         menuBar.setOnMousePressed(mouseEvent -> {
             x.set(mouseEvent.getSceneX());
-            y.set(mouseEvent.getY());});
+            y.set(mouseEvent.getSceneY());});
         menuBar.setOnMouseDragged(mouseEvent -> {main.getPrimaryStage().setX(mouseEvent.getScreenX()-x.get());
                     main.getPrimaryStage().setY(mouseEvent.getScreenY()-y.get());
                 }
@@ -544,18 +561,18 @@ public class MainViewController implements Initializable {
             musicPlayer.setSong(selectedSongOnPlayList);
             musicPlayer.setVolume(getVolumePercentage());
             musicPlayer.play();
-            playPauseImg.setImage(new Image("GUI/IMG/Button-Play-icon-removebg-preview.png"));
+            playPauseImg.setImage(new Image("GUI/IMG/Button-Pause-icon.png"));
             playing = !playing;
         }
         else if (selectedSong != null && !playing) {
             musicPlayer.setSong(selectedSong);
             musicPlayer.setVolume(getVolumePercentage());
             musicPlayer.play();
-            playPauseImg.setImage(new Image("GUI/IMG/Button-Play-icon-removebg-preview.png"));
+            playPauseImg.setImage(new Image("GUI/IMG/Button-Pause-icon.png"));
             playing = !playing;
         } else if (selectedSong != null || selectedSongOnPlayList!= null){
             musicPlayer.pause();
-            playPauseImg.setImage(new Image("GUI/IMG/Button-Pause-icon.png"));
+            playPauseImg.setImage(new Image("GUI/IMG/Button-Play-icon-removebg-preview.png"));
             playing = !playing;
         }
     }
@@ -622,7 +639,7 @@ public class MainViewController implements Initializable {
     }
 
     public void minimizeButton() {
-        main.getPrimaryStage().toBack();
+      main.getPrimaryStage().setIconified(true);
     }
 
     public void savePlaylist() {
