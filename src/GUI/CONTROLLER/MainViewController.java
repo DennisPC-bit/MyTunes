@@ -22,7 +22,6 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -47,7 +46,7 @@ public class MainViewController implements Initializable {
     @FXML
     private TableColumn<Playlist, String> playlistNameColumn;
     @FXML
-    private TableColumn<Playlist, String> playlistAmountOfSongsColumn;
+    private TableColumn<Playlist, Integer> playlistAmountOfSongsColumn;
     @FXML
     private TableView songsOnPlaylistTable;
     @FXML
@@ -186,13 +185,15 @@ public class MainViewController implements Initializable {
         playlistSongsColumn.setCellValueFactory(cellData -> cellData.getValue()==null?new SimpleStringProperty(""):cellData.getValue().toStringProperty());
 
         playlistNameColumn.setCellValueFactory(cellData -> cellData.getValue().getPlayListNameProperty());
-        playlistAmountOfSongsColumn.setCellValueFactory(cellData -> new SimpleStringProperty("123"));
+        playlistAmountOfSongsColumn.setCellValueFactory(cellData -> cellData.getValue().getPlaylistSize());
         playlistTimeColumn.setCellValueFactory(cellData -> new SimpleStringProperty("123"));
     }
 
     public void reloadSongTable() {
         try {
+            int index=songsTable.getSelectionModel().getFocusedIndex();
             this.songsTable.setItems(FXCollections.observableList(songManager.loadSongs()));
+            songsTable.getSelectionModel().select(index);
         }catch (Exception exception) {
             System.out.println("could not load songs");
         }
@@ -200,7 +201,9 @@ public class MainViewController implements Initializable {
 
     private void reloadPlaylistTable() {
         try {
+            int index=playlistTable.getSelectionModel().getFocusedIndex();
             this.playlistTable.setItems(FXCollections.observableList(playlistManager.loadPlaylists()));
+            playlistTable.getSelectionModel().select(index);
         } catch (Exception exception) {
             System.out.println("could not load playlistTable");
         }
@@ -208,7 +211,9 @@ public class MainViewController implements Initializable {
 
     private void reloadSongsOnPlaylist() {
         try {
+            int index=songsOnPlaylistTable.getSelectionModel().getFocusedIndex();
             this.songsOnPlaylistTable.setItems(FXCollections.observableList(playlistManager.loadSongsOnPlaylist(selectedPlaylist.getPlaylistId())));
+            songsOnPlaylistTable.getSelectionModel().select(index);
         } catch (Exception exception) {
             System.out.println("could not load playlistTable");
         }
@@ -369,7 +374,8 @@ public class MainViewController implements Initializable {
         if(selectedPlaylist!=null&&selectedSongOnPlayList!=null){
         try{
         playlistManager.deleteSongFromPlaylist(selectedPlaylist.getPlaylistId(),selectedSongOnPlayList.getId());
-        reloadSongsOnPlaylist();
+            reloadSongsOnPlaylist();
+            reloadPlaylistTable();
         }
         catch (Exception e){
             e.printStackTrace();
@@ -383,16 +389,24 @@ public class MainViewController implements Initializable {
     public void addToPlaylistButton() {
         if(selectedPlaylist!=null){
             try {
-                for(Song song : playlistManager.loadSongsOnPlaylist(selectedPlaylist.getPlaylistId())){
-                    if(song.getId()==selectedSong.getId())
+                for(Song song : Collections.unmodifiableList(playlistManager.loadSongsOnPlaylist(selectedPlaylist.getPlaylistId()))){
+                    if(song.getId()==selectedSong.getId()){
+                        if(songsTable.getSelectionModel().getFocusedIndex()==songsTable.getItems().size()-1){
+                            songsTable.getSelectionModel().select(0);
+                            return;
+                        }
+                        else
+                        songsTable.getSelectionModel().select(songsTable.getSelectionModel().getFocusedIndex()+1);
                         return;
+                    }
                 }
                 playlistManager.addSongsToPlaylist(selectedPlaylist.getPlaylistId(),selectedSong.getId());
                 reloadSongsOnPlaylist();
+                reloadPlaylistTable();
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }
+    }
     }
 
     /**
@@ -630,9 +644,8 @@ public class MainViewController implements Initializable {
         }
     }
 
+    @FXML
     private void shufflePlaylist(){
-        List<Song> shuffeledPlaylist = playlistSongs;
-        Collections.shuffle(shuffeledPlaylist);
-        this.playlistTable.setItems((ObservableList) shuffeledPlaylist);
+        Collections.shuffle(playlistSongs);
     }
 }

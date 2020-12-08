@@ -1,5 +1,8 @@
 package BE;
 
+import BLL.PlaylistManager;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
@@ -10,6 +13,7 @@ public class Playlist {
 
     private String playListName;
     private StringProperty playListNameProperty;
+    private ObjectProperty<Integer> playlistSize = new SimpleObjectProperty<>();
     private int playlistId;
     private List<Song> songList;
     private static final String seperator = "|";
@@ -145,5 +149,16 @@ public class Playlist {
     public void editSong(Song newSong, Song oldSong) {
         removeSong(oldSong);
         addSong(newSong);
+    }
+
+    public ObjectProperty<Integer> getPlaylistSize(){
+        PlaylistManager playlistManager = new PlaylistManager();
+        try {
+            playlistSize.setValue(playlistManager.loadSongsOnPlaylist(this.getPlaylistId()).size());
+            return playlistSize;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new SimpleObjectProperty<>(0);
+        }
     }
 }
