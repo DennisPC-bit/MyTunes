@@ -110,7 +110,7 @@ public class Playlist {
     }
 
     /**
-     *
+     * If songlist does not have this song, it will add it.
      * @param song
      */
     public void addSong(Song song) {
@@ -119,7 +119,7 @@ public class Playlist {
     }
 
     /**
-     *
+     * Adds song to songlist if its not already on.
      * @param songs
      */
     public void addSongs(List<Song> songs) {
@@ -130,7 +130,7 @@ public class Playlist {
     }
 
     /**
-     *
+     * Removes song from songlist
      * @param song
      */
     public void removeSong(Song song) {
@@ -138,7 +138,7 @@ public class Playlist {
     }
 
     /**
-     *
+     * Removes the old song, and replaces it with the edited one.
      * @param newSong
      * @param oldSong
      */

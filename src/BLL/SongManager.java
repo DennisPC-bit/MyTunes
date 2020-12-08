@@ -99,6 +99,12 @@ public class SongManager {
         songDAO.deleteSong(id);
     }
 
+    /**
+     *
+     * @param search
+     * @return
+     * @throws Exception
+     */
     public List<Song> searchSong(String search) throws Exception{
         return songDAO.searchSong(search);
     }
