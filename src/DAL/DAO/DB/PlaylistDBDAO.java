@@ -126,7 +126,8 @@ public class PlaylistDBDAO implements PlaylistDAOInterface {
     @Override
     public List<Song> loadSongsFromPlaylist(int playlist_id) throws SQLException {
         var temp = new ArrayList<Song>();
-        var sql = "SELECT song.song_id,song.song_title,song.song_filepath FROM playlist_song,song WHERE playlist_song.playlist_id=? AND playlist_song.song_id=song.song_id;";
+        var sql = "SELECT song.* FROM playlist_song,song" +
+                  " WHERE playlist_song.playlist_id=? AND playlist_song.song_id=song.song_id;";
         try (var con = database.getConnection();
              PreparedStatement st = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             st.setInt(1,playlist_id);
@@ -135,8 +136,9 @@ public class PlaylistDBDAO implements PlaylistDAOInterface {
             while (rs.next()) {
                 int song_id = rs.getInt("song_id");
                 String song_title = rs.getString("song_title");
+                String song_artist = rs.getString("song_artist");
                 String song_filepath = rs.getString("song_filepath");
-                temp.add(new Song(song_id,song_title,song_filepath));
+                temp.add(new Song(song_id,song_title,song_artist,song_filepath));
             }
             return temp;
         }catch (SQLNonTransientConnectionException e){

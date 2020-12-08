@@ -62,12 +62,11 @@ public class SongManager {
 
     /**
      * Sends information to create a song
-     * @param name
-     * @param path
+     * @param song
      * @throws Exception
      */
-    public void createSong(String name, String path) throws Exception {
-        songDAO.createSong(name, path);
+    public void createSong(Song song) throws Exception {
+        songDAO.createSong(song);
     }
 
     /**

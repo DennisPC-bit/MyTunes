@@ -47,13 +47,17 @@ public class SongDBDAO implements SongDAOInterface {
         try (var con = database.getConnection();
              Statement statement = con.createStatement())
         {
-            ResultSet rs = statement.executeQuery("SELECT * FROM song;");
+            ResultSet rs = statement.executeQuery("SELECT song.* FROM song;");
             while (rs.next()) {
                 int id = rs.getInt("song_id");
                 String name = rs.getString("song_title");
                 String path = rs.getString("song_filepath");
-                int category = rs.getInt("category_id");
-                temp.add(new Song(id, name, path, category));
+                /*
+                String category = rs.getString("category_Name");
+                 */
+
+                String artist = rs.getString("song_artist");
+                temp.add(new Song(id, name, artist,path , "not done yet"));
             }
             return temp;
         }catch (SQLNonTransientConnectionException e){
@@ -62,40 +66,21 @@ public class SongDBDAO implements SongDAOInterface {
         }
     }
 
-    /**
-     * Tries to create a song.
-     * @param name the name of the song
-     * @param path the path of the song
-     * @throws SQLException if it cant get connection to the database or something went wrong.
-     */
-    @Override
-    public void createSong(String name, String path) throws SQLException {
-        var sql = "INSERT INTO song (song_title, song_filepath) VALUES(?,?);";
-        try (var con = database.getConnection();
-             PreparedStatement st = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-            st.setString(1, name);
-            st.setString(2, path);
-            st.executeUpdate();
-        }catch (SQLNonTransientConnectionException e){
-            songManager.goLocal();
-        }
-    }
 
     /**
      * tries to create a song.
-     * @param name the name of the song.
-     * @param path teh path of the song.
-     * @param categoryId the categoryId of the song
+     * @param song the song.
      * @throws SQLException
      */
     @Override
-    public void createSong(String name, String path, int categoryId) throws SQLException {
-        var sql = "INSERT INTO song (song_title, song_filepath, category_id) VALUES(?,?,?);";
+    public void createSong(Song song) throws SQLException {
+        var sql = "INSERT INTO song (song_title, song_artist, song_filepath, category_id) VALUES(?,?,?,?);";
         try (var con = database.getConnection();
              PreparedStatement st = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-            st.setString(1, name);
-            st.setString(2, path);
-            st.setInt(3, categoryId);
+            st.setString(1, song.getTitle());
+            st.setString(2, song.getArtist());
+            st.setString(3, song.getFilePath());
+            st.setInt(4, -1);
             st.executeUpdate();
         }catch (SQLNonTransientConnectionException e){
             songManager.goLocal();
@@ -119,7 +104,8 @@ public class SongDBDAO implements SongDAOInterface {
             var id = resultSet.getInt("song_id");
             var name1 = resultSet.getString("song_name");
             var path = resultSet.getString("song_filepath");
-            var song = new Song(id, name1, path);
+            String artist = resultSet.getString("song_artist");
+            var song = new Song(id, name1, path, artist);
             return song;
         }catch (SQLNonTransientConnectionException e){
             songManager.goLocal();
@@ -152,12 +138,14 @@ public class SongDBDAO implements SongDAOInterface {
      */
     @Override
     public void updateSong(int id, Song modified) throws SQLException {
-        var sql = "UPDATE song SET song_title = ?, song_filepath = ? WHERE song_id = ?;";
+        var sql = "UPDATE song SET song_title = ?, song_filepath = ?, song_artist, category_id=? WHERE song_id = ?;";
         try (var con = database.getConnection();
              PreparedStatement st = con.prepareStatement(sql)) {
             st.setString(1, modified.getTitle());
             st.setString(2, modified.getFilePath());
-            st.setInt(3, id);
+            st.setString(3, modified.getArtist());
+            st.setInt(4, -1);
+            st.setInt(5, modified.getId());
             st.executeUpdate();
         }catch (SQLNonTransientConnectionException e){
             songManager.goLocal();
@@ -186,7 +174,7 @@ public class SongDBDAO implements SongDAOInterface {
                     var name = resultSet.getString("song_title");
                     var artist = resultSet.getString("song_artist");
                     var path = resultSet.getString("song_filepath");
-                    var song = new Song(id, name,artist, path,-1);
+                    var song = new Song(id, name,artist, path,"not done yet");
                     resultSongs.add(song);
                 }
                 return resultSongs;

@@ -61,14 +61,13 @@ public class SongLocalDAO implements SongDAOInterface {
 
     /**
      * Tries to create a song, overwrites empty values if such exist. Auto increments and adds song if no emptyValues found.
-     * @param name the name of the song.
-     * @param path the path of the song.
+     * @param song the song.
      * @throws IOException if something went wrong.
      */
     @Override
-    public void createSong(String name, String path) throws IOException {
-        String formattedName = String.format("%-" + SONG_NAME_SIZE + "s",name).substring(0,SONG_NAME_SIZE);
-        String formattedPath = String.format("%-" + SONG_PATH_SIZE + "s",path).substring(0,SONG_PATH_SIZE);
+    public void createSong(Song song) throws IOException {
+        String formattedName = String.format("%-" + SONG_NAME_SIZE + "s",song.getTitle()).substring(0,SONG_NAME_SIZE);
+        String formattedPath = String.format("%-" + SONG_PATH_SIZE + "s",song.getFilePath()).substring(0,SONG_PATH_SIZE);
         try(RandomAccessFile raf = new RandomAccessFile(new File(LOCAL_SONG_PATH),"rw")){
             if(raf.length()==0) {
                 raf.writeInt(1);
@@ -97,16 +96,6 @@ public class SongLocalDAO implements SongDAOInterface {
             raf.writeChars(formattedPath);
             }
         }
-
-    /**
-     * does nothing :)
-     * @param name
-     * @param path
-     * @param categoryId
-     */
-    @Override
-    public void createSong(String name, String path, int categoryId) {
-    }
 
     /**
      * Finds a song in the file.

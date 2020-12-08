@@ -22,14 +22,10 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class MainViewController implements Initializable {
@@ -509,11 +505,11 @@ public class MainViewController implements Initializable {
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("MP3-Files", "*.mp3"));
         List<File> selectedFiles = new ArrayList<>();
         try{
-        selectedFiles.addAll(fileChooser.showOpenMultipleDialog(windowStage));
-        try {
+            selectedFiles.addAll(fileChooser.showOpenMultipleDialog(windowStage));
+            try {
                 if(!selectedFiles.isEmpty()){
                     for (File selectedFile : selectedFiles)
-                        songManager.createSong(selectedFile.getName().substring(0, selectedFile.getName().indexOf('.')), selectedFile.getPath());
+                        songManager.createSong(new Song(selectedFile.getName().substring(0, selectedFile.getName().indexOf('.')), selectedFile.getPath()));
                     load();
                 }
             } catch (Exception e) {
@@ -521,9 +517,8 @@ public class MainViewController implements Initializable {
             }
         }
         catch(Exception e){
-            System.out.println( "selected files are empty: " + selectedFiles.isEmpty());
+            e.printStackTrace();
         }
-
     }
 
     /**
@@ -633,5 +628,11 @@ public class MainViewController implements Initializable {
             }
         }
         }
+    }
+
+    private void shufflePlaylist(){
+        List<Song> shuffeledPlaylist = playlistSongs;
+        Collections.shuffle(shuffeledPlaylist);
+        this.playlistTable.setItems((ObservableList) shuffeledPlaylist);
     }
 }

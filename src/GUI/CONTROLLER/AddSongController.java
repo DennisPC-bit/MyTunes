@@ -1,5 +1,6 @@
 package GUI.CONTROLLER;
 
+import BE.Song;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
@@ -28,7 +29,7 @@ public class AddSongController extends Component {
                 File selectedFile = fileChooser.getSelectedFile();
                 titleTextField.setText(selectedFile.getName());
                 filePathTextField.setText(selectedFile.getAbsolutePath());
-                mainMainViewController.getSongManager().createSong(titleTextField.getText(), filePathTextField.getText());
+                mainMainViewController.getSongManager().createSong(new Song(titleTextField.getText(), filePathTextField.getText()));
                 mainMainViewController.reloadSongTable();
                 closeWindow();
             }

@@ -22,20 +22,10 @@ public interface SongDAOInterface {
 
     /**
      *
-     * @param name
-     * @param path
+     * @param song the song
      * @throws Exception
      */
-    void createSong(String name, String path) throws Exception;
-
-    /**
-     *
-     * @param name
-     * @param path
-     * @param categoryId
-     * @throws Exception
-     */
-    void createSong(String name, String path, int categoryId) throws Exception;
+    void createSong(Song song) throws Exception;
 
     /**
      *

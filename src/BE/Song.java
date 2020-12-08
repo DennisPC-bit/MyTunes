@@ -4,23 +4,17 @@ import javafx.beans.property.*;
 import javafx.collections.MapChangeListener;
 import javafx.scene.media.Media;
 
-
 import java.io.File;
 
 public class Song {
     private SimpleIntegerProperty id;
     private SimpleBooleanProperty visible;
-
     private StringProperty title;
     protected StringProperty artist;
     protected SimpleDoubleProperty duration;
     protected StringProperty filePath;
-    protected SimpleIntegerProperty categoryId;
+    protected SimpleStringProperty categoryName;
     protected Media media;
-
-    public Song() {
-
-    }
 
     /**
      *
@@ -55,18 +49,18 @@ public class Song {
 
     /**
      *
-     * @param id
-     * @param title
-     * @param filePath
-     * @param categoryId
+     * @param id song id
+     * @param title song title
+     * @param filePath song filepath
+     * @param categoryName song category
      */
-    public Song(int id, String title, String filePath, int categoryId) {
+    public Song(int id, String title, String filePath, String categoryName) {
         this.id = new SimpleIntegerProperty(id);
         this.title = new SimpleStringProperty(title);
         this.artist = new SimpleStringProperty();
         this.visible = new SimpleBooleanProperty(true);
         this.filePath = new SimpleStringProperty(filePath);
-        this.categoryId = new SimpleIntegerProperty(categoryId);
+        this.categoryName = new SimpleStringProperty(categoryName);
         duration = new SimpleDoubleProperty();
         getMeta();
     }
@@ -74,19 +68,19 @@ public class Song {
 
     /**
      *
-     * @param id
-     * @param title
-     * @param artist
-     * @param filePath
-     * @param categoryId
+     * @param id song id
+     * @param title song title
+     * @param artist song artist
+     * @param filePath song filepath
+     * @param categoryName song categoryName
      */
-    public Song(int id, String title, String artist, String filePath, int categoryId) {
+    public Song(int id, String title, String artist, String filePath, String categoryName) {
         this.id = new SimpleIntegerProperty(id);
         this.title = new SimpleStringProperty(title);
         this.artist = new SimpleStringProperty(artist);
         this.visible = new SimpleBooleanProperty(true);
         this.filePath = new SimpleStringProperty(filePath);
-        this.categoryId = new SimpleIntegerProperty(categoryId);
+        this.categoryName = new SimpleStringProperty(categoryName);
         duration = new SimpleDoubleProperty();
         getMeta();
     }
@@ -96,15 +90,16 @@ public class Song {
      * Get the value of meta.
      */
     public void getMeta() {
+        if(this.getFilePath()!=null){
         var file = new File(getFilePath());
         if (file.exists()) {
             media = new Media(file.toURI().toString());
 
             media.getMetadata().addListener((MapChangeListener.Change<? extends String, ? extends Object> c) -> {
                 if (c.wasAdded()) {
-                    if ("artist".equals(c.getKey())) {
+                    if ("artist".equals(c.getKey()) && this.getArtist()==null) {
                         setArtist(c.getValueAdded().toString());
-                    } else if ("title".equals(c.getKey())) {
+                    } else if ("title".equals(c.getKey())&&this.getArtist()==null) {
                         setTitle(c.getValueAdded().toString());
                     } else if ("album".equals(c.getKey())) {
                         //album = c.getValueAdded().toString();
@@ -112,6 +107,7 @@ public class Song {
                 }
             });
             setDuration(media.getDuration().toMinutes());
+        }
         }
     }
 
@@ -255,16 +251,16 @@ public class Song {
      * Get the value of CategoryId
      * @return the value of CategoryId
      */
-    public int getCategoryId() {
-        return categoryId.get();
+    public String getCategoryName() {
+        return categoryName.get();
     }
 
     /**
      * Set the value of CategoryId
-     * @param id new value of CategoryId
+     * @param newCategoryName new value of CategoryName
      */
-    public void setCategoryId(int id) {
-        categoryId.set(id);
+    public void setCategoryName(String newCategoryName) {
+        categoryName.set(newCategoryName);
     }
 
     /**
