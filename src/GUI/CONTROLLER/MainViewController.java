@@ -22,6 +22,7 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -62,7 +63,7 @@ public class MainViewController implements Initializable {
     @FXML
     private TableColumn<Song, String> songTableCategoryColumn;
     @FXML
-    private TableColumn<Song, Number> songTableTimeColumn;
+    private TableColumn<Song, String> songTableTimeColumn;
     @FXML
     private Label currentSong;
     private Song songPlaying;
@@ -503,9 +504,8 @@ public class MainViewController implements Initializable {
         FileChooser fileChooser = new FileChooser();
         windowStage = new Stage();
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("MP3-Files", "*.mp3"));
-        List<File> selectedFiles = new ArrayList<>();
         try{
-            selectedFiles.addAll(fileChooser.showOpenMultipleDialog(windowStage));
+        List<File> selectedFiles = new ArrayList<>(fileChooser.showOpenMultipleDialog(windowStage));
             try {
                 if(!selectedFiles.isEmpty()){
                     for (File selectedFile : selectedFiles)
@@ -515,11 +515,11 @@ public class MainViewController implements Initializable {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+        }catch (RuntimeException e)
+        {
+            System.out.println("No file selected");
         }
-        catch(Exception e){
-            e.printStackTrace();
         }
-    }
 
     /**
      * Plays from the playlist

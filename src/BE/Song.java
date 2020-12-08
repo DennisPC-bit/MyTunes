@@ -3,15 +3,18 @@ package BE;
 import javafx.beans.property.*;
 import javafx.collections.MapChangeListener;
 import javafx.scene.media.Media;
-
+import javafx.scene.media.MediaPlayer;
+import javafx.util.Duration;
+import javax.sound.sampled.AudioFileFormat;
 import java.io.File;
+import java.util.Map;
 
 public class Song {
     private SimpleIntegerProperty id;
     private SimpleBooleanProperty visible;
     private StringProperty title;
     protected StringProperty artist;
-    protected SimpleDoubleProperty duration;
+    protected SimpleStringProperty duration;
     protected StringProperty filePath;
     protected SimpleStringProperty categoryName;
     protected Media media;
@@ -28,7 +31,7 @@ public class Song {
         this.artist = new SimpleStringProperty();
         this.visible = new SimpleBooleanProperty(true);
         this.filePath = new SimpleStringProperty(filePath);
-        duration = new SimpleDoubleProperty();
+        duration = new SimpleStringProperty("");
         getMeta();
     }
 
@@ -43,7 +46,7 @@ public class Song {
         this.artist = new SimpleStringProperty();
         this.visible = new SimpleBooleanProperty(true);
         this.filePath = new SimpleStringProperty(filePath);
-        duration = new SimpleDoubleProperty();
+        duration = new SimpleStringProperty("");
         getMeta();
     }
 
@@ -61,7 +64,7 @@ public class Song {
         this.visible = new SimpleBooleanProperty(true);
         this.filePath = new SimpleStringProperty(filePath);
         this.categoryName = new SimpleStringProperty(categoryName);
-        duration = new SimpleDoubleProperty();
+        duration = new SimpleStringProperty("");
         getMeta();
     }
 
@@ -81,7 +84,7 @@ public class Song {
         this.visible = new SimpleBooleanProperty(true);
         this.filePath = new SimpleStringProperty(filePath);
         this.categoryName = new SimpleStringProperty(categoryName);
-        duration = new SimpleDoubleProperty();
+        duration = new SimpleStringProperty("");
         getMeta();
     }
 
@@ -94,22 +97,30 @@ public class Song {
         var file = new File(getFilePath());
         if (file.exists()) {
             media = new Media(file.toURI().toString());
-
+            if(this.getDuration().equals("")){
+            MediaPlayer mediaPlayer = new MediaPlayer(media);
+            mediaPlayer.setOnReady(new Runnable() {
+                @Override
+                public void run() {
+                    setDuration(String.format("%02d",(int)media.getDuration().toMinutes()) + ":" + String.format("%02d",((int)media.getDuration().toSeconds()%60)));
+                }
+            });
+            }
+            }
             media.getMetadata().addListener((MapChangeListener.Change<? extends String, ? extends Object> c) -> {
                 if (c.wasAdded()) {
                     if ("artist".equals(c.getKey()) && this.getArtist()==null) {
                         setArtist(c.getValueAdded().toString());
-                    } else if ("title".equals(c.getKey())&&this.getArtist()==null) {
+                    } if ("title".equals(c.getKey()) && this.getTitle()==null) {
                         setTitle(c.getValueAdded().toString());
-                    } else if ("album".equals(c.getKey())) {
+                    } if ("album".equals(c.getKey())) {
                         //album = c.getValueAdded().toString();
                     }
                 }
+
             });
-            setDuration(media.getDuration().toMinutes());
         }
         }
-    }
 
     /**
      * Get the value of id
@@ -163,7 +174,7 @@ public class Song {
      * Get the value of Duration
      * @return the value of Duration.
      */
-    public double getDuration() {
+    public String getDuration() {
         return duration.get();
     }
 
@@ -171,7 +182,7 @@ public class Song {
      *
      * @return duration
      */
-    public SimpleDoubleProperty durationProperty() {
+    public SimpleStringProperty durationProperty() {
         return duration;
     }
 
@@ -179,7 +190,7 @@ public class Song {
      * Set the value of duration
      * @param duration new value of duration
      */
-    public void setDuration(double duration) {
+    public void setDuration(String duration) {
         this.duration.set(duration);
     }
 

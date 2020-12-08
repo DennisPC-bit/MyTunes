@@ -138,13 +138,13 @@ public class SongDBDAO implements SongDAOInterface {
      */
     @Override
     public void updateSong(int id, Song modified) throws SQLException {
-        var sql = "UPDATE song SET song_title = ?, song_filepath = ?, song_artist, category_id=? WHERE song_id = ?;";
+        var sql = "UPDATE song SET song_title = ?, song_filepath = ?, song_artist=?, category_id=? WHERE song_id = ?;";
         try (var con = database.getConnection();
              PreparedStatement st = con.prepareStatement(sql)) {
             st.setString(1, modified.getTitle());
             st.setString(2, modified.getFilePath());
             st.setString(3, modified.getArtist());
-            st.setInt(4, -1);
+            st.setInt(4,-1);
             st.setInt(5, modified.getId());
             st.executeUpdate();
         }catch (SQLNonTransientConnectionException e){
