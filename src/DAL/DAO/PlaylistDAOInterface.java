@@ -9,12 +9,14 @@ public interface PlaylistDAOInterface {
 
     /**
      * Sets the playlistManager
+     *
      * @param playlistManager the playlistManager
      */
     void setPlaylistManager(PlaylistManager playlistManager);
 
     /**
      * Loads the playlists
+     *
      * @return A list of playlists
      * @throws Exception if something went wrong.
      */
@@ -22,6 +24,7 @@ public interface PlaylistDAOInterface {
 
     /**
      * Creates a playlist
+     *
      * @param   name
      * @throws  Exception if something went wrong.
      */
@@ -29,6 +32,7 @@ public interface PlaylistDAOInterface {
 
     /**
      * Gets a playlist
+     *
      * @param   name the name of the playlist
      * @return  the requested playlist.
      * @throws  Exception if something went wrong.
@@ -38,6 +42,7 @@ public interface PlaylistDAOInterface {
 
     /**
      * Deletes a playlist
+     *
      * @param   name name of the playlist
      * @throws  Exception if something went wrong.
      */
@@ -46,6 +51,7 @@ public interface PlaylistDAOInterface {
 
     /**
      * Loads the songs on the playlist
+     *
      * @param   playlist_id the id of the playlist
      * @return  A list of songs on the playlist
      * @throws  Exception if something went wrong.
@@ -54,6 +60,7 @@ public interface PlaylistDAOInterface {
 
     /**
      * Adds a song to the playlist
+     *
      * @param   playlist_id the playlist you want to add a song to
      * @param   song_id the song you want to add
      * @throws  Exception if something went wrong.
@@ -63,6 +70,7 @@ public interface PlaylistDAOInterface {
 
     /**
      * Removes a song from the playlist
+     *
      * @param   playlist_id the id of the playlist you want to remove the song from
      * @param   song_id the id of the song you want to remove
      * @throws  Exception if something went wrong.
@@ -72,8 +80,9 @@ public interface PlaylistDAOInterface {
 
     /**
      * Updates a playlist to with new parameters
-     * @param   playlist the modified playlist
-     * @throws  Exception if something went wrong.
+     *
+     * @param   playlist    the modified playlist
+     * @throws  Exception   if something went wrong.
      */
 
     void updatePlaylist(Playlist playlist) throws Exception;

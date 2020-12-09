@@ -24,6 +24,7 @@ public class PlaylistLocalDAO implements PlaylistDAOInterface {
 
     /**
      * Tries to make a playlist with the given name.
+     *
      * @param   name the name of the playlist.
      * @throws  IOException if something went wrong.
      */
@@ -52,8 +53,9 @@ public class PlaylistLocalDAO implements PlaylistDAOInterface {
     }
 
     /**
-     * Tries to load playlists, ignores playlists with emptyValue, creates file if the file does not exist,
+     * Tries to load playlists, ignores playlists with emptyValue, creates file if the file does not exist.
      * makes sure there is a file to overwrite, when creating a playlist.
+     *
      * @return A list of playlists, an empty list if no playlists exist.
      * @throws IOException if something went wrong.
      */
@@ -80,8 +82,9 @@ public class PlaylistLocalDAO implements PlaylistDAOInterface {
 
     /**
      * Tries to get a playlist.
-     * @param   name The name of the playlist
-     * @return  a playlist or null if none found
+     *
+     * @param   name The name of the playlist.
+     * @return  a playlist or null if none found.
      * @throws  IOException if something went wrong.
      */
     @Override
@@ -103,7 +106,8 @@ public class PlaylistLocalDAO implements PlaylistDAOInterface {
 
     /**
      * Tries to overwrite a playlist with emptyValue, and deletes songs all songs from the playlist.
-     * @param   name the name of the playlist
+     *
+     * @param   name the name of the playlist.
      * @throws  IOException if something went wrong.
      */
     @Override
@@ -126,7 +130,8 @@ public class PlaylistLocalDAO implements PlaylistDAOInterface {
     }
 
     /**
-     * Overwrites the old name, with the new modified name from the Playlist
+     * Overwrites the old name, with the new modified name from the Playlist.
+     *
      * @param   modified the modified playlist.
      * @throws  IOException if something went wrong.
      */
@@ -145,6 +150,7 @@ public class PlaylistLocalDAO implements PlaylistDAOInterface {
 
     /**
      * Tries to load songs from the playlist with playlist id.
+     *
      * @param   playlist_id the id of the playlist you want to load.
      * @return  A list of Songs in the Playlist, a empty list if there and no songs in the playlist.
      * @throws  IOException if something when wrong.
@@ -172,6 +178,7 @@ public class PlaylistLocalDAO implements PlaylistDAOInterface {
 
     /**
      * Tries to add a song to a playlist, if it finds an emptyIntValue, it overwrites instead of writing at the file end.
+     *
      * @param   playlist_id the id of the playlist
      * @param   song_id the id of the song
      * @throws  IOException if something went wrong.
@@ -197,6 +204,7 @@ public class PlaylistLocalDAO implements PlaylistDAOInterface {
 
     /**
      * Overwrites a song and playlist id with emptyIntValue.
+     *
      * @param   playlist_id the id of the playlist
      * @param   song_id the id of the song
      * @throws  IOException if something went wrong.
@@ -219,6 +227,7 @@ public class PlaylistLocalDAO implements PlaylistDAOInterface {
 
     /**
      * Tries to overwrite all matches of playlist_id with emptyIntValue
+     *
      * @param   playlist_id the id of the playlist you want to clear of songs.
      * @throws  IOException if something went wrong.
      */

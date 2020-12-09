@@ -68,6 +68,9 @@ public class AddSongController extends Component implements Initializable {
         this.mainViewController = mainViewController;
     }
 
+    /**
+     * Lets you select a file in your system
+     */
     public void browse() {
         try {
             JFileChooser fileChooser = new JFileChooser();
@@ -113,6 +116,9 @@ public class AddSongController extends Component implements Initializable {
         }
     }
 
+    /**
+     * Closes the window
+     */
     public void close() {
         mainViewController.getWindowStage().close();
     }

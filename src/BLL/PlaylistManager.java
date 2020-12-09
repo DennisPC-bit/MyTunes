@@ -16,9 +16,7 @@ public class PlaylistManager {
     protected MainViewController mainController;
 
 
-    /**
-     *
-     */
+    //initializes the interface, if no connection to the database, it will try to use the local option.
     static {
         try {
             playlistDAO = new PlaylistDBDAO();

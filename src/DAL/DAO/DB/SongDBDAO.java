@@ -4,7 +4,6 @@ import BE.Song;
 import BLL.SongManager;
 import DAL.DAO.SongDAOInterface;
 import DAL.DB.DbConnectionHandler;
-
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,7 +17,7 @@ public class SongDBDAO implements SongDAOInterface {
     /**
      * Sets the manager.
      *
-     * @param songManager
+     * @param songManager the manager
      */
     @Override
     public void setSongManager(SongManager songManager) {
@@ -72,8 +71,8 @@ public class SongDBDAO implements SongDAOInterface {
     /**
      * tries to create a song.
      *
-     * @param song the song.
-     * @throws SQLException
+     * @param   song the song.
+     * @throws  SQLException
      */
     @Override
     public void createSong(Song song) throws SQLException {
@@ -93,9 +92,9 @@ public class SongDBDAO implements SongDAOInterface {
     /**
      * Tries to find a song with the given name.
      *
-     * @param name the name of the song.
-     * @return A song with the name.
-     * @throws SQLException if it cant get connection to the database or something went wrong.
+     * @param   name the name of the song.
+     * @return  A song with the name.
+     * @throws  SQLException if it cant get connection to the database or something went wrong.
      */
     @Override
     public Song getSong(String name) throws SQLException {
@@ -120,8 +119,8 @@ public class SongDBDAO implements SongDAOInterface {
     /**
      * Tries to delete a song with the given id.
      *
-     * @param id the id of the song.
-     * @throws SQLException if it cant get connection to the database or something went wrong.
+     * @param   id the id of the song.
+     * @throws  SQLException if it cant get connection to the database or something went wrong.
      */
     @Override
     public void deleteSong(int id) throws SQLException {
@@ -138,12 +137,11 @@ public class SongDBDAO implements SongDAOInterface {
     /**
      * Tries to update a Song.
      *
-     * @param id       id of the song
-     * @param modified the modified version of the song.
-     * @throws SQLException if it cant get connection to the database or something went wrong.
+     * @param   modified the modified version of the song.
+     * @throws  SQLException if it cant get connection to the database or something went wrong.
      */
     @Override
-    public void updateSong(int id, Song modified) throws SQLException {
+    public void updateSong(Song modified) throws SQLException {
         var sql = "UPDATE song SET song_title = ?, song_filepath = ?, song_artist=?, category_id=? WHERE song_id = ?;";
         try (var con = database.getConnection();
              PreparedStatement st = con.prepareStatement(sql)) {
@@ -161,19 +159,19 @@ public class SongDBDAO implements SongDAOInterface {
     /**
      * Tries to find a list of songs that contain search
      *
-     * @param search the search string
-     * @return A list containing songs that match, or an empty list if no song matches.
+     * @param   searchQuery the search string
+     * @return  A list containing songs that match, or an empty list if no song matches.
      */
     @Override
-    public List<Song> searchSong(String search) {
+    public List<Song> searchSong(String searchQuery) {
         List<Song> resultSongs = new ArrayList<>();
         try (var connection = database.getConnection()) {
             String sql = "SELECT * FROM song WHERE LOWER(song_title) LIKE LOWER(?) OR song_id LIKE LOWER(?) OR LOWER(song_filepath) LIKE LOWER(?) OR LOWER(song_artist) LIKE LOWER(?);";
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setString(1, "%" + search + "%");
-            preparedStatement.setString(2, "%" + search + "%");
-            preparedStatement.setString(3, "%" + search + "%");
-            preparedStatement.setString(4, "%" + search + "%");
+            preparedStatement.setString(1, "%" + searchQuery + "%");
+            preparedStatement.setString(2, "%" + searchQuery + "%");
+            preparedStatement.setString(3, "%" + searchQuery + "%");
+            preparedStatement.setString(4, "%" + searchQuery + "%");
             if (preparedStatement.execute()) {
                 ResultSet resultSet = preparedStatement.getResultSet();
                 while (resultSet.next()) {
@@ -186,7 +184,7 @@ public class SongDBDAO implements SongDAOInterface {
                 }
                 return resultSongs;
             } else {
-                System.out.println(String.format("Couldn't find the song: %s", search));
+                System.out.println(String.format("Couldn't find the song: %s", searchQuery));
             }
         } catch (SQLNonTransientConnectionException e) {
             songManager.goLocal();
@@ -196,6 +194,12 @@ public class SongDBDAO implements SongDAOInterface {
         return resultSongs;
     }
 
+    /**
+     * Gets the genreMap
+     *
+     * @return A map of genres
+     * @throws Exception if something went wrong
+     */
     @Override
     public Map<Integer, String> getGenres() throws Exception {
         HashMap<Integer, String> temp = new HashMap<>();

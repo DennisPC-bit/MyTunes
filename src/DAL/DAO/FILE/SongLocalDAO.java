@@ -27,6 +27,7 @@ public class SongLocalDAO implements SongDAOInterface {
 
     /**
      * sets the song manager.
+     *
      * @param songManager
      */
     @Override
@@ -36,6 +37,7 @@ public class SongLocalDAO implements SongDAOInterface {
 
     /**
      * Loads all songs in the files, makes sure the songs are not equal to the emptyValue
+     *
      * @return A list of songs if there are any in the file or a empty list if there are no songs in the file.
      * @throws IOException if something went wrong.
      */
@@ -68,6 +70,7 @@ public class SongLocalDAO implements SongDAOInterface {
 
     /**
      * Tries to create a song, overwrites empty values if such exist. Auto increments and adds song if no emptyValues found.
+     *
      * @param   song the song.
      * @throws  IOException if something went wrong.
      */
@@ -113,6 +116,7 @@ public class SongLocalDAO implements SongDAOInterface {
 
     /**
      * Finds a song in the file.
+     *
      * @param   name the name of the song you want to get
      * @return  A song that has the given name.
      * @throws  IOException if something went wrong.
@@ -142,6 +146,7 @@ public class SongLocalDAO implements SongDAOInterface {
 
     /**
      * Finds a song in the file.
+     *
      * @param   id the id of the song you want to get
      * @return  A song that has the given name.
      * @throws  IOException if something went wrong.
@@ -170,6 +175,7 @@ public class SongLocalDAO implements SongDAOInterface {
 
     /**
      * Overwrites a song with matching id with emptyValues. Also overwrites the song matches from playlists with emptyIntValue
+     *
      * @param   id the id of the song you want to delete.
      * @throws  IOException if something went wrong.
      */
@@ -201,18 +207,18 @@ public class SongLocalDAO implements SongDAOInterface {
 
     /**
      * Overwrites the song with the new values in modified.
-     * @param   id the song id
+     *
      * @param   modified the modified song
      * @throws  IOException if something went wrong.
      */
     @Override
-    public void updateSong(int id, Song modified) throws IOException {
+    public void updateSong(Song modified) throws IOException {
         String formattedName = String.format("%-" + SONG_NAME_SIZE + "s",modified.getTitle()).substring(0,SONG_NAME_SIZE);
         String formattedPath = String.format("%-" + SONG_PATH_SIZE + "s",modified.getFilePath()).substring(0,SONG_PATH_SIZE);
         String formattedArtist = String.format("%-" + SONG_ARTIST_SIZE + "s",modified.getArtist()).substring(0,SONG_PATH_SIZE);
         try(RandomAccessFile raf = new RandomAccessFile(new File(LOCAL_SONG_PATH),"rw")){
             while(raf.getFilePointer()<raf.length()){
-                if(raf.readInt()==id){
+                if(raf.readInt()==modified.getId()){
                     raf.writeChars(formattedName);
                     raf.writeChars(formattedPath);
                     raf.writeChars(formattedArtist);
@@ -225,13 +231,14 @@ public class SongLocalDAO implements SongDAOInterface {
 
     /**
      * Searches for a song in the file
-     * @param   search the string you are searching for
+     *
+     * @param   searchQuery the string you are searching for
      * @return  A list of songs containing all matches, a empty list if no matches.
      * @throws  IOException if something went wrong.
      */
     @Override
-    public List<Song> searchSong(String search) throws Exception {
-        if(search.isEmpty())
+    public List<Song> searchSong(String searchQuery) throws Exception {
+        if(searchQuery.isEmpty())
             return loadSongs();
         List<Song> tmp = new ArrayList<>();
         try(RandomAccessFile raf = new RandomAccessFile(new File(LOCAL_SONG_PATH),"rw")){
@@ -247,13 +254,19 @@ public class SongLocalDAO implements SongDAOInterface {
             for(int i=0;i<SONG_ARTIST_SIZE;i++)
                 artist+=raf.readChar();
                 int category_id = raf.readInt();
-            if(songName.trim().toLowerCase().contains(search.trim().toLowerCase()) || path.trim().toLowerCase().contains(search.trim().toLowerCase()))
+            if(songName.trim().toLowerCase().contains(searchQuery.trim().toLowerCase()) || path.trim().toLowerCase().contains(searchQuery.trim().toLowerCase()))
                 tmp.add(new Song(song_id,songName.trim(),artist.trim(),path.trim(),category_id, getGenres().get(category_id)));
             }
             return tmp;
         }
     }
 
+    /**
+     * gets the map of genres
+     *
+     * @return a map of genres
+     * @throws Exception if something went wrong
+     */
     @Override
     public Map<Integer, String> getGenres() throws Exception {
        Map<Integer,String> tmp = new HashMap<Integer,String>();

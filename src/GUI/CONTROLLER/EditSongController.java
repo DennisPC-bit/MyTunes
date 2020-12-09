@@ -1,7 +1,6 @@
 package GUI.CONTROLLER;
 
 import BE.Song;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -49,7 +48,7 @@ public class EditSongController extends Component implements Initializable {
     }
 
     /**
-     * Assign the genre combo box to have the specfied hash map genres.
+     * Assign the genre combo box to have the specified hash map genres.
      *
      * @param genres The genres to add.
      */
@@ -60,7 +59,7 @@ public class EditSongController extends Component implements Initializable {
     }
 
     /**
-     * Sets the maing view controller
+     * Sets the main view controller
      *
      * @param mainViewController
      */
@@ -69,7 +68,7 @@ public class EditSongController extends Component implements Initializable {
     }
 
     /**
-     * Find the specfiied category name and return its id.
+     * Find the specified category name and return its id.
      *
      * @param categoryName The category name to find.
      * @return
@@ -113,18 +112,10 @@ public class EditSongController extends Component implements Initializable {
         }
     }
 
-    public void save(ActionEvent event) {
-        try {
-            save();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
     /**
      * Saves the changes made to the selected song.
      *
-     * @throws Exception
+     * @throws Exception if something went wrong.
      */
     public void save() throws Exception {
         if (selectedSong != null) {
@@ -132,7 +123,7 @@ public class EditSongController extends Component implements Initializable {
             selectedSong.setFilePath(filePathTextField.getText());
             selectedSong.setArtist(artistTextField.getText());
             selectedSong.setCategoryId(getCategoryIdFromName(selectedCategory));
-            mainViewController.getSongManager().updateSong(selectedSong.getId(), selectedSong);
+            mainViewController.getSongManager().updateSong(selectedSong);
             mainViewController.reloadSongTable();
             close();
         }
@@ -143,6 +134,5 @@ public class EditSongController extends Component implements Initializable {
      */
     public void close() {
         mainViewController.getWindowStage().close();
-        ;
     }
 }

@@ -66,25 +66,28 @@ public class MainViewController implements Initializable {
     private TableColumn<Song, String> songTableTimeColumn;
     @FXML
     private Label currentSong;
-    private Song songPlaying;
     @FXML
     private TextField volumeSliderField;
+    private Song songPlaying;
     private Song selectedSong;
     private Song selectedSongOnPlayList;
     private Playlist selectedPlaylist;
-    private double volumePercentage;
-    private boolean playing = false;
-    private ObservableList<Song> songs;
-    private ObservableList<Song> playlistSongs;
-    private ObservableList<Playlist> playlists;
-    private static final PlaylistManager playlistManager = new PlaylistManager();
-    private static final SongManager songManager = new SongManager();
-    private final InputAlert inputAlert = new InputAlert();
-    private final MusicPlayer musicPlayer = new MusicPlayer();
-    private boolean isMaximized = false;
     private Main main;
     private Stage windowStage = new Stage();
+    private ObservableList<Song> songs;
+    private ObservableList<Playlist> playlists;
+    private ObservableList<Song> playlistSongs;
+    private boolean playing = false;
+    private boolean isMaximized=false;
+    private double volumePercentage;
+    private static final PlaylistManager playlistManager = new PlaylistManager();
+    private static final SongManager songManager = new SongManager();
+    private static final InputAlert inputAlert = new InputAlert();
+    private static final MusicPlayer musicPlayer = new MusicPlayer();
 
+    /**
+     * Constructor
+     */
     public MainViewController() {
         playlistManager.setMainController(this);
         songManager.setMainController(this);
@@ -176,7 +179,7 @@ public class MainViewController implements Initializable {
     }
 
     /**
-     * Puts values into the tables
+     * Puts the proper values into the tables
      */
     private void initTables() {
         songTableTitleColumn.setCellValueFactory(cellData -> cellData.getValue().titleProperty());
@@ -191,6 +194,9 @@ public class MainViewController implements Initializable {
         playlistTimeColumn.setCellValueFactory(cellData -> new SimpleStringProperty("123"));
     }
 
+    /**
+     * Reloads the song table
+     */
     public void reloadSongTable() {
         try {
             int index = songsTable.getSelectionModel().getFocusedIndex();
@@ -201,6 +207,9 @@ public class MainViewController implements Initializable {
         }
     }
 
+    /**
+     * Reloads The playlist table
+     */
     private void reloadPlaylistTable() {
         try {
             int index = playlistTable.getSelectionModel().getFocusedIndex();
@@ -211,6 +220,9 @@ public class MainViewController implements Initializable {
         }
     }
 
+    /**
+     * Reloads the songs on the selected playlist
+     */
     private void reloadSongsOnPlaylist() {
         try {
             int index = songsOnPlaylistTable.getSelectionModel().getFocusedIndex();
@@ -223,6 +235,7 @@ public class MainViewController implements Initializable {
 
     /**
      * Makes the volume slider change when the volume field is changed to a valid value.
+     * and the field change when the volume slider changes.
      */
     private void volumeFieldControl() {
         volumeSliderField.textProperty().addListener(
@@ -248,6 +261,9 @@ public class MainViewController implements Initializable {
         );
     }
 
+    /**
+     * Changes window size when pulled from the bottom and the right
+     */
     public void setMainViewSize() {
         AtomicReference<Double> x = new AtomicReference<>((double) 0);
         AtomicReference<Double> y = new AtomicReference<>((double) 0);
@@ -264,6 +280,9 @@ public class MainViewController implements Initializable {
         });
     }
 
+    /**
+     * Moves the main view when pulling the top bar
+     */
     public void moveMainView() {
         AtomicReference<Double> x = new AtomicReference<>((double) 0);
         AtomicReference<Double> y = new AtomicReference<>((double) 0);
@@ -287,12 +306,16 @@ public class MainViewController implements Initializable {
         return volumeSlider.getValue() / 100;
     }
 
+    /**
+     * Gets the windowStage
+     * @return the windowStage
+     */
     public Stage getWindowStage() {
         return windowStage;
     }
 
     /**
-     * should change songsTable, whenever the searchField changes.
+     * Changes songsTable, whenever the searchField changes.
      */
     public void search() {
         try {
@@ -317,6 +340,10 @@ public class MainViewController implements Initializable {
         dialog("playlist name:", "Add playlist", "", 1);
     }
 
+    /**
+     * Creates a new playlist
+     * @param playlist the new playlist
+     */
     public void addPlaylist(Playlist playlist) {
         try {
             playlistManager.createPlaylist(playlist.getPlayListName());
@@ -335,6 +362,10 @@ public class MainViewController implements Initializable {
         }
     }
 
+    /**
+     *  Edits the selected playlist.
+     * @param newTitle new title
+     */
     public void editPlaylist(String newTitle) {
         try {
             selectedPlaylist.setPlayListName(newTitle);
@@ -348,11 +379,11 @@ public class MainViewController implements Initializable {
     /**
      * Opens a dialog window
      *
-     * @param labelFieldText
-     * @param dialogTitleText
-     * @param titleFieldText
-     * @param mode
-     * @throws IOException
+     * @param labelFieldText    The new label field text
+     * @param dialogTitleText   The dialog title text
+     * @param titleFieldText    The title field text
+     * @param mode              The mode
+     * @throws IOException      If something went wrong
      */
     private void dialog(String labelFieldText, String dialogTitleText, String titleFieldText, int mode) throws IOException {
         FXMLLoader loader = new FXMLLoader(Main.class.getResource("DIALOGUE/AddPlaylist.fxml"));
@@ -443,6 +474,13 @@ public class MainViewController implements Initializable {
         this.songsOnPlaylistTable.setItems(playlistSongs);
     }
 
+    /**
+     * Changes the position on the playlist
+     * @param listOfSongs   the list of song you want to change
+     * @param song          the song
+     * @param pos           the position
+     * @return              A playlist with the new order
+     */
     public List<Song> moveOnPlaylist(List<Song> listOfSongs, Song song, int pos) {
         LinkedList<Song> linkedSongs = new LinkedList<>(listOfSongs);
         int index = linkedSongs.indexOf(song) + pos;
@@ -622,18 +660,33 @@ public class MainViewController implements Initializable {
         }
     }
 
+    /**
+     * Gets the song manager
+     * @return the songManager
+     */
     public SongManager getSongManager() {
         return songManager;
     }
 
+
+    /**
+     * Sets the main
+     * @param main the main class
+     */
     public void setMain(Main main) {
         this.main = main;
     }
 
+    /**
+     * Closes the stage
+     */
     public void closeButton() {
         main.getPrimaryStage().close();
     }
 
+    /**
+     * Maximizes the stage
+     */
     public void maximizeButton() {
         if (!isMaximized) {
             main.getPrimaryStage().setFullScreen(true);
@@ -646,10 +699,16 @@ public class MainViewController implements Initializable {
         }
     }
 
+    /**
+     * Minimizes the stage
+     */
     public void minimizeButton() {
         main.getPrimaryStage().setIconified(true);
     }
 
+    /**
+     * Saves the playlists
+     */
     public void savePlaylist() {
         if (songsOnPlaylistTable.getItems() != null) {
             for (Song song : playlistSongs) {
@@ -669,11 +728,18 @@ public class MainViewController implements Initializable {
         }
     }
 
+    /**
+     * Shuffles the playlists
+     */
     @FXML
     private void shufflePlaylist() {
         Collections.shuffle(playlistSongs);
     }
 
+    /**
+     * Creates a song
+     * @param song the song
+     */
     public void createSong(Song song){
         try {
             songManager.createSong(song);

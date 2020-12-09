@@ -13,7 +13,9 @@ import java.util.Map;
 public class SongManager {
     private static InputAlert inputAlert = new InputAlert();
     protected static SongDAOInterface songDAO;
+    protected MainViewController mainController;
 
+    //initializes the interface, if no connection to the database, it will try to use the local option.
     static {
         try {
             songDAO = new SongDBDAO();
@@ -22,22 +24,24 @@ public class SongManager {
         }
     }
 
+    /**
+     * makes is use the local class.
+     */
     public void goLocal() {
         songDAO = new SongLocalDAO();
         mainController.load();
     }
 
-    protected MainViewController mainController;
 
     /**
-     *
+     * Constructor
      */
     public SongManager() {
         songDAO.setSongManager(this);
     }
 
     /**
-     * Set the value of songDAO
+     * Sets the value of songDAO
      *
      * @param songDAO new value of songDAO
      */
@@ -46,7 +50,7 @@ public class SongManager {
     }
 
     /**
-     * Set he value of MainController
+     * Sets he value of MainController
      *
      * @param mainController new value of MainController
      */
@@ -55,8 +59,10 @@ public class SongManager {
     }
 
     /**
-     * @return
-     * @throws Exception
+     * Loads songs
+     *
+     * @return a list of the songs
+     * @throws Exception if something went wrong
      */
     public List<Song> loadSongs() throws Exception {
         return songDAO.loadSongs();
@@ -65,15 +71,15 @@ public class SongManager {
     /**
      * Sends information to create a song
      *
-     * @param song
-     * @throws Exception
+     * @param song the new song
+     * @throws Exception if something went wrong
      */
     public void createSong(Song song) throws Exception {
         songDAO.createSong(song);
     }
 
     /**
-     * Get the value of song name
+     * Gets the value of song name
      *
      * @param name new value of song name
      * @return the value of song name
@@ -86,33 +92,39 @@ public class SongManager {
     /**
      * Sends information to update song
      *
-     * @param id
-     * @param modified
-     * @throws Exception
+     * @param modified      the modified song
+     * @throws Exception    if something went wrong
      */
-    public void updateSong(int id, Song modified) throws Exception {
-        songDAO.updateSong(id, modified);
+    public void updateSong(Song modified) throws Exception {
+        songDAO.updateSong(modified);
     }
 
     /**
      * Sends information to delete song
      *
-     * @param id
-     * @throws Exception
+     * @param id            the song id
+     * @throws Exception    if something went wrong
      */
     public void deleteSong(int id) throws Exception {
         songDAO.deleteSong(id);
     }
 
     /**
-     * @param search
-     * @return
-     * @throws Exception
+     * Searches trough the songs
+     *
+     * @param search        the searchQuery
+     * @return              the list that contains the search query
+     * @throws Exception    if something went wrong
      */
     public List<Song> searchSong(String search) throws Exception {
         return songDAO.searchSong(search);
     }
 
+    /**
+     * Gets the map of genres
+     * @return              the map
+     * @throws Exception    if something went wrong
+     */
     public Map<Integer, String> getGenres() throws Exception {
         return songDAO.getGenres();
     }
