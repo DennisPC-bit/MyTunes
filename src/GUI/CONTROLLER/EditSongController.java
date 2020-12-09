@@ -1,7 +1,6 @@
 package GUI.CONTROLLER;
 
 import BE.Song;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 
@@ -17,22 +16,32 @@ public class EditSongController extends Component {
 
     public Song selectedSong;
 
-    private MainViewController mainMainViewController;
+    private MainViewController mainViewController;
 
-    public void setMainController(MainViewController mainMainViewController) {
-        this.mainMainViewController = mainMainViewController;
+    /**
+     * Sets the maing view controller
+     * @param mainViewController
+     */
+    public void setMainController(MainViewController mainViewController) {
+        this.mainViewController = mainViewController;
     }
 
+    /**
+     * Sets the selected song
+     * @param song the selected song
+     */
     public void setSelectedSong(Song song) {
         if (song != null) {
             selectedSong = song;
             titleTextField.setText(selectedSong.getTitle());
             filePathTextField.setText(selectedSong.getFilePath());
-            System.out.println(selectedSong.getId());
         }
     }
 
-    public void browse(ActionEvent event) {
+    /**
+     * Opens a window in which you can select files
+     */
+    public void browse() {
         try {
             JFileChooser fileChooser = new JFileChooser();
             int result = fileChooser.showOpenDialog(this);
@@ -46,20 +55,20 @@ public class EditSongController extends Component {
         }
     }
 
-    public void save(ActionEvent event) throws Exception {
+    /**
+     * Saves the changes made
+     * @throws Exception
+     */
+    public void save() throws Exception {
         if (selectedSong != null) {
             selectedSong.setTitle(titleTextField.getText());
             selectedSong.setFilePath(filePathTextField.getText());
-            mainMainViewController.getSongManager().updateSong(selectedSong.getId(), selectedSong);
-            closeWindow();
+            mainViewController.getSongManager().updateSong(selectedSong.getId(), selectedSong);
+            close();
         }
     }
 
-    public void close(ActionEvent event) {
-        closeWindow();
-    }
-
-    protected void closeWindow() {
-        mainMainViewController.getWindowStage().close();
+    public void close() {
+        mainViewController.getWindowStage().close();;
     }
 }

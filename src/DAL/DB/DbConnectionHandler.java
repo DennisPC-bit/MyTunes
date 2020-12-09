@@ -22,14 +22,14 @@ public class DbConnectionHandler implements DAL.DB.IINTERFACE.IDbConnectionProvi
     private static DbConnectionHandler instance;
 
     /**
-     *
+     * Initializes the connection
      */
     public DbConnectionHandler() {
         loadDbSettings();
     }
 
     /**
-     *
+     * Loads the database settings
      */
     protected void loadDbSettings() {
         try {
@@ -69,7 +69,7 @@ public class DbConnectionHandler implements DAL.DB.IINTERFACE.IDbConnectionProvi
     }
 
     /**
-     *
+     * Tries to reconnect
      */
     protected void reconnect() {
         switch (connectionType) {
@@ -93,17 +93,25 @@ public class DbConnectionHandler implements DAL.DB.IINTERFACE.IDbConnectionProvi
         }
     }
 
+    /**
+     * Gets the database settings filepath
+     * @return The path of the database settings file
+     */
     public String getDatabaseSettingsFile() {
         return databaseSettingsFile;
     }
 
+    /**
+     * sets the database settings filepath
+     * @param file the new filepath
+     */
     public void setDatabaseSettingsFile(String file) {
         databaseSettingsFile = file;
     }
 
     /**
-     *
-     * @return
+     * Tries to get a connection to the database
+     * @return the connection
      */
     @Override
     public Connection getConnection() {
@@ -116,8 +124,8 @@ public class DbConnectionHandler implements DAL.DB.IINTERFACE.IDbConnectionProvi
     }
 
     /**
-     *
-     * @return
+     * Tries to get the database filepath
+     * @return the filepath
      */
     @Override
     public String getDatabase() {
@@ -129,8 +137,8 @@ public class DbConnectionHandler implements DAL.DB.IINTERFACE.IDbConnectionProvi
     }
 
     /**
-     *
-     * @return
+     * Gets the host
+     * @return the host
      */
     @Override
     public String getHost() {
@@ -142,8 +150,8 @@ public class DbConnectionHandler implements DAL.DB.IINTERFACE.IDbConnectionProvi
     }
 
     /**
-     *
-     * @return
+     * Gets the user
+     * @return the user
      */
     @Override
     public String getUser() {
@@ -155,8 +163,8 @@ public class DbConnectionHandler implements DAL.DB.IINTERFACE.IDbConnectionProvi
     }
 
     /**
-     *
-     * @return
+     * Gets the password
+     * @return the password
      */
     @Override
     public String getPassword() {
@@ -168,8 +176,8 @@ public class DbConnectionHandler implements DAL.DB.IINTERFACE.IDbConnectionProvi
     }
 
     /**
-     *
-     * @return
+     * Gets the port
+     * @return the port
      */
     @Override
     public int getPort() {
@@ -181,7 +189,7 @@ public class DbConnectionHandler implements DAL.DB.IINTERFACE.IDbConnectionProvi
     }
 
     /**
-     *
+     * Tries to connect to the database
      */
     @Override
     public void connect() {
@@ -192,8 +200,8 @@ public class DbConnectionHandler implements DAL.DB.IINTERFACE.IDbConnectionProvi
     }
 
     /**
-     *
-     * @param database
+     * Sets the database
+     * @param database the new database
      */
     @Override
     public void setDatabase(String database) {
@@ -204,8 +212,8 @@ public class DbConnectionHandler implements DAL.DB.IINTERFACE.IDbConnectionProvi
     }
 
     /**
-     *
-     * @param host
+     * Sets the host
+     * @param host the new host
      */
     @Override
     public void setHost(String host) {
@@ -216,8 +224,8 @@ public class DbConnectionHandler implements DAL.DB.IINTERFACE.IDbConnectionProvi
     }
 
     /**
-     *
-     * @param user
+     * Sets the user
+     * @param user the new user
      */
     @Override
     public void setUser(String user) {
@@ -228,8 +236,8 @@ public class DbConnectionHandler implements DAL.DB.IINTERFACE.IDbConnectionProvi
     }
 
     /**
-     *
-     * @param password
+     * Set the password
+     * @param password the new password
      */
     @Override
     public void setPassword(String password) {
@@ -240,8 +248,8 @@ public class DbConnectionHandler implements DAL.DB.IINTERFACE.IDbConnectionProvi
     }
 
     /**
-     *
-     * @param port
+     * sets the port
+     * @param port the new port
      */
     @Override
     public void setPort(int port) {
@@ -252,8 +260,8 @@ public class DbConnectionHandler implements DAL.DB.IINTERFACE.IDbConnectionProvi
     }
 
     /**
-     *
-     * @return
+     * Gets the instance
+     * @return the instance
      */
     public static DbConnectionHandler getInstance() {
         if (instance == null)
@@ -262,7 +270,7 @@ public class DbConnectionHandler implements DAL.DB.IINTERFACE.IDbConnectionProvi
     }
 
     /**
-     *
+     * Closes the connection if there is one
      */
     public void close() {
         try {
@@ -283,10 +291,19 @@ public class DbConnectionHandler implements DAL.DB.IINTERFACE.IDbConnectionProvi
         }
     }
 
+
+    /**
+     * Gets the connection type
+     * @return 0 if microsoft sql, 1 if my sql
+     */
     public int getConnectionType() {
         return connectionType;
     }
 
+    /**
+     * Sets the connection type
+     * @param type 0 if microsoft sql, 1 if my sql
+     */
     public void setConnectionType(int type) {
         // Close any open connection.
         close();

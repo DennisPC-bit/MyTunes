@@ -61,8 +61,8 @@ public class SongLocalDAO implements SongDAOInterface {
 
     /**
      * Tries to create a song, overwrites empty values if such exist. Auto increments and adds song if no emptyValues found.
-     * @param song the song.
-     * @throws IOException if something went wrong.
+     * @param   song the song.
+     * @throws  IOException if something went wrong.
      */
     @Override
     public void createSong(Song song) throws IOException {
@@ -99,9 +99,9 @@ public class SongLocalDAO implements SongDAOInterface {
 
     /**
      * Finds a song in the file.
-     * @param name the name of the song you want to get
-     * @return A song that has the given name.
-     * @throws IOException if something went wrong.
+     * @param   name the name of the song you want to get
+     * @return  A song that has the given name.
+     * @throws  IOException if something went wrong.
      */
     @Override
     public Song getSong(String name) throws IOException {
@@ -124,9 +124,9 @@ public class SongLocalDAO implements SongDAOInterface {
 
     /**
      * Finds a song in the file.
-     * @param id the id of the song you want to get
-     * @return A song that has the given name.
-     * @throws IOException if something went wrong.
+     * @param   id the id of the song you want to get
+     * @return  A song that has the given name.
+     * @throws  IOException if something went wrong.
      */
     public Song getSong(int id) throws IOException {
         try(RandomAccessFile raf = new RandomAccessFile(new File(LOCAL_SONG_PATH),"r")){
@@ -148,8 +148,8 @@ public class SongLocalDAO implements SongDAOInterface {
 
     /**
      * Overwrites a song with matching id with emptyValues. Also overwrites the song matches from playlists with emptyIntValue
-     * @param id the id of the song you want to delete.
-     * @throws IOException if something went wrong.
+     * @param   id the id of the song you want to delete.
+     * @throws  IOException if something went wrong.
      */
     @Override
     public void deleteSong(int id) throws IOException {
@@ -177,9 +177,9 @@ public class SongLocalDAO implements SongDAOInterface {
 
     /**
      * Overwrites the song with the new values in modified.
-     * @param id the song id
-     * @param modified the modified song
-     * @throws IOException if something went wrong.
+     * @param   id the song id
+     * @param   modified the modified song
+     * @throws  IOException if something went wrong.
      */
     @Override
     public void updateSong(int id, Song modified) throws IOException {
@@ -198,9 +198,9 @@ public class SongLocalDAO implements SongDAOInterface {
 
     /**
      * Searches for a song in the file
-     * @param search the string you are searching for
-     * @return A list of songs containing all matches, a empty list if no matches.
-     * @throws IOException if something went wrong.
+     * @param   search the string you are searching for
+     * @return  A list of songs containing all matches, a empty list if no matches.
+     * @throws  IOException if something went wrong.
      */
     @Override
     public List<Song> searchSong(String search) throws IOException{

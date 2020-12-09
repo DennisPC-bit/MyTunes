@@ -6,27 +6,15 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Playlist {
 
     private String playListName;
     private StringProperty playListNameProperty;
     private ObjectProperty<Integer> playlistSize = new SimpleObjectProperty<>();
     private int playlistId;
-    private List<Song> songList;
-    private static final String seperator = "|";
 
     /**
-     *
-     */
-    public Playlist() {
-        initialize();
-    }
-
-    /**
-     *
+     * Constructor with id and playlistName
      * @param id
      * @param playListName
      */
@@ -37,7 +25,7 @@ public class Playlist {
     }
 
     /**
-     *
+     * Constructor with playlistName
      * @param playListName
      */
     public Playlist(String playListName) {
@@ -46,21 +34,9 @@ public class Playlist {
     }
 
     /**
-     *
-     * @param playListName
-     * @param songs
-     */
-    public Playlist(String playListName, List<Song> songs) {
-        initialize();
-        setPlayListName(playListName);
-        addSongs(songs);
-    }
-
-    /**
-     *
+     *  initializes the variables
      */
     private void initialize() {
-        songList = new ArrayList<>();
         playListNameProperty = new SimpleStringProperty();
     }
 
@@ -103,52 +79,6 @@ public class Playlist {
      */
     public void setPlaylistId(int playlistId) {
         this.playlistId = playlistId;
-    }
-
-    /**
-     *
-     * @return songList
-     */
-    public List<Song> getSongList() {
-        return this.songList;
-    }
-
-    /**
-     * If songlist does not have this song, it will add it.
-     * @param song
-     */
-    public void addSong(Song song) {
-        if(!songList.contains(song))
-        this.songList.add(song);
-    }
-
-    /**
-     * Adds song to songlist if its not already on.
-     * @param songs
-     */
-    public void addSongs(List<Song> songs) {
-        songs.forEach(song->{
-            if(!this.songList.contains(song))
-            songList.add(song);
-        });
-    }
-
-    /**
-     * Removes song from songlist
-     * @param song
-     */
-    public void removeSong(Song song) {
-        songList.remove(song);
-    }
-
-    /**
-     * Removes the old song, and replaces it with the edited one.
-     * @param newSong
-     * @param oldSong
-     */
-    public void editSong(Song newSong, Song oldSong) {
-        removeSong(oldSong);
-        addSong(newSong);
     }
 
     public ObjectProperty<Integer> getPlaylistSize(){

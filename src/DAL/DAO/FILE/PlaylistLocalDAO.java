@@ -24,8 +24,8 @@ public class PlaylistLocalDAO implements PlaylistDAOInterface {
 
     /**
      * Tries to make a playlist with the given name.
-     * @param name the name of the playlist.
-     * @throws IOException if something went wrong.
+     * @param   name the name of the playlist.
+     * @throws  IOException if something went wrong.
      */
     @Override
     public void createPlaylist(String name) throws IOException {
@@ -80,9 +80,9 @@ public class PlaylistLocalDAO implements PlaylistDAOInterface {
 
     /**
      * Tries to get a playlist.
-     * @param name The name of the playlist
-     * @return a playlist or null if none found
-     * @throws IOException if something went wrong.
+     * @param   name The name of the playlist
+     * @return  a playlist or null if none found
+     * @throws  IOException if something went wrong.
      */
     @Override
     public Playlist getPlaylist(String name) throws IOException {
@@ -103,8 +103,8 @@ public class PlaylistLocalDAO implements PlaylistDAOInterface {
 
     /**
      * Tries to overwrite a playlist with emptyValue, and deletes songs all songs from the playlist.
-     * @param name the name of the playlist
-     * @throws IOException if something went wrong.
+     * @param   name the name of the playlist
+     * @throws  IOException if something went wrong.
      */
     @Override
     public void deletePlaylist(String name) throws IOException {
@@ -127,8 +127,8 @@ public class PlaylistLocalDAO implements PlaylistDAOInterface {
 
     /**
      * Overwrites the old name, with the new modified name from the Playlist
-     * @param modified the modified playlist.
-     * @throws IOException if something went wrong.
+     * @param   modified the modified playlist.
+     * @throws  IOException if something went wrong.
      */
     @Override
     public void updatePlaylist(Playlist modified) throws IOException {
@@ -145,9 +145,9 @@ public class PlaylistLocalDAO implements PlaylistDAOInterface {
 
     /**
      * Tries to load songs from the playlist with playlist id.
-     * @param playlist_id the id of the playlist you want to load.
-     * @return A list of Songs in the Playlist, a empty list if there and no songs in the playlist.
-     * @throws IOException if something when wrong.
+     * @param   playlist_id the id of the playlist you want to load.
+     * @return  A list of Songs in the Playlist, a empty list if there and no songs in the playlist.
+     * @throws  IOException if something when wrong.
      */
     @Override
     public List<Song> loadSongsFromPlaylist(int playlist_id) throws IOException {
@@ -172,9 +172,9 @@ public class PlaylistLocalDAO implements PlaylistDAOInterface {
 
     /**
      * Tries to add a song to a playlist, if it finds an emptyIntValue, it overwrites instead of writing at the file end.
-     * @param playlist_id the id of the playlist
-     * @param song_id the id of the song
-     * @throws IOException if something went wrong.
+     * @param   playlist_id the id of the playlist
+     * @param   song_id the id of the song
+     * @throws  IOException if something went wrong.
      */
     @Override
     public void AddSongToPlaylist(int playlist_id, int song_id) throws IOException {
@@ -197,9 +197,9 @@ public class PlaylistLocalDAO implements PlaylistDAOInterface {
 
     /**
      * Overwrites a song and playlist id with emptyIntValue.
-     * @param playlist_id the id of the playlist
-     * @param song_id the id of the song
-     * @throws IOException if something went wrong.
+     * @param   playlist_id the id of the playlist
+     * @param   song_id the id of the song
+     * @throws  IOException if something went wrong.
      */
     @Override
     public void deleteFromPlaylist(int playlist_id, int song_id) throws IOException {
@@ -219,8 +219,8 @@ public class PlaylistLocalDAO implements PlaylistDAOInterface {
 
     /**
      * Tries to overwrite all matches of playlist_id with emptyIntValue
-     * @param playlist_id the id of the playlist you want to clear of songs.
-     * @throws IOException if something went wrong.
+     * @param   playlist_id the id of the playlist you want to clear of songs.
+     * @throws  IOException if something went wrong.
      */
     private void deleteAllFromPlaylist(int playlist_id) throws IOException {
         try(RandomAccessFile raf = new RandomAccessFile(new File(LOCAL_PLAYLIST_SONG),"rw")){

@@ -27,7 +27,7 @@ public class DbMSSQLConnectionProvider implements DAL.DB.IINTERFACE.IDbConnectio
     }
 
     /**
-     *
+     * Tries to connect to the database
      */
     public void connect() {
         ds = new SQLServerDataSource();
@@ -39,8 +39,8 @@ public class DbMSSQLConnectionProvider implements DAL.DB.IINTERFACE.IDbConnectio
     }
 
     /**
-     *
-     * @return
+     * Gets the connection
+     * @return the connection
      */
     @Override
     public Connection getConnection() {
@@ -52,16 +52,16 @@ public class DbMSSQLConnectionProvider implements DAL.DB.IINTERFACE.IDbConnectio
     }
 
     /**
-     *
-     * @return
+     * Gets the datasource
+     * @return the datasource
      */
     public SQLServerDataSource getDataSource() {
         return ds;
     }
 
     /**
-     *
-     * @return
+     * Gets the databse
+     * @return the database
      */
     @Override
     public String getDatabase() {
@@ -69,8 +69,8 @@ public class DbMSSQLConnectionProvider implements DAL.DB.IINTERFACE.IDbConnectio
     }
 
     /**
-     *
-     * @return
+     * Gets the host
+     * @return the host
      */
     @Override
     public String getHost() {
@@ -78,8 +78,8 @@ public class DbMSSQLConnectionProvider implements DAL.DB.IINTERFACE.IDbConnectio
     }
 
     /**
-     *
-     * @return
+     * Gets the user
+     * @return the user
      */
     @Override
     public String getUser() {
@@ -87,8 +87,8 @@ public class DbMSSQLConnectionProvider implements DAL.DB.IINTERFACE.IDbConnectio
     }
 
     /**
-     *
-     * @return
+     * Gets the password
+     * @return the password
      */
     @Override
     public String getPassword() {
@@ -96,8 +96,8 @@ public class DbMSSQLConnectionProvider implements DAL.DB.IINTERFACE.IDbConnectio
     }
 
     /**
-     *
-     * @return
+     * Gets the port
+     * @return the port
      */
     @Override
     public int getPort() {
@@ -105,8 +105,8 @@ public class DbMSSQLConnectionProvider implements DAL.DB.IINTERFACE.IDbConnectio
     }
 
     /**
-     *
-     * @param database
+     * Sets the database
+     * @param database the new database
      */
     @Override
     public void setDatabase(String database) {
@@ -115,8 +115,8 @@ public class DbMSSQLConnectionProvider implements DAL.DB.IINTERFACE.IDbConnectio
     }
 
     /**
-     *
-     * @param host
+     * Sets the host
+     * @param host the new host
      */
     @Override
     public void setHost(String host) {
@@ -125,8 +125,8 @@ public class DbMSSQLConnectionProvider implements DAL.DB.IINTERFACE.IDbConnectio
     }
 
     /**
-     *
-     * @param user
+     * Sets the user
+     * @param user the new user
      */
     @Override
     public void setUser(String user) {
@@ -135,8 +135,8 @@ public class DbMSSQLConnectionProvider implements DAL.DB.IINTERFACE.IDbConnectio
     }
 
     /**
-     *
-     * @param password
+     * Sets the password
+     * @param password the new password
      */
     @Override
     public void setPassword(String password) {
@@ -145,8 +145,8 @@ public class DbMSSQLConnectionProvider implements DAL.DB.IINTERFACE.IDbConnectio
     }
 
     /**
-     *
-     * @param port
+     * Sets the port
+     * @param port the new port
      */
     @Override
     public void setPort(int port) {

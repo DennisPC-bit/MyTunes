@@ -1,7 +1,6 @@
 package GUI.CONTROLLER;
 
 import BE.Song;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 
@@ -17,11 +16,18 @@ public class AddSongController extends Component {
 
     private MainViewController mainMainViewController;
 
-    public void setMainController(MainViewController mainMainViewController) {
-        this.mainMainViewController = mainMainViewController;
+    /**
+     * Sets the main view controller
+     * @param mainViewController
+     */
+    public void setMainController(MainViewController mainViewController) {
+        this.mainMainViewController = mainViewController;
     }
 
-    public void browse(ActionEvent event) {
+    /**
+     * Opens a window in which you can select files
+     */
+    public void browse() {
         try {
             JFileChooser fileChooser = new JFileChooser();
             int result = fileChooser.showOpenDialog(this);
@@ -31,18 +37,17 @@ public class AddSongController extends Component {
                 filePathTextField.setText(selectedFile.getAbsolutePath());
                 mainMainViewController.getSongManager().createSong(new Song(titleTextField.getText(), filePathTextField.getText()));
                 mainMainViewController.reloadSongTable();
-                closeWindow();
+                close();
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public void close(ActionEvent event) {
-        closeWindow();
-    }
-
-    protected void closeWindow() {
+    /**
+     * Closes the window
+     */
+    public void close() {
         mainMainViewController.getWindowStage().close();
     }
 }
