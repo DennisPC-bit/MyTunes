@@ -132,7 +132,7 @@ public class PlaylistDBDAO implements PlaylistDAOInterface {
     @Override
     public List<Song> loadSongsFromPlaylist(int playlist_id) throws SQLException {
         var temp = new ArrayList<Song>();
-        var sql = "SELECT song.*, category.category_name FROM playlist_song, song, category WHERE playlist_song.playlist_id = ? AND playlist_song.song_id = song.song_id;";
+        var sql = "SELECT song.*, category.category_name FROM playlist INNER JOIN playlist_song ON  playlist.playlist_id = playlist_song.playlist_id INNER JOIN song ON  playlist_song.song_id = song.song_id INNER JOIN category ON  song.category_id = category.category_id WHERE playlist.playlist_id = ?;";
         try (var con = database.getConnection();
              PreparedStatement st = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             st.setInt(1, playlist_id);
