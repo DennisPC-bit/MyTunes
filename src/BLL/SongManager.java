@@ -8,6 +8,7 @@ import DAL.DAO.SongDAOInterface;
 import GUI.CONTROLLER.MainViewController;
 
 import java.util.List;
+import java.util.Map;
 
 public class SongManager {
     private static InputAlert inputAlert = new InputAlert();
@@ -21,7 +22,7 @@ public class SongManager {
         }
     }
 
-    public void goLocal(){
+    public void goLocal() {
         songDAO = new SongLocalDAO();
         mainController.load();
     }
@@ -37,6 +38,7 @@ public class SongManager {
 
     /**
      * Set the value of songDAO
+     *
      * @param songDAO new value of songDAO
      */
     public void setSongDAO(SongDAOInterface songDAO) {
@@ -45,6 +47,7 @@ public class SongManager {
 
     /**
      * Set he value of MainController
+     *
      * @param mainController new value of MainController
      */
     public void setMainController(MainViewController mainController) {
@@ -52,16 +55,16 @@ public class SongManager {
     }
 
     /**
-     *
      * @return
      * @throws Exception
      */
-    public List<Song> loadSongs() throws Exception{
+    public List<Song> loadSongs() throws Exception {
         return songDAO.loadSongs();
     }
 
     /**
      * Sends information to create a song
+     *
      * @param song
      * @throws Exception
      */
@@ -71,26 +74,29 @@ public class SongManager {
 
     /**
      * Get the value of song name
+     *
      * @param name new value of song name
      * @return the value of song name
      * @throws Exception
      */
-    public Song getSong(String name) throws Exception{
+    public Song getSong(String name) throws Exception {
         return songDAO.getSong(name);
     }
 
     /**
      * Sends information to update song
+     *
      * @param id
      * @param modified
      * @throws Exception
      */
-    public void updateSong(int id, Song modified) throws Exception{
+    public void updateSong(int id, Song modified) throws Exception {
         songDAO.updateSong(id, modified);
     }
 
     /**
      * Sends information to delete song
+     *
      * @param id
      * @throws Exception
      */
@@ -99,12 +105,15 @@ public class SongManager {
     }
 
     /**
-     *
      * @param search
      * @return
      * @throws Exception
      */
-    public List<Song> searchSong(String search) throws Exception{
+    public List<Song> searchSong(String search) throws Exception {
         return songDAO.searchSong(search);
+    }
+
+    public Map<Integer, String> getGenres() throws Exception {
+        return songDAO.getGenres();
     }
 }

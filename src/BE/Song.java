@@ -19,6 +19,20 @@ public class Song {
     protected SimpleStringProperty categoryName;
     protected Media media;
 
+    private void initialize() {
+        this.id = new SimpleIntegerProperty(-1);
+        this.title = new SimpleStringProperty("");
+        this.artist = new SimpleStringProperty("");
+        this.filePath = new SimpleStringProperty("");
+        this.categoryId = new SimpleIntegerProperty(-1);
+        this.categoryName = new SimpleStringProperty("");
+        duration = new SimpleStringProperty("");
+    }
+
+    public Song() {
+        initialize();
+    }
+
     /**
      * Initialize a new Song instance.
      *
@@ -32,7 +46,7 @@ public class Song {
         this.artist = new SimpleStringProperty();
         this.filePath = new SimpleStringProperty(filePath);
         duration = new SimpleStringProperty("");
-        getMeta();
+        //getMeta();
     }
 
     /**
@@ -47,7 +61,7 @@ public class Song {
         this.artist = new SimpleStringProperty();
         this.filePath = new SimpleStringProperty(filePath);
         duration = new SimpleStringProperty("");
-        getMeta();
+        //getMeta();
     }
 
     /**
@@ -65,7 +79,7 @@ public class Song {
         this.filePath = new SimpleStringProperty(filePath);
         this.categoryName = new SimpleStringProperty(categoryName);
         duration = new SimpleStringProperty("");
-        getMeta();
+        //getMeta();
     }
 
 
@@ -85,7 +99,7 @@ public class Song {
         this.filePath = new SimpleStringProperty(filePath);
         this.categoryName = new SimpleStringProperty(categoryName);
         duration = new SimpleStringProperty("");
-        getMeta();
+        //getMeta();
     }
 
     /**
@@ -105,7 +119,7 @@ public class Song {
         this.categoryId = new SimpleIntegerProperty(categoryId);
         this.categoryName = new SimpleStringProperty(categoryName);
         duration = new SimpleStringProperty("");
-        getMeta();
+        //getMeta();
     }
 
 
@@ -113,36 +127,34 @@ public class Song {
      * Gets the value of the metadata.
      */
     public void getMeta() {
-        if (this.getFilePath() != null) {
+        if (getFilePath() != null) {
             var file = new File(getFilePath());
             if (file.exists()) {
                 media = new Media(file.toURI().toString());
                 if (this.getDuration().equals("")) {
                     MediaPlayer mediaPlayer = new MediaPlayer(media);
-                    mediaPlayer.setOnReady(new Runnable() {
-                        @Override
-                        public void run() {
-                            setDuration(String.format("%02d", (int) media.getDuration().toMinutes()) + ":" + String.format("%02d", ((int) media.getDuration().toSeconds() % 60)));
-                        }
-                    });
-                }
-            }
-            media.getMetadata().addListener((MapChangeListener.Change<? extends String, ? extends Object> c) -> {
-                if (c.wasAdded()) {
-                    if ("artist".equals(c.getKey()) && this.getArtist() == null) {
-                        setArtist(c.getValueAdded().toString());
-                    }
-                    if ("title".equals(c.getKey()) && this.getTitle() == null) {
-                        setTitle(c.getValueAdded().toString());
-                    }
-                    if ("album".equals(c.getKey())) {
-                        //album = c.getValueAdded().toString();
-                    }
+                    mediaPlayer.setOnReady(() -> setDuration(String.format("%02d", (int) media.getDuration().toMinutes()) + ":" + String.format("%02d", ((int) media.getDuration().toSeconds() % 60))));
                 }
 
-            });
+                media.getMetadata().addListener((MapChangeListener.Change<? extends String, ? extends Object> c) -> {
+                    if (c.wasAdded()) {
+                        if ("artist".equals(c.getKey()) && this.getArtist() == null) {
+                            setArtist(c.getValueAdded().toString());
+                        }
+                        if ("title".equals(c.getKey()) && this.getTitle() == null) {
+                            setTitle(c.getValueAdded().toString());
+                        }
+                        if ("album".equals(c.getKey())) {
+                            //album = c.getValueAdded().toString();
+                        }
+                    }
+                    System.out.println("Metatag update");
+
+                });
+            } else System.out.println("Naw man");
         }
     }
+
 
     /**
      * Get the value of id
@@ -323,5 +335,9 @@ public class Song {
      */
     public void setCategoryName(String newCategoryName) {
         this.categoryName.set(newCategoryName);
+    }
+
+    public Media getMedia() {
+        return media;
     }
 }
