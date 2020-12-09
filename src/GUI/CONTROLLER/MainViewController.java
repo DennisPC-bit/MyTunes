@@ -270,10 +270,10 @@ public class MainViewController implements Initializable {
             x.set(mouseEvent1.getSceneX());
             y.set(mouseEvent1.getSceneY());
             int offset = 5;
-            if(y.get()>borderGridPane.getHeight()-offset || x.get()>borderGridPane.getWidth()-offset)
-            {
+            if(y.get()>borderGridPane.getHeight()-offset || x.get()>borderGridPane.getWidth()-offset) {
                 borderGridPane.setOnMouseReleased(mouseEvent2 -> {main.getPrimaryStage().setHeight(borderGridPane.getHeight()+(mouseEvent2.getSceneY()-y.get()));
                     main.getPrimaryStage().setWidth(borderGridPane.getWidth()+(mouseEvent2.getSceneX()-x.get()));
+                    mouseEvent2.consume();
                 });
             }
     });
