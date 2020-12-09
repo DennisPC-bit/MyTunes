@@ -629,6 +629,10 @@ public class MainViewController implements Initializable {
         }
     }
 
+    /**
+     * Changes the song
+     * @param selectedSong
+     */
     private void setSong(Song selectedSong) {
         musicPlayer.pause();
         musicPlayer.setSong(selectedSong);
