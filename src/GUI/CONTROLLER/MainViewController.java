@@ -180,7 +180,7 @@ public class MainViewController implements Initializable {
     private void initTables() {
         songTableTitleColumn.setCellValueFactory(cellData -> cellData.getValue().titleProperty());
         songTableArtistColumn.setCellValueFactory(cellData -> cellData.getValue().artistProperty());
-        songTableCategoryColumn.setCellValueFactory(cellData -> new SimpleStringProperty("456"));
+        songTableCategoryColumn.setCellValueFactory(cellData -> cellData.getValue().categoryNameProperty());
         songTableTimeColumn.setCellValueFactory(cellData -> cellData.getValue().durationProperty());
 
         playlistSongsColumn.setCellValueFactory(cellData -> cellData.getValue()==null?new SimpleStringProperty(""):cellData.getValue().toStringProperty());

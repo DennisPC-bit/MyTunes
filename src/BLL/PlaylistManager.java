@@ -10,7 +10,7 @@ import GUI.CONTROLLER.MainViewController;
 
 import java.util.List;
 
-public class PlaylistManager{
+public class PlaylistManager {
     protected static PlaylistDAOInterface playlistDAO;
     private static InputAlert inputAlert = new InputAlert();
     protected MainViewController mainController;
@@ -24,18 +24,22 @@ public class PlaylistManager{
             playlistDAO = new PlaylistDBDAO();
         } catch (Exception e) {
             playlistDAO = new PlaylistLocalDAO();
-            inputAlert.showAlert("you lost connection, restart to try to reconnect. changes will now only be saved locally");
+            inputAlert.showAlert("Couldn't establish connection to the database. Your changes will be done locally.");
         }
     }
 
+    /**
+     * Save playlists locally instead of to database.
+     */
     public void goLocal() {
-        inputAlert.showAlert("you lost connection, restart to try to reconnect. changes will now only be saved locally");
+        inputAlert.showAlert("Couldn't establish connection to the database. Your changes will be done locally.");
         playlistDAO = new PlaylistLocalDAO();
         mainController.load();
     }
 
     /**
      * Set the value of PlaylistDAO
+     *
      * @param playlistDAO new value of PlaylistDAO
      */
     public void setPlaylistDAO(PlaylistDAOInterface playlistDAO) {
@@ -45,20 +49,22 @@ public class PlaylistManager{
     /**
      *
      */
-    public PlaylistManager(){
+    public PlaylistManager() {
         playlistDAO.setPlaylistManager(this);
     }
 
     /**
      * Set the value of mainController
+     *
      * @param mainController new value of mainController
      */
-    public void setMainController(MainViewController mainController){
-        this.mainController=mainController;
+    public void setMainController(MainViewController mainController) {
+        this.mainController = mainController;
     }
 
     /**
      * loads the playlists, if it cannot connect to the database, it saves locally
+     *
      * @return Playlists
      */
     public List<Playlist> loadPlaylists() throws Exception {
@@ -67,6 +73,7 @@ public class PlaylistManager{
 
     /**
      * Sends information to create playlist
+     *
      * @param name
      * @throws Exception
      */
@@ -76,6 +83,7 @@ public class PlaylistManager{
 
     /**
      * Get the value of playlist name
+     *
      * @param name new value of name
      * @return the value of name
      * @throws Exception
@@ -86,6 +94,7 @@ public class PlaylistManager{
 
     /**
      * Sends information to delete playlist
+     *
      * @param name
      * @throws Exception
      */
@@ -94,7 +103,6 @@ public class PlaylistManager{
     }
 
     /**
-     *
      * @param playlist_id
      * @return
      * @throws Exception
@@ -105,26 +113,29 @@ public class PlaylistManager{
 
     /**
      * Sends information to add a song to playlist
+     *
      * @param playlist_id
      * @param song_id
      * @throws Exception
      */
-    public void addSongsToPlaylist(int playlist_id,int song_id) throws Exception {
-        playlistDAO.AddSongToPlaylist(playlist_id,song_id);
+    public void addSongsToPlaylist(int playlist_id, int song_id) throws Exception {
+        playlistDAO.AddSongToPlaylist(playlist_id, song_id);
     }
 
     /**
      * Sends information to delete a song from playlist
+     *
      * @param playlist_id
      * @param song_id
      * @throws Exception
      */
-    public void deleteSongFromPlaylist(int playlist_id,int song_id) throws Exception {
+    public void deleteSongFromPlaylist(int playlist_id, int song_id) throws Exception {
         playlistDAO.deleteFromPlaylist(playlist_id, song_id);
     }
 
     /**
      * Sends information to update playlist
+     *
      * @param playlist
      * @throws Exception
      */

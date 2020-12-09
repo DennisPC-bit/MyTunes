@@ -1,13 +1,14 @@
 package BE;
 
-import javafx.beans.property.*;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.collections.MapChangeListener;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
-import javafx.util.Duration;
-import javax.sound.sampled.AudioFileFormat;
+
 import java.io.File;
-import java.util.Map;
 
 public class Song {
     private SimpleIntegerProperty id;
@@ -16,10 +17,12 @@ public class Song {
     protected StringProperty artist;
     protected SimpleStringProperty duration;
     protected StringProperty filePath;
+    protected SimpleIntegerProperty categoryId;
     protected SimpleStringProperty categoryName;
     protected Media media;
 
     /**
+     * Initialize a new Song instance.
      *
      * @param id
      * @param title
@@ -36,6 +39,7 @@ public class Song {
     }
 
     /**
+     * Initialize a new Song instance.
      *
      * @param title
      * @param filePath
@@ -51,10 +55,11 @@ public class Song {
     }
 
     /**
+     * Initialize a new Song instance.
      *
-     * @param id song id
-     * @param title song title
-     * @param filePath song filepath
+     * @param id           song id
+     * @param title        song title
+     * @param filePath     song filepath
      * @param categoryName song category
      */
     public Song(int id, String title, String filePath, String categoryName) {
@@ -70,11 +75,12 @@ public class Song {
 
 
     /**
+     * Initialize a new Song instance.
      *
-     * @param id song id
-     * @param title song title
-     * @param artist song artist
-     * @param filePath song filepath
+     * @param id           song id
+     * @param title        song title
+     * @param artist       song artist
+     * @param filePath     song filepath
      * @param categoryName song categoryName
      */
     public Song(int id, String title, String artist, String filePath, String categoryName) {
@@ -88,42 +94,66 @@ public class Song {
         getMeta();
     }
 
+    /**
+     * Initialize a new Song instance.
+     *
+     * @param id           song id
+     * @param title        song title
+     * @param artist       song artist
+     * @param filePath     song filepath
+     * @param categoryName song categoryName
+     */
+    public Song(int id, String title, String artist, String filePath, int categoryId, String categoryName) {
+        this.id = new SimpleIntegerProperty(id);
+        this.title = new SimpleStringProperty(title);
+        this.artist = new SimpleStringProperty(artist);
+        this.visible = new SimpleBooleanProperty(true);
+        this.filePath = new SimpleStringProperty(filePath);
+        this.categoryId = new SimpleIntegerProperty(categoryId);
+        this.categoryName = new SimpleStringProperty(categoryName);
+        duration = new SimpleStringProperty("");
+        getMeta();
+    }
+
 
     /**
      * Get the value of meta.
      */
     public void getMeta() {
-        if(this.getFilePath()!=null){
-        var file = new File(getFilePath());
-        if (file.exists()) {
-            media = new Media(file.toURI().toString());
-            if(this.getDuration().equals("")){
-            MediaPlayer mediaPlayer = new MediaPlayer(media);
-            mediaPlayer.setOnReady(new Runnable() {
-                @Override
-                public void run() {
-                    setDuration(String.format("%02d",(int)media.getDuration().toMinutes()) + ":" + String.format("%02d",((int)media.getDuration().toSeconds()%60)));
+        if (this.getFilePath() != null) {
+            var file = new File(getFilePath());
+            if (file.exists()) {
+                media = new Media(file.toURI().toString());
+                if (this.getDuration().equals("")) {
+                    MediaPlayer mediaPlayer = new MediaPlayer(media);
+                    mediaPlayer.setOnReady(new Runnable() {
+                        @Override
+                        public void run() {
+                            setDuration(String.format("%02d", (int) media.getDuration().toMinutes()) + ":" + String.format("%02d", ((int) media.getDuration().toSeconds() % 60)));
+                        }
+                    });
                 }
-            });
-            }
             }
             media.getMetadata().addListener((MapChangeListener.Change<? extends String, ? extends Object> c) -> {
                 if (c.wasAdded()) {
-                    if ("artist".equals(c.getKey()) && this.getArtist()==null) {
+                    if ("artist".equals(c.getKey()) && this.getArtist() == null) {
                         setArtist(c.getValueAdded().toString());
-                    } if ("title".equals(c.getKey()) && this.getTitle()==null) {
+                    }
+                    if ("title".equals(c.getKey()) && this.getTitle() == null) {
                         setTitle(c.getValueAdded().toString());
-                    } if ("album".equals(c.getKey())) {
+                    }
+                    if ("album".equals(c.getKey())) {
                         //album = c.getValueAdded().toString();
                     }
                 }
 
             });
         }
-        }
+    }
 
     /**
      * Get the value of id
+     *
      * @return the value of id
      */
     public int getId() {
@@ -131,7 +161,6 @@ public class Song {
     }
 
     /**
-     *
      * @return
      */
     public SimpleIntegerProperty idProperty() {
@@ -139,15 +168,27 @@ public class Song {
     }
 
     /**
-     *
      * @param id
      */
     public void setId(int id) {
         this.id.set(id);
     }
 
+    public int getCategoryId() {
+        return categoryId.get();
+    }
+
+    public SimpleIntegerProperty categoryIdProperty() {
+        return categoryId;
+    }
+
+    public void setCategoryId(int id) {
+        categoryId.set(id);
+    }
+
     /**
      * Set the value of isVisible.
+     *
      * @return the value of isVisible
      */
     public boolean isVisible() {
@@ -155,7 +196,6 @@ public class Song {
     }
 
     /**
-     *
      * @return
      */
     public SimpleBooleanProperty visibleProperty() {
@@ -164,6 +204,7 @@ public class Song {
 
     /**
      * Set the value of Visible
+     *
      * @param visible new value of Visible
      */
     public void setVisible(boolean visible) {
@@ -172,6 +213,7 @@ public class Song {
 
     /**
      * Get the value of Duration
+     *
      * @return the value of Duration.
      */
     public String getDuration() {
@@ -179,7 +221,6 @@ public class Song {
     }
 
     /**
-     *
      * @return duration
      */
     public SimpleStringProperty durationProperty() {
@@ -188,6 +229,7 @@ public class Song {
 
     /**
      * Set the value of duration
+     *
      * @param duration new value of duration
      */
     public void setDuration(String duration) {
@@ -196,6 +238,7 @@ public class Song {
 
     /**
      * Get the value of Artist
+     *
      * @return the value of Artist
      */
     public String getArtist() {
@@ -203,7 +246,6 @@ public class Song {
     }
 
     /**
-     *
      * @return artist
      */
     public StringProperty artistProperty() {
@@ -212,6 +254,7 @@ public class Song {
 
     /**
      * Set the value of Artist
+     *
      * @param artist new value of Artist
      */
     public void setArtist(String artist) {
@@ -220,6 +263,7 @@ public class Song {
 
     /**
      * Get the value of Title
+     *
      * @return the value of Title
      */
     public String getTitle() {
@@ -227,7 +271,6 @@ public class Song {
     }
 
     /**
-     *
      * @return Title
      */
     public StringProperty titleProperty() {
@@ -236,6 +279,7 @@ public class Song {
 
     /**
      * Set the value of title
+     *
      * @param title new value of title.
      */
     public void setTitle(String title) {
@@ -244,6 +288,7 @@ public class Song {
 
     /**
      * Get the value of filePath
+     *
      * @return the value of filepath
      */
     public String getFilePath() {
@@ -252,6 +297,7 @@ public class Song {
 
     /**
      * Set the value of filepath
+     *
      * @param filePath new value of filepath
      */
     public void setFilePath(String filePath) {
@@ -260,14 +306,21 @@ public class Song {
 
     /**
      * Get the value of CategoryId
+     *
      * @return the value of CategoryId
      */
     public String getCategoryName() {
         return categoryName.get();
     }
 
+    public SimpleStringProperty categoryNameProperty() {
+        return categoryName;
+    }
+
+
     /**
      * Set the value of CategoryId
+     *
      * @param newCategoryName new value of CategoryName
      */
     public void setCategoryName(String newCategoryName) {
@@ -275,7 +328,6 @@ public class Song {
     }
 
     /**
-     *
      * @return value of title
      */
     public StringProperty toStringProperty() {
