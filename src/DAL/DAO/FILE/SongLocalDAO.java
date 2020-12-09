@@ -9,17 +9,21 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class SongLocalDAO implements SongDAOInterface {
     private SongManager songManager;
     private static final String LOCAL_SONG_PATH = "Data/localSongs.data";
+    private static final String LOCAL_PLAYLIST_SONG = "Data/localPlaylist_song.data";
     private static final int SONG_NAME_SIZE=100;
     private static final int SONG_PATH_SIZE=100;
+    private static final int SONG_ARTIST_SIZE=100;
     private static final int emptyIntValue=-1;
     private static final String emptyNameValue = String.format("%-" + SONG_NAME_SIZE + "s",emptyIntValue);
     private static final String emptyPathValue = String.format("%-" + SONG_PATH_SIZE + "s",emptyIntValue);
-    private static final String LOCAL_PLAYLIST_SONG = "Data/localPlaylist_song.data";
+    private static final String emptyArtistValue = String.format("%-" + SONG_ARTIST_SIZE + "s",emptyIntValue);
 
     /**
      * sets the song manager.
@@ -36,21 +40,24 @@ public class SongLocalDAO implements SongDAOInterface {
      * @throws IOException if something went wrong.
      */
     @Override
-    public List<Song> loadSongs() throws IOException {
+    public List<Song> loadSongs() throws Exception {
         File file = new File(LOCAL_SONG_PATH);
         List<Song> tmp = new ArrayList<>();
         try(RandomAccessFile raf = new RandomAccessFile(file,"r")){
-            while(raf.getFilePointer()<raf.length())
-            {
+            while(raf.getFilePointer()<raf.length()) {
                 int song_id = raf.readInt();
                 String songName ="";
                 String path="";
+                String artist="";
                 for(int i=0;i<SONG_NAME_SIZE;i++)
                     songName+=raf.readChar();
                 for(int i=0;i<SONG_PATH_SIZE;i++)
                     path+=raf.readChar();
+                for(int i=0;i<SONG_ARTIST_SIZE;i++)
+                    artist+=raf.readChar();
+                int category_id = raf.readInt();
                 if(!songName.equals(emptyNameValue) && !path.equals(emptyPathValue))
-                tmp.add(new Song(song_id,songName.trim(),path.trim()));
+                tmp.add(new Song(song_id,songName.trim(),artist.trim(),path.trim(),category_id, getGenres().get(category_id)));
             }
             return tmp;
         }catch (FileNotFoundException e){
@@ -68,11 +75,14 @@ public class SongLocalDAO implements SongDAOInterface {
     public void createSong(Song song) throws IOException {
         String formattedName = String.format("%-" + SONG_NAME_SIZE + "s",song.getTitle()).substring(0,SONG_NAME_SIZE);
         String formattedPath = String.format("%-" + SONG_PATH_SIZE + "s",song.getFilePath()).substring(0,SONG_PATH_SIZE);
+        String formattedArtist = String.format("%-" + SONG_ARTIST_SIZE + "s",song.getArtist()==null?"":song.getArtist()).substring(0,SONG_PATH_SIZE);
         try(RandomAccessFile raf = new RandomAccessFile(new File(LOCAL_SONG_PATH),"rw")){
             if(raf.length()==0) {
                 raf.writeInt(1);
                 raf.writeChars(emptyNameValue);
                 raf.writeChars(emptyPathValue);
+                raf.writeChars(emptyArtistValue);
+                raf.writeInt(emptyIntValue);
                 raf.seek(0);
             }
             while(raf.getFilePointer()<raf.length()){
@@ -84,16 +94,20 @@ public class SongLocalDAO implements SongDAOInterface {
                     raf.seek(raf.getFilePointer()-SONG_NAME_SIZE*2);
                         raf.writeChars(formattedName);
                         raf.writeChars(formattedPath);
+                        raf.writeChars(formattedArtist);
+                        raf.writeInt(song.getCategoryId());
+                        return;
                     }
-                else raf.skipBytes(SONG_PATH_SIZE*2);
-
+                else raf.skipBytes(SONG_PATH_SIZE*2+SONG_ARTIST_SIZE*2+4);
                 }
-            raf.seek(raf.length()-(SONG_NAME_SIZE*2)-(SONG_PATH_SIZE*2)-4);
+            raf.seek(raf.length()-(SONG_NAME_SIZE*2)-(SONG_PATH_SIZE*2)-(SONG_ARTIST_SIZE*2)-8);
             int index = raf.readInt()+1;
             raf.seek(raf.length());
             raf.writeInt(index);
             raf.writeChars(formattedName);
             raf.writeChars(formattedPath);
+            raf.writeChars(formattedArtist);
+            raf.writeInt(song.getCategoryId());
             }
         }
 
@@ -104,19 +118,23 @@ public class SongLocalDAO implements SongDAOInterface {
      * @throws  IOException if something went wrong.
      */
     @Override
-    public Song getSong(String name) throws IOException {
+    public Song getSong(String name) throws Exception {
         try(RandomAccessFile raf = new RandomAccessFile(new File(LOCAL_SONG_PATH),"r")){
             while(raf.getFilePointer()<raf.length())
             {
                 int song_id = raf.readInt();
                 String songName ="";
-                String songPath="";
+                String path="";
+                String artist = "";
                 for(int i=0;i<SONG_NAME_SIZE;i++)
                     songName+=raf.readChar();
                 for(int i=0;i<SONG_PATH_SIZE;i++)
-                    songPath+=raf.readChar();
+                    path+=raf.readChar();
+                for(int i=0;i<SONG_ARTIST_SIZE;i++)
+                    artist+=raf.readChar();
+                int category_id = raf.readInt();
                 if(songName.trim().equals(name))
-                    return new Song(song_id,songName.trim(),songPath);
+                    return new Song(song_id,songName.trim(),artist.trim(),path.trim(),category_id, getGenres().get(category_id));
             }
             return null;
         }
@@ -128,19 +146,23 @@ public class SongLocalDAO implements SongDAOInterface {
      * @return  A song that has the given name.
      * @throws  IOException if something went wrong.
      */
-    public Song getSong(int id) throws IOException {
+    public Song getSong(int id) throws Exception {
         try(RandomAccessFile raf = new RandomAccessFile(new File(LOCAL_SONG_PATH),"r")){
             while(raf.getFilePointer()<raf.length())
             {
                 int song_id = raf.readInt();
                 String songName ="";
-                String songPath="";
+                String path="";
+                String artist="";
                 for(int i=0;i<SONG_NAME_SIZE;i++)
                     songName+=raf.readChar();
                 for(int i=0;i<SONG_PATH_SIZE;i++)
-                    songPath+=raf.readChar();
+                    path+=raf.readChar();
+                for(int i=0;i<SONG_ARTIST_SIZE;i++)
+                    artist+=raf.readChar();
+                int category_id = raf.readInt();
                 if(song_id==id)
-                    return new Song(song_id,songName.trim(),songPath.trim());
+                    return new Song(song_id,songName.trim(),artist.trim(),path.trim(),category_id, getGenres().get(category_id));
             }
             return null;
         }
@@ -158,8 +180,10 @@ public class SongLocalDAO implements SongDAOInterface {
                 if(raf.readInt()==id){
                     raf.writeChars(emptyNameValue);
                     raf.writeChars(emptyPathValue);
+                    raf.writeChars(emptyArtistValue);
+                    raf.writeInt(emptyIntValue);
                 }
-                else raf.skipBytes(SONG_NAME_SIZE*2+SONG_PATH_SIZE*2);
+                else raf.skipBytes(SONG_NAME_SIZE*2+SONG_PATH_SIZE*2+SONG_ARTIST_SIZE*2+4);
                 }
         }
 
@@ -185,13 +209,16 @@ public class SongLocalDAO implements SongDAOInterface {
     public void updateSong(int id, Song modified) throws IOException {
         String formattedName = String.format("%-" + SONG_NAME_SIZE + "s",modified.getTitle()).substring(0,SONG_NAME_SIZE);
         String formattedPath = String.format("%-" + SONG_PATH_SIZE + "s",modified.getFilePath()).substring(0,SONG_PATH_SIZE);
+        String formattedArtist = String.format("%-" + SONG_ARTIST_SIZE + "s",modified.getArtist()).substring(0,SONG_PATH_SIZE);
         try(RandomAccessFile raf = new RandomAccessFile(new File(LOCAL_SONG_PATH),"rw")){
             while(raf.getFilePointer()<raf.length()){
                 if(raf.readInt()==id){
                     raf.writeChars(formattedName);
                     raf.writeChars(formattedPath);
+                    raf.writeChars(formattedArtist);
+                    raf.writeInt(modified.getId());
                 }
-                else raf.skipBytes(SONG_NAME_SIZE*2+SONG_PATH_SIZE*2);
+                else raf.skipBytes(SONG_NAME_SIZE*2+SONG_PATH_SIZE*2+SONG_ARTIST_SIZE*2+4);
             }
         }
     }
@@ -203,23 +230,35 @@ public class SongLocalDAO implements SongDAOInterface {
      * @throws  IOException if something went wrong.
      */
     @Override
-    public List<Song> searchSong(String search) throws IOException{
+    public List<Song> searchSong(String search) throws Exception {
         if(search.isEmpty())
             return loadSongs();
         List<Song> tmp = new ArrayList<>();
         try(RandomAccessFile raf = new RandomAccessFile(new File(LOCAL_SONG_PATH),"rw")){
             while(raf.getFilePointer()<raf.length()){
-            int songID = raf.readInt();
+            int song_id = raf.readInt();
             String songName = "";
-            String songPath = "";
+            String path = "";
+            String artist="";
             for(int i = 0; i<SONG_NAME_SIZE;i++)
                 songName += raf.readChar();
             for(int i = 0; i<SONG_PATH_SIZE;i++)
-                songPath += raf.readChar();
-            if(songName.trim().toLowerCase().contains(search.trim().toLowerCase()) || songPath.trim().toLowerCase().contains(search.trim().toLowerCase()))
-                tmp.add(new Song(songID,songName.trim(),songPath.trim()));
+                path += raf.readChar();
+            for(int i=0;i<SONG_ARTIST_SIZE;i++)
+                artist+=raf.readChar();
+                int category_id = raf.readInt();
+            if(songName.trim().toLowerCase().contains(search.trim().toLowerCase()) || path.trim().toLowerCase().contains(search.trim().toLowerCase()))
+                tmp.add(new Song(song_id,songName.trim(),artist.trim(),path.trim(),category_id, getGenres().get(category_id)));
             }
             return tmp;
         }
     }
+
+    @Override
+    public Map<Integer, String> getGenres() throws Exception {
+       Map<Integer,String> tmp = new HashMap<Integer,String>();
+       tmp.put(-1,"none");
+       return tmp;
+    }
+
 }

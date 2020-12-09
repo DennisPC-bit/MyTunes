@@ -68,7 +68,7 @@ public class AddSongController extends Component implements Initializable {
         this.mainViewController = mainViewController;
     }
 
-    public void browse(ActionEvent event) {
+    public void browse() {
         try {
             JFileChooser fileChooser = new JFileChooser();
             int result = fileChooser.showOpenDialog(this);
@@ -83,7 +83,7 @@ public class AddSongController extends Component implements Initializable {
     }
 
     /**
-     * Find the specfiied category name and return its id.
+     * Find the specfied category name and return its id.
      *
      * @param categoryName The category name to find.
      * @return
@@ -99,32 +99,21 @@ public class AddSongController extends Component implements Initializable {
 
     /**
      * Add the new song to database.
-     * @param event
      */
-    public void addSong(ActionEvent event) {
+    public void addSong() {
         try {
-            songToAdd = new Song();
+            songToAdd = new Song(titleTextField.getText(),filePathTextField.getText());
             songToAdd.setArtist(artistTextField.getText());
-            songToAdd.setTitle(titleTextField.getText());
-            songToAdd.setFilePath(filePathTextField.getText());
-
-            var category_id = getCategoryIdFromName(selectedCategory);
-            System.out.println("Selected cateory id: " + category_id);
-            songToAdd.setCategoryId(category_id);
-
-            mainViewController.getSongManager().createSong(songToAdd);
+            songToAdd.setCategoryId(getCategoryIdFromName(selectedCategory));
+            mainViewController.createSong(songToAdd);
             mainViewController.reloadSongTable();
-            closeWindow();
+            close();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public void close(ActionEvent event) {
-        closeWindow();
-    }
-
-    protected void closeWindow() {
+    public void close() {
         mainViewController.getWindowStage().close();
     }
 }

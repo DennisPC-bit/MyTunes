@@ -673,4 +673,12 @@ public class MainViewController implements Initializable {
     private void shufflePlaylist() {
         Collections.shuffle(playlistSongs);
     }
+
+    public void createSong(Song song){
+        try {
+            songManager.createSong(song);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

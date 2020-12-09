@@ -150,7 +150,7 @@ public class PlaylistLocalDAO implements PlaylistDAOInterface {
      * @throws  IOException if something when wrong.
      */
     @Override
-    public List<Song> loadSongsFromPlaylist(int playlist_id) throws IOException {
+    public List<Song> loadSongsFromPlaylist(int playlist_id) throws Exception {
         File file = new File(LOCAL_PLAYLIST_SONG);
         SongLocalDAO songLocalDAO = new SongLocalDAO();
         List<Song> tmp = new ArrayList<>();

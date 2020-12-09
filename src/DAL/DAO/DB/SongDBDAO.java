@@ -55,7 +55,7 @@ public class SongDBDAO implements SongDAOInterface {
             while (rs.next()) {
                 int song_id = rs.getInt("song_id");
                 String song_title = rs.getString("song_title");
-                String song_artist = rs.getString("song_title");
+                String song_artist = rs.getString("song_artist");
                 String song_filepath = rs.getString("song_filepath");
                 int category_id = rs.getInt("category_id");
                 String category_name = rs.getString("category_name");

@@ -55,7 +55,7 @@ public interface SongDAOInterface {
      */
     void updateSong(int id, Song modified) throws Exception;
 
-    List<Song> searchSong(String name) throws IOException;
+    List<Song> searchSong(String name) throws Exception;
 
     Map<Integer, String> getGenres() throws Exception;
 }

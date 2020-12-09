@@ -45,8 +45,9 @@ public class Song {
         this.title = new SimpleStringProperty(title);
         this.artist = new SimpleStringProperty();
         this.filePath = new SimpleStringProperty(filePath);
+        this.categoryId = new SimpleIntegerProperty(-1);
         duration = new SimpleStringProperty("");
-        //getMeta();
+        getMeta();
     }
 
     /**
@@ -60,8 +61,9 @@ public class Song {
         this.title = new SimpleStringProperty(title);
         this.artist = new SimpleStringProperty();
         this.filePath = new SimpleStringProperty(filePath);
+        this.categoryId = new SimpleIntegerProperty(-1);
         duration = new SimpleStringProperty("");
-        //getMeta();
+        getMeta();
     }
 
     /**
@@ -77,9 +79,10 @@ public class Song {
         this.title = new SimpleStringProperty(title);
         this.artist = new SimpleStringProperty();
         this.filePath = new SimpleStringProperty(filePath);
+        this.categoryId = new SimpleIntegerProperty(-1);
         this.categoryName = new SimpleStringProperty(categoryName);
         duration = new SimpleStringProperty("");
-        //getMeta();
+        getMeta();
     }
 
 
@@ -97,9 +100,29 @@ public class Song {
         this.title = new SimpleStringProperty(title);
         this.artist = new SimpleStringProperty(artist);
         this.filePath = new SimpleStringProperty(filePath);
+        this.categoryId = new SimpleIntegerProperty(-1);
         this.categoryName = new SimpleStringProperty(categoryName);
         duration = new SimpleStringProperty("");
-        //getMeta();
+        getMeta();
+    }
+
+    /**
+     * Initialize a new Song instance.
+     *
+     * @param id           song id
+     * @param title        song title
+     * @param artist       song artist
+     * @param filePath     song filepath
+     */
+    public Song(int id, String title, String filePath, String artist, int categoryId) {
+        this.id = new SimpleIntegerProperty(id);
+        this.title = new SimpleStringProperty(title);
+        this.artist = new SimpleStringProperty(artist);
+        this.filePath = new SimpleStringProperty(filePath);
+        this.categoryId = new SimpleIntegerProperty(categoryId);
+        this.categoryName = new SimpleStringProperty();
+        duration = new SimpleStringProperty("");
+        getMeta();
     }
 
     /**
@@ -119,7 +142,7 @@ public class Song {
         this.categoryId = new SimpleIntegerProperty(categoryId);
         this.categoryName = new SimpleStringProperty(categoryName);
         duration = new SimpleStringProperty("");
-        //getMeta();
+        getMeta();
     }
 
 
@@ -138,7 +161,7 @@ public class Song {
 
                 media.getMetadata().addListener((MapChangeListener.Change<? extends String, ? extends Object> c) -> {
                     if (c.wasAdded()) {
-                        if ("artist".equals(c.getKey()) && this.getArtist() == null) {
+                        if ("artist".equals(c.getKey()) && this.getArtist() == null ||"artist".equals(c.getKey()) && this.getArtist().equals("")) {
                             setArtist(c.getValueAdded().toString());
                         }
                         if ("title".equals(c.getKey()) && this.getTitle() == null) {
@@ -148,10 +171,9 @@ public class Song {
                             //album = c.getValueAdded().toString();
                         }
                     }
-                    System.out.println("Metatag update");
 
                 });
-            } else System.out.println("Naw man");
+            }
         }
     }
 
