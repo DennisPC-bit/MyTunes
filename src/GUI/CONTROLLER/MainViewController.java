@@ -635,12 +635,14 @@ public class MainViewController implements Initializable {
                 if(!autoPlay)
                 nextButton();
                 playing=!playing;
+                musicPlayer.stop();
                 playButton();
             }
             if(selectedSong!=null && playing){
                 if(!autoPlay)
                 nextButton();
                 playing=!playing;
+                musicPlayer.stop();
                 playButton();
             }
         });
