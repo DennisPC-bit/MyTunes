@@ -40,12 +40,13 @@ public class PlaylistDBDAO implements PlaylistDAOInterface {
     /**
      * Tries to load the songs from the database.
      *
-     * @return  A list of the songs in the database or a empty list if the database has no songs.
-     * @throws  SQLException if it cant get connection to the database or something went wrong.
+     * @return A list of the songs in the database or a empty list if the database has no songs.
+     * @throws SQLException if it cant get connection to the database or something went wrong.
      */
     @Override
     public List<Playlist> loadPlaylist() throws SQLException {
         var temp = new ArrayList<Playlist>();
+
         try (var con = database.getConnection();
              Statement statement = con.createStatement()) {
             ResultSet rs = statement.executeQuery("SELECT * FROM playlist;");
@@ -54,9 +55,19 @@ public class PlaylistDBDAO implements PlaylistDAOInterface {
                 String name = rs.getString("playlist_name");
                 temp.add(new Playlist(id, name));
             }
+
+            for (int i = 0; i < temp.size(); i++) {
+                var playlist = temp.get(i);
+                if (playlist != null) {
+                    var totalLength = getTotalDurationOfPlaylist(playlist.getPlaylistId());
+                    playlist.setPlaylistDurationProperty(totalLength);
+                    playlist.setPlaylistDurationStringProperty(totalLength);
+                }
+            }
             return temp;
-        } catch (SQLNonTransientConnectionException e) {
+        } catch (Exception e) {
             playlistManager.goLocal();
+            e.printStackTrace();
             return temp;
         }
     }
@@ -64,8 +75,8 @@ public class PlaylistDBDAO implements PlaylistDAOInterface {
     /**
      * Tries to create a playlist on the database
      *
-     * @param   name the name of the playlist.
-     * @throws  SQLException if it cant get connection to the database or something went wrong.
+     * @param name the name of the playlist.
+     * @throws SQLException if it cant get connection to the database or something went wrong.
      */
     @Override
     public void createPlaylist(String name) throws SQLException {
@@ -82,9 +93,9 @@ public class PlaylistDBDAO implements PlaylistDAOInterface {
     /**
      * Searches for a playlist on the database
      *
-     * @param   name the name of the playlist you are looking for
-     * @return  a playlist with the name
-     * @throws  SQLException if it cannot connect to the database or something went wrong.
+     * @param name the name of the playlist you are looking for
+     * @return a playlist with the name
+     * @throws SQLException if it cannot connect to the database or something went wrong.
      */
     @Override
     public Playlist getPlaylist(String name) throws SQLException {
@@ -107,8 +118,8 @@ public class PlaylistDBDAO implements PlaylistDAOInterface {
     /**
      * Tries to delete a playlist from the database, does nothing if a playlist with name doesnt exist.
      *
-     * @param   name the name of the playlist.
-     * @throws  SQLException if it cannot connect to the database or something went wrong.
+     * @param name the name of the playlist.
+     * @throws SQLException if it cannot connect to the database or something went wrong.
      */
     @Override
     public void deletePlaylist(String name) throws SQLException {
@@ -125,14 +136,14 @@ public class PlaylistDBDAO implements PlaylistDAOInterface {
     /**
      * Tries to load songs from a playlist, by looking for id matches
      *
-     * @param   playlist_id the id of the playlist whose songs you are looking for.
-     * @return  a list of songs if theres a positive match for the playlist, an empty playlist otherwise.
-     * @throws  SQLException if it cannot connect to the database or something went wrong.
+     * @param playlist_id the id of the playlist whose songs you are looking for.
+     * @return a list of songs if theres a positive match for the playlist, an empty playlist otherwise.
+     * @throws SQLException if it cannot connect to the database or something went wrong.
      */
     @Override
     public List<Song> loadSongsFromPlaylist(int playlist_id) throws SQLException {
         var temp = new ArrayList<Song>();
-        var sql = "SELECT song.*, category.category_name FROM playlist INNER JOIN playlist_song ON  playlist.playlist_id = playlist_song.playlist_id INNER JOIN song ON  playlist_song.song_id = song.song_id INNER JOIN category ON  song.category_id = category.category_id WHERE playlist.playlist_id = ?;";
+        var sql = "SELECT song.*, category.category_name FROM playlist LEFT OUTER JOIN playlist_song ON  playlist.playlist_id = playlist_song.playlist_id LEFT OUTER JOIN song ON playlist_song.song_id = song.song_id LEFT OUTER JOIN category ON  song.category_id = category.category_id WHERE playlist.playlist_id = ?;";
         try (var con = database.getConnection();
              PreparedStatement st = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             st.setInt(1, playlist_id);
@@ -159,9 +170,9 @@ public class PlaylistDBDAO implements PlaylistDAOInterface {
     /**
      * Tries to add a song to a playlist
      *
-     * @param   playlist_id the id of the playlist you want to add a song to.
-     * @param   song_id     the id of the song you want to add to the playlist.
-     * @throws  SQLException if it cannot connect to the database or something went wrong.
+     * @param playlist_id the id of the playlist you want to add a song to.
+     * @param song_id     the id of the song you want to add to the playlist.
+     * @throws SQLException if it cannot connect to the database or something went wrong.
      */
     @Override
     public void AddSongToPlaylist(int playlist_id, int song_id) throws SQLException {
@@ -179,9 +190,9 @@ public class PlaylistDBDAO implements PlaylistDAOInterface {
     /**
      * Tries to delete a song with song_id from a playlist in the database, does nothing if no match found.
      *
-     * @param   playlist_id the id of the playlist you want to remove a song from.
-     * @param   song_id     the id of the song you want to remove from the playlist.
-     * @throws  SQLException if it cannot connect to the database or something went wrong.
+     * @param playlist_id the id of the playlist you want to remove a song from.
+     * @param song_id     the id of the song you want to remove from the playlist.
+     * @throws SQLException if it cannot connect to the database or something went wrong.
      */
     @Override
     public void deleteFromPlaylist(int playlist_id, int song_id) throws SQLException {
@@ -200,8 +211,8 @@ public class PlaylistDBDAO implements PlaylistDAOInterface {
     /**
      * Changes the name of the playlist if a match is found.
      *
-     * @param   playlist a Playlist with the new name, and the original id.
-     * @throws  SQLException if it cannot connect to the database or something went wrong.
+     * @param playlist a Playlist with the new name, and the original id.
+     * @throws SQLException if it cannot connect to the database or something went wrong.
      */
     @Override
     public void updatePlaylist(Playlist playlist) throws SQLException {
@@ -216,6 +227,49 @@ public class PlaylistDBDAO implements PlaylistDAOInterface {
             }
         } catch (SQLNonTransientConnectionException e) {
             playlistManager.goLocal();
+        }
+    }
+
+    public double getTotalDurationOfPlaylist(Playlist playlist) throws SQLException {
+        String sql = "SELECT song.*, category.category_name FROM playlist LEFT OUTER JOIN playlist_song ON  playlist.playlist_id = playlist_song.playlist_id LEFT OUTER JOIN song ON playlist_song.song_id = song.song_id LEFT OUTER JOIN category ON  song.category_id = category.category_id WHERE playlist.playlist_id = ?;";
+        double totalDuration = 0;
+        try (var con = database.getConnection();
+             PreparedStatement st = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            st.setInt(1, playlist.getPlaylistId());
+            st.execute();
+
+            ResultSet rs = st.getResultSet();
+            while (rs.next()) {
+                double song_length = rs.getDouble("song_length");
+                totalDuration += song_length;
+            }
+
+            return totalDuration;
+        } catch (SQLNonTransientConnectionException e) {
+            playlistManager.goLocal();
+            return 0;
+        }
+    }
+
+
+    public double getTotalDurationOfPlaylist(int playlist_id) throws SQLException {
+        String sql = "SELECT song.*, category.category_name FROM playlist LEFT OUTER JOIN playlist_song ON  playlist.playlist_id = playlist_song.playlist_id LEFT OUTER JOIN song ON playlist_song.song_id = song.song_id LEFT OUTER JOIN category ON  song.category_id = category.category_id WHERE playlist.playlist_id = ?;";
+        double totalDuration = 0;
+        try (var con = database.getConnection();
+             PreparedStatement st = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            st.setInt(1, playlist_id);
+            st.execute();
+
+            ResultSet rs = st.getResultSet();
+            while (rs.next()) {
+                double song_length = rs.getDouble("song_length");
+                totalDuration += song_length;
+            }
+
+            return totalDuration;
+        } catch (SQLNonTransientConnectionException e) {
+            playlistManager.goLocal();
+            return 0;
         }
     }
 }

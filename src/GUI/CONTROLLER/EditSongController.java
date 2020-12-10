@@ -1,6 +1,7 @@
 package GUI.CONTROLLER;
 
 import BE.Song;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -119,13 +120,44 @@ public class EditSongController extends Component implements Initializable {
      */
     public void save() throws Exception {
         if (selectedSong != null) {
-            selectedSong.setTitle(titleTextField.getText());
-            selectedSong.setFilePath(filePathTextField.getText());
-            selectedSong.setArtist(artistTextField.getText());
-            selectedSong.setCategoryId(getCategoryIdFromName(selectedCategory));
-            mainViewController.getSongManager().updateSong(selectedSong);
-            mainViewController.reloadSongTable();
-            close();
+
+            Thread songEditThread = null;
+            try {
+                selectedSong.setTitle(titleTextField.getText());
+                selectedSong.setFilePath(filePathTextField.getText());
+                selectedSong.setArtist(artistTextField.getText());
+                selectedSong.setCategoryId(getCategoryIdFromName(selectedCategory));
+
+                songEditThread = new Thread(() -> {
+                    while (!selectedSong.getIsInitialized()) {
+                        try {
+                            System.out.println("Waiting for media to initialize.");
+                            Thread.sleep(250);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    // https://stackoverflow.com/questions/49343256/threads-in-javafx-not-on-fx-application-thread.
+                    // Required for updating GUI stuff from another thread.
+                    Platform.runLater(() -> {
+                        try {
+                            mainViewController.getSongManager().updateSong(selectedSong);
+                            mainViewController.reloadSongTable();
+                            close();
+                            System.out.println("Media initialized.");
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    });
+                });
+                songEditThread.start();
+            } catch (
+                    Exception e) {
+                if (songEditThread != null)
+                    songEditThread.interrupt();
+                e.printStackTrace();
+            }
         }
     }
 

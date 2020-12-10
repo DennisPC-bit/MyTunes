@@ -185,13 +185,13 @@ public class MainViewController implements Initializable {
         songTableTitleColumn.setCellValueFactory(cellData -> cellData.getValue().titleProperty());
         songTableArtistColumn.setCellValueFactory(cellData -> cellData.getValue().artistProperty());
         songTableCategoryColumn.setCellValueFactory(cellData -> cellData.getValue().categoryNameProperty());
-        songTableTimeColumn.setCellValueFactory(cellData -> cellData.getValue().durationProperty());
+        songTableTimeColumn.setCellValueFactory(cellData -> cellData.getValue().durationStringProperty());
 
         playlistSongsColumn.setCellValueFactory(cellData -> cellData.getValue() == null ? new SimpleStringProperty("") : cellData.getValue().titleProperty());
 
         playlistNameColumn.setCellValueFactory(cellData -> cellData.getValue().getPlayListNameProperty());
         playlistAmountOfSongsColumn.setCellValueFactory(cellData -> cellData.getValue().getPlaylistSize());
-        playlistTimeColumn.setCellValueFactory(cellData -> new SimpleStringProperty("123"));
+        playlistTimeColumn.setCellValueFactory(cellData -> cellData.getValue().playlistDurationPropertyString());
     }
 
     /**

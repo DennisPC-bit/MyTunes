@@ -1,6 +1,8 @@
 package GUI.CONTROLLER;
 
 import BE.Song;
+import javafx.application.Platform;
+import javafx.collections.MapChangeListener;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -104,14 +106,40 @@ public class AddSongController extends Component implements Initializable {
      * Add the new song to database.
      */
     public void addSong() {
+        Thread songAdderThread = null;
         try {
-            songToAdd = new Song(titleTextField.getText(),filePathTextField.getText());
+            songToAdd = new Song(titleTextField.getText(), filePathTextField.getText());
             songToAdd.setArtist(artistTextField.getText());
             songToAdd.setCategoryId(getCategoryIdFromName(selectedCategory));
-            mainViewController.createSong(songToAdd);
-            mainViewController.reloadSongTable();
-            close();
-        } catch (Exception e) {
+
+            songAdderThread = new Thread(() -> {
+                while (!songToAdd.getIsInitialized()) {
+                    try {
+                        System.out.println("Waiting for media to initialize.");
+                        Thread.sleep(250);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                // https://stackoverflow.com/questions/49343256/threads-in-javafx-not-on-fx-application-thread.
+                // Required for updating GUI stuff from another thread.
+                Platform.runLater(() -> {
+                    try {
+                        mainViewController.getSongManager().createSong(songToAdd);
+                        mainViewController.reloadSongTable();
+                        close();
+                        System.out.println("Media initialized.");
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                });
+            });
+            songAdderThread.start();
+        } catch (
+                Exception e) {
+            if (songAdderThread != null)
+                songAdderThread.interrupt();
             e.printStackTrace();
         }
     }

@@ -1,5 +1,6 @@
 package BE;
 
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -13,11 +14,13 @@ public class Song {
     private SimpleIntegerProperty id;
     private StringProperty title;
     protected StringProperty artist;
-    protected SimpleStringProperty duration;
+    protected SimpleDoubleProperty duration;
+    protected SimpleStringProperty durationString;
     protected StringProperty filePath;
     protected SimpleIntegerProperty categoryId;
     protected SimpleStringProperty categoryName;
     protected Media media;
+    protected boolean isInitialized;
 
     private void initialize() {
         this.id = new SimpleIntegerProperty(-1);
@@ -26,7 +29,8 @@ public class Song {
         this.filePath = new SimpleStringProperty("");
         this.categoryId = new SimpleIntegerProperty(-1);
         this.categoryName = new SimpleStringProperty("");
-        duration = new SimpleStringProperty("");
+        duration = new SimpleDoubleProperty();
+        durationString = new SimpleStringProperty("");
     }
 
     public Song() {
@@ -36,33 +40,33 @@ public class Song {
     /**
      * Initialize a new Song instance.
      *
-     * @param id        The song id
-     * @param title     The song title
-     * @param filePath  The filepath of the song
+     * @param id       The song id
+     * @param title    The song title
+     * @param filePath The filepath of the song
      */
     public Song(int id, String title, String filePath) {
+        initialize();
         this.id = new SimpleIntegerProperty(id);
         this.title = new SimpleStringProperty(title);
         this.artist = new SimpleStringProperty();
         this.filePath = new SimpleStringProperty(filePath);
         this.categoryId = new SimpleIntegerProperty(-1);
-        duration = new SimpleStringProperty("");
         getMeta();
     }
 
     /**
      * Initialize a new Song instance.
      *
-     * @param title     The song title
-     * @param filePath  The filepath of the song
+     * @param title    The song title
+     * @param filePath The filepath of the song
      */
     public Song(String title, String filePath) {
+        initialize();
         this.id = new SimpleIntegerProperty(-1);
         this.title = new SimpleStringProperty(title);
         this.artist = new SimpleStringProperty();
         this.filePath = new SimpleStringProperty(filePath);
         this.categoryId = new SimpleIntegerProperty(-1);
-        duration = new SimpleStringProperty("");
         getMeta();
     }
 
@@ -75,13 +79,14 @@ public class Song {
      * @param categoryName song category
      */
     public Song(int id, String title, String filePath, String categoryName) {
+        initialize();
         this.id = new SimpleIntegerProperty(id);
         this.title = new SimpleStringProperty(title);
         this.artist = new SimpleStringProperty();
         this.filePath = new SimpleStringProperty(filePath);
         this.categoryId = new SimpleIntegerProperty(-1);
         this.categoryName = new SimpleStringProperty(categoryName);
-        duration = new SimpleStringProperty("");
+        duration = new SimpleDoubleProperty();
         getMeta();
     }
 
@@ -96,32 +101,53 @@ public class Song {
      * @param categoryName song categoryName
      */
     public Song(int id, String title, String artist, String filePath, String categoryName) {
+        initialize();
         this.id = new SimpleIntegerProperty(id);
         this.title = new SimpleStringProperty(title);
         this.artist = new SimpleStringProperty(artist);
         this.filePath = new SimpleStringProperty(filePath);
         this.categoryId = new SimpleIntegerProperty(-1);
         this.categoryName = new SimpleStringProperty(categoryName);
-        duration = new SimpleStringProperty("");
         getMeta();
     }
 
     /**
      * Initialize a new Song instance.
      *
-     * @param id           song id
-     * @param title        song title
-     * @param artist       song artist
-     * @param filePath     song filepath
+     * @param id       song id
+     * @param title    song title
+     * @param artist   song artist
+     * @param filePath song filepath
      */
     public Song(int id, String title, String filePath, String artist, int categoryId) {
+        initialize();
+
         this.id = new SimpleIntegerProperty(id);
         this.title = new SimpleStringProperty(title);
         this.artist = new SimpleStringProperty(artist);
         this.filePath = new SimpleStringProperty(filePath);
         this.categoryId = new SimpleIntegerProperty(categoryId);
         this.categoryName = new SimpleStringProperty();
-        duration = new SimpleStringProperty("");
+        getMeta();
+    }
+
+    /**
+     * Initialize a new Song instance.
+     *
+     * @param id       song id
+     * @param title    song title
+     * @param artist   song artist
+     * @param filePath song filepath
+     */
+    public Song(int id, String title, String filePath, String artist, int categoryId, double duration) {
+        initialize();
+        this.id = new SimpleIntegerProperty(id);
+        this.title = new SimpleStringProperty(title);
+        this.artist = new SimpleStringProperty(artist);
+        this.filePath = new SimpleStringProperty(filePath);
+        this.categoryId = new SimpleIntegerProperty(categoryId);
+        this.categoryName = new SimpleStringProperty();
+        this.duration = new SimpleDoubleProperty(duration);
         getMeta();
     }
 
@@ -135,13 +161,34 @@ public class Song {
      * @param categoryName song categoryName
      */
     public Song(int id, String title, String artist, String filePath, int categoryId, String categoryName) {
+        initialize();
         this.id = new SimpleIntegerProperty(id);
         this.title = new SimpleStringProperty(title);
         this.artist = new SimpleStringProperty(artist);
         this.filePath = new SimpleStringProperty(filePath);
         this.categoryId = new SimpleIntegerProperty(categoryId);
         this.categoryName = new SimpleStringProperty(categoryName);
-        duration = new SimpleStringProperty("");
+        getMeta();
+    }
+
+    /**
+     * Initialize a new Song instance.
+     *
+     * @param id           song id
+     * @param title        song title
+     * @param artist       song artist
+     * @param filePath     song filepath
+     * @param categoryName song categoryName
+     */
+    public Song(int id, String title, String artist, String filePath, int categoryId, String categoryName, double duration) {
+        initialize();
+        this.id = new SimpleIntegerProperty(id);
+        this.title = new SimpleStringProperty(title);
+        this.artist = new SimpleStringProperty(artist);
+        this.filePath = new SimpleStringProperty(filePath);
+        this.categoryId = new SimpleIntegerProperty(categoryId);
+        this.categoryName = new SimpleStringProperty(categoryName);
+        this.duration = new SimpleDoubleProperty(duration);
         getMeta();
     }
 
@@ -154,14 +201,19 @@ public class Song {
             var file = new File(getFilePath());
             if (file.exists()) {
                 media = new Media(file.toURI().toString());
-                if (this.getDuration().equals("")) {
-                    MediaPlayer mediaPlayer = new MediaPlayer(media);
-                    mediaPlayer.setOnReady(() -> setDuration(String.format("%02d", (int) media.getDuration().toMinutes()) + ":" + String.format("%02d", ((int) media.getDuration().toSeconds() % 60))));
+                if (this.getDuration() == 0) {
+                    var mediaPlayer = new MediaPlayer(media);
+                    mediaPlayer.setOnReady(() -> {
+                        var duration = media.getDuration();
+                        setDuration(duration.toMinutes());
+                        setDurationString(String.format("%02d", (int) duration.toMinutes()) + ":" + String.format("%02d", ((int) duration.toSeconds() % 60)));
+                        isInitialized = true;
+                    });
                 }
 
                 media.getMetadata().addListener((MapChangeListener.Change<? extends String, ? extends Object> c) -> {
                     if (c.wasAdded()) {
-                        if ("artist".equals(c.getKey()) && this.getArtist() == null ||"artist".equals(c.getKey()) && this.getArtist().equals("")) {
+                        if ("artist".equals(c.getKey()) && this.getArtist() == null || "artist".equals(c.getKey()) && this.getArtist().equals("")) {
                             setArtist(c.getValueAdded().toString());
                         }
                         if ("title".equals(c.getKey()) && this.getTitle() == null) {
@@ -237,8 +289,12 @@ public class Song {
      *
      * @return the value of Duration.
      */
-    public String getDuration() {
+    public double getDuration() {
         return this.duration.get();
+    }
+
+    public String getDurationString() {
+        return durationString.get();
     }
 
     /**
@@ -246,8 +302,16 @@ public class Song {
      *
      * @return duration
      */
-    public SimpleStringProperty durationProperty() {
+    public SimpleDoubleProperty durationProperty() {
         return this.duration;
+    }
+
+    public SimpleStringProperty durationStringProperty() {
+        return durationString;
+    }
+
+    public void setDurationString(String s) {
+        durationString.set(s);
     }
 
     /**
@@ -255,7 +319,7 @@ public class Song {
      *
      * @param duration new value of duration
      */
-    public void setDuration(String duration) {
+    public void setDuration(double duration) {
         this.duration.set(duration);
     }
 
@@ -361,5 +425,9 @@ public class Song {
 
     public Media getMedia() {
         return media;
+    }
+
+    public boolean getIsInitialized() {
+        return isInitialized;
     }
 }
