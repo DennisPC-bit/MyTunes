@@ -10,6 +10,7 @@ import GUI.Main;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -23,6 +24,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -30,6 +32,8 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class MainViewController implements Initializable {
+    @FXML
+    private ToggleButton toggleAutoplay;
     @FXML
     private GridPane borderGridPane;
     @FXML
@@ -79,6 +83,7 @@ public class MainViewController implements Initializable {
     private ObservableList<Song> playlistSongs;
     private boolean playing = false;
     private boolean isMaximized = false;
+    private boolean autoPlay=false;
     private double volumePercentage;
     private static final PlaylistManager playlistManager = new PlaylistManager();
     private static final SongManager songManager = new SongManager();
@@ -626,15 +631,13 @@ public class MainViewController implements Initializable {
         musicPlayer.getMediaPlayer().setOnEndOfMedia( () ->{
             if(selectedSongOnPlayList!=null && playing){
                 nextButton();
-                musicPlayer.setSong(selectedSongOnPlayList);
-                musicPlayer.setVolume(getVolumePercentage());
-                musicPlayer.play();
+                playing=!playing;
+                playButton();
             }
             if(selectedSong!=null && playing){
                 nextButton();
-                musicPlayer.setSong(selectedSong);
-                musicPlayer.setVolume(getVolumePercentage());
-                musicPlayer.play();
+                playing=!playing;
+                playButton();
             }
         });
     }
@@ -646,13 +649,15 @@ public class MainViewController implements Initializable {
         if (selectedSongOnPlayList != null) {
             if (this.songsOnPlaylistTable.getSelectionModel().getFocusedIndex() != this.songsOnPlaylistTable.getItems().size() - 1)
                 this.songsOnPlaylistTable.getSelectionModel().selectBelowCell();
-            else this.songsOnPlaylistTable.getSelectionModel().selectFirst();
+            else if(autoPlay)
+                this.songsOnPlaylistTable.getSelectionModel().selectFirst();
             setSong(selectedSongOnPlayList);
         }
         if (selectedSong != null) {
             if (this.songsTable.getSelectionModel().getFocusedIndex() != this.songsTable.getItems().size() - 1)
                 this.songsTable.getSelectionModel().selectBelowCell();
-            else this.songsTable.getSelectionModel().selectFirst();
+            else if(autoPlay)
+                this.songsTable.getSelectionModel().selectFirst();
             setSong(selectedSong);
         }
     }
@@ -777,5 +782,10 @@ public class MainViewController implements Initializable {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void toggleAutoplay() {
+        autoPlay=!autoPlay;
+        System.out.println(autoPlay);
     }
 }

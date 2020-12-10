@@ -8,6 +8,7 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -326,18 +327,25 @@
                                        <children>
                                           <BorderPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                              <right>
-                                                <Button alignment="CENTER" mnemonicParsing="false" onAction="#previousButton" pickOnBounds="false" textAlignment="CENTER" BorderPane.alignment="CENTER">
-                                                   <graphic>
-                                                      <ImageView fitHeight="17.0" fitWidth="17.0" pickOnBounds="true" preserveRatio="true">
-                                                         <image>
-                                                            <Image url="@IMG/Button-Rewind-icon-removebg-preview.png" />
-                                                         </image>
-                                                         <viewport>
-                                                            <Rectangle2D height="256.0" width="256.0" />
-                                                         </viewport>
-                                                      </ImageView>
-                                                   </graphic>
-                                                </Button>
+                                                <BorderPane BorderPane.alignment="CENTER">
+                                                   <right>
+                                                      <Button alignment="CENTER" mnemonicParsing="false" onAction="#previousButton" pickOnBounds="false" textAlignment="CENTER" BorderPane.alignment="CENTER">
+                                                         <graphic>
+                                                            <ImageView fitHeight="17.0" fitWidth="17.0" pickOnBounds="true" preserveRatio="true">
+                                                               <image>
+                                                                  <Image url="@IMG/Button-Rewind-icon-removebg-preview.png" />
+                                                               </image>
+                                                               <viewport>
+                                                                  <Rectangle2D height="256.0" width="256.0" />
+                                                               </viewport>
+                                                            </ImageView>
+                                                         </graphic>
+                                                      </Button>
+                                                   </right>
+                                                   <center>
+                                                      <ToggleButton fx:id="toggleAutoplay" mnemonicParsing="false" onAction="#toggleAutoplay" text="Autoplay" BorderPane.alignment="CENTER" />
+                                                   </center>
+                                                </BorderPane>
                                              </right>
                                              <center>
                                                 <Label fx:id="currentSong" alignment="CENTER" contentDisplay="CENTER" text="Song Title" textOverrun="CENTER_WORD_ELLIPSIS" BorderPane.alignment="CENTER" />
