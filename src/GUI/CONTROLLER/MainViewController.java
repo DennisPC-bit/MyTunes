@@ -106,6 +106,7 @@ public class MainViewController implements Initializable {
         selectedPlaylist();
         setMainViewSize();
         moveMainView();
+        playNextSong();
     }
 
     /**
@@ -625,11 +626,15 @@ public class MainViewController implements Initializable {
      */
     public void nextButton() {
         if (selectedSongOnPlayList != null) {
+            if(this.songsOnPlaylistTable.getSelectionModel().getFocusedIndex()!=this.songsOnPlaylistTable.getItems().size()-1)
             this.songsOnPlaylistTable.getSelectionModel().selectBelowCell();
+            else this.songsOnPlaylistTable.getSelectionModel().selectFirst();
             setSong(selectedSongOnPlayList);
         }
         if (selectedSong != null) {
+            if(this.songsTable.getSelectionModel().getFocusedIndex()!=this.songsTable.getItems().size()-1)
             this.songsTable.getSelectionModel().selectBelowCell();
+            else this.songsTable.getSelectionModel().selectFirst();
             setSong(selectedSong);
         }
     }
@@ -651,11 +656,15 @@ public class MainViewController implements Initializable {
      */
     public void previousButton() {
         if (selectedSongOnPlayList != null) {
+            if(this.songsOnPlaylistTable.getSelectionModel().getFocusedIndex()!=0)
             this.songsOnPlaylistTable.getSelectionModel().selectAboveCell();
+            else this.songsOnPlaylistTable.getSelectionModel().selectLast();
             setSong(selectedSongOnPlayList);
         }
         if (selectedSong != null) {
+            if(this.songsTable.getSelectionModel().getFocusedIndex()!=0)
             this.songsTable.getSelectionModel().selectAboveCell();
+            else this.songsTable.getSelectionModel().selectLast();
             setSong(selectedSong);
         }
     }
@@ -745,6 +754,25 @@ public class MainViewController implements Initializable {
             songManager.createSong(song);
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    private void playNextSong() {
+        if(musicPlayer.getMediaPlayer()!=null){
+        musicPlayer.getMediaPlayer().setOnEndOfMedia( () ->{
+            if(selectedSongOnPlayList!=null && playing){
+                nextButton();
+                musicPlayer.setSong(selectedSongOnPlayList);
+                musicPlayer.setVolume(getVolumePercentage());
+                musicPlayer.play();
+            }
+            if(selectedSong!=null && playing){
+                nextButton();
+                musicPlayer.setSong(selectedSong);
+                musicPlayer.setVolume(getVolumePercentage());
+                musicPlayer.play();
+            }
+        });
         }
     }
 }
