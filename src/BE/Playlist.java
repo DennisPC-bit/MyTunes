@@ -5,12 +5,12 @@ import javafx.beans.property.*;
 
 public class Playlist {
 
+    private int playlistId;
     private String playListName;
     private StringProperty playListNameProperty;
     protected SimpleDoubleProperty playlistDurationProperty;
     protected SimpleStringProperty playlistDurationStringProperty;
     private ObjectProperty<Integer> playlistSize = new SimpleObjectProperty<>();
-    private int playlistId;
 
     /**
      * Constructor with playlistName
@@ -34,6 +34,12 @@ public class Playlist {
         setPlayListName(playListName);
     }
 
+    /**
+     * Constructor with id, playlist name and total duration.
+     * @param id
+     * @param playListName
+     * @param totalDuration
+     */
     public Playlist(int id, String playListName, double totalDuration) {
         initialize();
         setPlaylistId(id);
@@ -97,10 +103,18 @@ public class Playlist {
         this.playlistId = playlistId;
     }
 
+    /**
+     * Get the playlist duration string property.
+     * @return
+     */
     public SimpleStringProperty playlistDurationPropertyString() {
         return playlistDurationStringProperty;
     }
 
+    /**
+     * Set the playlist string property. Time gets automatically formatted.
+     * @param duration
+     */
     public void setPlaylistDurationStringProperty(double duration) {
         var min = (int) duration;
         var sec = (int) duration / 60;
@@ -108,22 +122,42 @@ public class Playlist {
         playlistDurationStringProperty.set(str);
     }
 
-    public SimpleDoubleProperty getPlaylistDurationProperty() {
+    /**
+     * Get the playlist duration property.
+     * @return
+     */
+    public SimpleDoubleProperty playlistDurationProperty() {
         return playlistDurationProperty;
     }
 
+    /**
+     * Set the playlist duration property.
+     * @param duration
+     */
     public void setPlaylistDurationProperty(double duration) {
         playlistDurationProperty.set(duration);
     }
 
+    /**
+     * Get the total duration of the playlist.
+     * @return
+     */
     public double getTotalDuration() {
         return playlistDurationProperty.get();
     }
 
+    /**
+     * Get the formatted total duration of the playlist for GUI.
+     * @return
+     */
     public String getTotalDurationString() {
         return playlistDurationStringProperty.get();
     }
 
+    /**
+     * Get the total amount of songs in the playlist.
+     * @return
+     */
     public ObjectProperty<Integer> getPlaylistSize() {
         PlaylistManager playlistManager = new PlaylistManager();
         try {

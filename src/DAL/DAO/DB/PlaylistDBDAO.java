@@ -230,6 +230,13 @@ public class PlaylistDBDAO implements PlaylistDAOInterface {
         }
     }
 
+    /**
+     * Get the total duration of a given playlist.
+     *
+     * @param playlist
+     * @return
+     * @throws SQLException
+     */
     public double getTotalDurationOfPlaylist(Playlist playlist) throws SQLException {
         String sql = "SELECT song.*, category.category_name FROM playlist LEFT OUTER JOIN playlist_song ON  playlist.playlist_id = playlist_song.playlist_id LEFT OUTER JOIN song ON playlist_song.song_id = song.song_id LEFT OUTER JOIN category ON  song.category_id = category.category_id WHERE playlist.playlist_id = ?;";
         double totalDuration = 0;
@@ -252,6 +259,13 @@ public class PlaylistDBDAO implements PlaylistDAOInterface {
     }
 
 
+    /**
+     * Get the total duration of a given playlist id.
+     *
+     * @param playlist_id
+     * @return
+     * @throws SQLException
+     */
     public double getTotalDurationOfPlaylist(int playlist_id) throws SQLException {
         String sql = "SELECT song.*, category.category_name FROM playlist LEFT OUTER JOIN playlist_song ON  playlist.playlist_id = playlist_song.playlist_id LEFT OUTER JOIN song ON playlist_song.song_id = song.song_id LEFT OUTER JOIN category ON  song.category_id = category.category_id WHERE playlist.playlist_id = ?;";
         double totalDuration = 0;

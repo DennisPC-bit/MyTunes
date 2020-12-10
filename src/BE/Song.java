@@ -423,10 +423,18 @@ public class Song {
         this.categoryName.set(newCategoryName);
     }
 
+    /**
+     * Get the media associated with this Song.
+     * @return
+     */
     public Media getMedia() {
         return media;
     }
 
+    /**
+     * Is the song ready? Must be checked before adding or editing songs to ensure all meta tags get loaded properly.
+     * @return
+     */
     public boolean getIsInitialized() {
         return isInitialized;
     }
