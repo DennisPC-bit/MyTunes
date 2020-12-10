@@ -201,29 +201,26 @@ public class Song {
             var file = new File(getFilePath());
             if (file.exists()) {
                 media = new Media(file.toURI().toString());
-                if (this.getDuration() == 0) {
-                    var mediaPlayer = new MediaPlayer(media);
-                    mediaPlayer.setOnReady(() -> {
-                        var duration = media.getDuration();
-                        setDuration(duration.toMinutes());
-                        setDurationString(String.format("%02d", (int) duration.toMinutes()) + ":" + String.format("%02d", ((int) duration.toSeconds() % 60)));
-                        isInitialized = true;
-                    });
-                }
+                var mediaPlayer = new MediaPlayer(media);
+                mediaPlayer.setOnReady(() -> {
+                    var duration = media.getDuration();
+                    setDuration(duration.toMinutes());
+                    setDurationString(String.format("%02d", (int) duration.toMinutes()) + ":" + String.format("%02d", ((int) duration.toSeconds() % 60)));
+                });
 
                 media.getMetadata().addListener((MapChangeListener.Change<? extends String, ? extends Object> c) -> {
                     if (c.wasAdded()) {
-                        if ("artist".equals(c.getKey()) && this.getArtist() == null || "artist".equals(c.getKey()) && this.getArtist().equals("")) {
+                        if ("artist".equals(c.getKey()) && getArtist().isEmpty()) {
                             setArtist(c.getValueAdded().toString());
                         }
-                        if ("title".equals(c.getKey()) && this.getTitle() == null) {
+                        if ("title".equals(c.getKey()) && getTitle().isEmpty()) {
                             setTitle(c.getValueAdded().toString());
                         }
                         if ("album".equals(c.getKey())) {
                             //album = c.getValueAdded().toString();
                         }
                     }
-
+                    isInitialized = true;
                 });
             }
         }
@@ -425,6 +422,7 @@ public class Song {
 
     /**
      * Get the media associated with this Song.
+     *
      * @return
      */
     public Media getMedia() {
@@ -433,6 +431,7 @@ public class Song {
 
     /**
      * Is the song ready? Must be checked before adding or editing songs to ensure all meta tags get loaded properly.
+     *
      * @return
      */
     public boolean getIsInitialized() {
