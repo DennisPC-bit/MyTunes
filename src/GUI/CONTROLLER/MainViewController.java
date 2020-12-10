@@ -520,9 +520,11 @@ public class MainViewController implements Initializable {
     public void removeFromPlaylistButton() {
         if (selectedPlaylist != null && selectedSongOnPlayList != null) {
             try {
+                int index = songsOnPlaylistTable.getSelectionModel().getFocusedIndex();
                 playlistManager.deleteSongFromPlaylist(selectedPlaylist.getPlaylistId(), selectedSongOnPlayList.getId());
                 reloadSongsOnPlaylist();
                 reloadPlaylistTable();
+                songsOnPlaylistTable.getSelectionModel().select(index>0?index-1:index);
             } catch (Exception e) {
                 e.printStackTrace();
             }

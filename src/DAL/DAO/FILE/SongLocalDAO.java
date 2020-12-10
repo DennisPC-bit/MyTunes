@@ -270,7 +270,7 @@ public class SongLocalDAO implements SongDAOInterface {
     @Override
     public Map<Integer, String> getGenres() throws Exception {
        Map<Integer,String> tmp = new HashMap<Integer,String>();
-       tmp.put(-1,"none");
+       tmp.put(-1,"");
        return tmp;
     }
 
