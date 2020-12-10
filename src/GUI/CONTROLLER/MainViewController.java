@@ -33,6 +33,8 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class MainViewController implements Initializable {
     @FXML
+    private ImageView repeatPic;
+    @FXML
     private ToggleButton toggleAutoplay;
     @FXML
     private GridPane borderGridPane;
@@ -630,11 +632,13 @@ public class MainViewController implements Initializable {
         }
         musicPlayer.getMediaPlayer().setOnEndOfMedia( () ->{
             if(selectedSongOnPlayList!=null && playing){
+                if(!autoPlay)
                 nextButton();
                 playing=!playing;
                 playButton();
             }
             if(selectedSong!=null && playing){
+                if(!autoPlay)
                 nextButton();
                 playing=!playing;
                 playButton();
@@ -649,14 +653,14 @@ public class MainViewController implements Initializable {
         if (selectedSongOnPlayList != null) {
             if (this.songsOnPlaylistTable.getSelectionModel().getFocusedIndex() != this.songsOnPlaylistTable.getItems().size() - 1)
                 this.songsOnPlaylistTable.getSelectionModel().selectBelowCell();
-            else if(autoPlay)
+            else
                 this.songsOnPlaylistTable.getSelectionModel().selectFirst();
             setSong(selectedSongOnPlayList);
         }
         if (selectedSong != null) {
             if (this.songsTable.getSelectionModel().getFocusedIndex() != this.songsTable.getItems().size() - 1)
                 this.songsTable.getSelectionModel().selectBelowCell();
-            else if(autoPlay)
+            else
                 this.songsTable.getSelectionModel().selectFirst();
             setSong(selectedSong);
         }
@@ -786,6 +790,9 @@ public class MainViewController implements Initializable {
 
     public void toggleAutoplay() {
         autoPlay=!autoPlay;
-        System.out.println(autoPlay);
+        if(autoPlay)
+            repeatPic.setImage(new Image("GUI/IMG/repeatPressed.png"));
+        else
+            repeatPic.setImage(new Image("GUI/IMG/repeatNonPressed.png"));
     }
 }

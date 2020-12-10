@@ -256,7 +256,7 @@
                               <GridPane maxHeight="50.0" minHeight="50.0" prefHeight="50.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <columnConstraints>
                                     <ColumnConstraints hgrow="SOMETIMES" prefWidth="300.0" />
-                                    <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="100.0" minWidth="100.0" prefWidth="100.0" />
+                                    <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="50.0" minWidth="50.0" prefWidth="50.0" />
                                     <ColumnConstraints hgrow="SOMETIMES" />
                                  </columnConstraints>
                                  <rowConstraints>
@@ -265,36 +265,41 @@
                                  <children>
                                     <AnchorPane GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                                        <children>
-                                          <Button alignment="CENTER" contentDisplay="CENTER" maxHeight="50.0" minHeight="50.0" mnemonicParsing="false" onAction="#playButton" pickOnBounds="false" prefHeight="50.0" textAlignment="CENTER" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="20.0">
-                                             <graphic>
-                                                <ImageView fx:id="playPauseImg" fitHeight="40.0" fitWidth="40.0" layoutX="5.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true" x="5.0" y="5.0">
-                                                   <image>
-                                                      <Image url="@IMG/Button-Play-icon-removebg-preview.png" />
-                                                   </image>
-                                                   <viewport>
-                                                      <Rectangle2D height="256.0" width="256.0" />
-                                                   </viewport>
-                                                </ImageView>
-                                             </graphic>
-                                          </Button>
+                                          <ImageView fx:id="playPauseImg" fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true" x="5.0" y="5.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                             <image>
+                                                <Image url="@IMG/Button-Play-icon-removebg-preview.png" />
+                                             </image>
+                                             <viewport>
+                                                <Rectangle2D height="256.0" width="256.0" />
+                                             </viewport>
+                                          </ImageView>
+                                          <Button alignment="CENTER" contentDisplay="CENTER" maxHeight="50.0" maxWidth="50.0" minHeight="50.0" minWidth="50.0" mnemonicParsing="false" onAction="#playButton" opacity="0.0" pickOnBounds="false" prefHeight="50.0" prefWidth="50.0" textAlignment="CENTER" />
                                        </children>
                                     </AnchorPane>
                                     <AnchorPane GridPane.columnIndex="2">
                                        <children>
                                           <BorderPane maxWidth="300.0" minWidth="300.0" prefWidth="300.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                              <left>
-                                                <Button alignment="CENTER" mnemonicParsing="false" onAction="#nextButton" pickOnBounds="false" textAlignment="CENTER" BorderPane.alignment="CENTER">
-                                                   <graphic>
-                                                      <ImageView fitHeight="17.0" fitWidth="17.0" pickOnBounds="true" preserveRatio="true">
-                                                         <image>
-                                                            <Image url="@IMG/Button-Fast-Forward-icon-removebg-preview.png" />
-                                                         </image>
-                                                         <viewport>
-                                                            <Rectangle2D height="256.0" width="256.0" />
-                                                         </viewport>
-                                                      </ImageView>
-                                                   </graphic>
-                                                </Button>
+                                                <BorderPane BorderPane.alignment="CENTER">
+                                                   <center>
+                                                      <AnchorPane maxHeight="35.0" maxWidth="35.0" minHeight="35.0" minWidth="35.0" prefHeight="35.0" prefWidth="35.0">
+                                                         <children>
+                                                            <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+                                                               <image>
+                                                                  <Image url="@IMG/Button-Fast-Forward-icon-removebg-preview.png" />
+                                                               </image>
+                                                               <viewport>
+                                                                  <Rectangle2D height="256.0" width="256.0" />
+                                                               </viewport>
+                                                            </ImageView>
+                                                            <Button alignment="CENTER" maxHeight="35.0" maxWidth="35.0" minHeight="35.0" minWidth="35.0" mnemonicParsing="false" onAction="#nextButton" opacity="0.0" pickOnBounds="false" prefHeight="35.0" prefWidth="35.0" textAlignment="CENTER" />
+                                                         </children>
+                                                      </AnchorPane>
+                                                   </center>
+                                                   <BorderPane.margin>
+                                                      <Insets left="5.0" right="5.0" />
+                                                   </BorderPane.margin>
+                                                </BorderPane>
                                              </left>
                                              <center>
                                                 <GridPane maxWidth="300.0" BorderPane.alignment="CENTER">
@@ -329,21 +334,45 @@
                                              <right>
                                                 <BorderPane BorderPane.alignment="CENTER">
                                                    <right>
-                                                      <Button alignment="CENTER" mnemonicParsing="false" onAction="#previousButton" pickOnBounds="false" textAlignment="CENTER" BorderPane.alignment="CENTER">
-                                                         <graphic>
-                                                            <ImageView fitHeight="17.0" fitWidth="17.0" pickOnBounds="true" preserveRatio="true">
-                                                               <image>
-                                                                  <Image url="@IMG/Button-Rewind-icon-removebg-preview.png" />
-                                                               </image>
-                                                               <viewport>
-                                                                  <Rectangle2D height="256.0" width="256.0" />
-                                                               </viewport>
-                                                            </ImageView>
-                                                         </graphic>
-                                                      </Button>
+                                                      <BorderPane BorderPane.alignment="CENTER">
+                                                         <center>
+                                                            <AnchorPane maxHeight="35.0" maxWidth="35.0" minHeight="35.0" minWidth="35.0" prefHeight="35.0" prefWidth="35.0">
+                                                               <children>
+                                                                  <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+                                                                     <image>
+                                                                        <Image url="@IMG/Button-Rewind-icon-removebg-preview.png" />
+                                                                     </image>
+                                                                     <viewport>
+                                                                        <Rectangle2D height="256.0" width="256.0" />
+                                                                     </viewport>
+                                                                  </ImageView>
+                                                                  <Button alignment="CENTER" maxHeight="35.0" maxWidth="35.0" minHeight="35.0" minWidth="35.0" mnemonicParsing="false" onAction="#previousButton" opacity="0.0" pickOnBounds="false" prefHeight="35.0" prefWidth="35.0" textAlignment="CENTER" />
+                                                               </children>
+                                                               <padding>
+                                                                  <Insets right="5.0" />
+                                                               </padding>
+                                                            </AnchorPane>
+                                                         </center>
+                                                         <padding>
+                                                            <Insets left="5.0" right="5.0" />
+                                                         </padding>
+                                                      </BorderPane>
                                                    </right>
                                                    <center>
-                                                      <ToggleButton fx:id="toggleAutoplay" mnemonicParsing="false" onAction="#toggleAutoplay" text="Autoplay" BorderPane.alignment="CENTER" />
+                                                      <BorderPane BorderPane.alignment="CENTER">
+                                                         <center>
+                                                            <AnchorPane maxHeight="35.0" maxWidth="35.0" minHeight="35.0" minWidth="35.0" prefHeight="35.0" prefWidth="35.0">
+                                                               <children>
+                                                                  <ImageView fx:id="repeatPic" fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+                                                                     <image>
+                                                                        <Image url="@IMG/repeatNonPressed.png" />
+                                                                     </image>
+                                                                  </ImageView>
+                                                                  <ToggleButton fx:id="toggleAutoplay" maxHeight="35.0" maxWidth="35.0" minHeight="35.0" minWidth="35.0" mnemonicParsing="false" onAction="#toggleAutoplay" opacity="0.0" prefHeight="35.0" prefWidth="35.0" />
+                                                               </children>
+                                                            </AnchorPane>
+                                                         </center>
+                                                      </BorderPane>
                                                    </center>
                                                 </BorderPane>
                                              </right>
