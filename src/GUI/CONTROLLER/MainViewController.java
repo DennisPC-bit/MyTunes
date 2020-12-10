@@ -78,7 +78,7 @@ public class MainViewController implements Initializable {
     private ObservableList<Playlist> playlists;
     private ObservableList<Song> playlistSongs;
     private boolean playing = false;
-    private boolean isMaximized=false;
+    private boolean isMaximized = false;
     private double volumePercentage;
     private static final PlaylistManager playlistManager = new PlaylistManager();
     private static final SongManager songManager = new SongManager();
@@ -106,7 +106,6 @@ public class MainViewController implements Initializable {
         selectedPlaylist();
         setMainViewSize();
         moveMainView();
-        playNextSong();
     }
 
     /**
@@ -272,9 +271,10 @@ public class MainViewController implements Initializable {
             x.set(mouseEvent1.getSceneX());
             y.set(mouseEvent1.getSceneY());
             int offset = 5;
-            if(y.get()>borderGridPane.getHeight()-offset || x.get()>borderGridPane.getWidth()-offset) {
-                borderGridPane.setOnMouseReleased(mouseEvent2 -> {main.getPrimaryStage().setHeight(borderGridPane.getHeight()+(mouseEvent2.getSceneY()-y.get()));
-                    main.getPrimaryStage().setWidth(borderGridPane.getWidth()+(mouseEvent2.getSceneX()-x.get()));
+            if (y.get() > borderGridPane.getHeight() - offset || x.get() > borderGridPane.getWidth() - offset) {
+                borderGridPane.setOnMouseReleased(mouseEvent2 -> {
+                    main.getPrimaryStage().setHeight(borderGridPane.getHeight() + (mouseEvent2.getSceneY() - y.get()));
+                    main.getPrimaryStage().setWidth(borderGridPane.getWidth() + (mouseEvent2.getSceneX() - x.get()));
                     mouseEvent2.consume();
                 });
             }
@@ -309,6 +309,7 @@ public class MainViewController implements Initializable {
 
     /**
      * Gets the windowStage
+     *
      * @return the windowStage
      */
     public Stage getWindowStage() {
@@ -343,6 +344,7 @@ public class MainViewController implements Initializable {
 
     /**
      * Creates a new playlist
+     *
      * @param playlist the new playlist
      */
     public void addPlaylist(Playlist playlist) {
@@ -364,7 +366,8 @@ public class MainViewController implements Initializable {
     }
 
     /**
-     *  Edits the selected playlist.
+     * Edits the selected playlist.
+     *
      * @param newTitle new title
      */
     public void editPlaylist(String newTitle) {
@@ -380,11 +383,11 @@ public class MainViewController implements Initializable {
     /**
      * Opens a dialog window
      *
-     * @param labelFieldText    The new label field text
-     * @param dialogTitleText   The dialog title text
-     * @param titleFieldText    The title field text
-     * @param mode              The mode
-     * @throws IOException      If something went wrong
+     * @param labelFieldText  The new label field text
+     * @param dialogTitleText The dialog title text
+     * @param titleFieldText  The title field text
+     * @param mode            The mode
+     * @throws IOException If something went wrong
      */
     private void dialog(String labelFieldText, String dialogTitleText, String titleFieldText, int mode) throws IOException {
         FXMLLoader loader = new FXMLLoader(Main.class.getResource("DIALOGUE/AddPlaylist.fxml"));
@@ -477,10 +480,11 @@ public class MainViewController implements Initializable {
 
     /**
      * Changes the position on the playlist
-     * @param listOfSongs   the list of song you want to change
-     * @param song          the song
-     * @param pos           the position
-     * @return              A playlist with the new order
+     *
+     * @param listOfSongs the list of song you want to change
+     * @param song        the song
+     * @param pos         the position
+     * @return A playlist with the new order
      */
     public List<Song> moveOnPlaylist(List<Song> listOfSongs, Song song, int pos) {
         LinkedList<Song> linkedSongs = new LinkedList<>(listOfSongs);
@@ -619,6 +623,20 @@ public class MainViewController implements Initializable {
             playPauseImg.setImage(new Image("GUI/IMG/Button-Play-icon-removebg-preview.png"));
             playing = !playing;
         }
+        musicPlayer.getMediaPlayer().setOnEndOfMedia( () ->{
+            if(selectedSongOnPlayList!=null && playing){
+                nextButton();
+                musicPlayer.setSong(selectedSongOnPlayList);
+                musicPlayer.setVolume(getVolumePercentage());
+                musicPlayer.play();
+            }
+            if(selectedSong!=null && playing){
+                nextButton();
+                musicPlayer.setSong(selectedSong);
+                musicPlayer.setVolume(getVolumePercentage());
+                musicPlayer.play();
+            }
+        });
     }
 
     /**
@@ -626,14 +644,14 @@ public class MainViewController implements Initializable {
      */
     public void nextButton() {
         if (selectedSongOnPlayList != null) {
-            if(this.songsOnPlaylistTable.getSelectionModel().getFocusedIndex()!=this.songsOnPlaylistTable.getItems().size()-1)
-            this.songsOnPlaylistTable.getSelectionModel().selectBelowCell();
+            if (this.songsOnPlaylistTable.getSelectionModel().getFocusedIndex() != this.songsOnPlaylistTable.getItems().size() - 1)
+                this.songsOnPlaylistTable.getSelectionModel().selectBelowCell();
             else this.songsOnPlaylistTable.getSelectionModel().selectFirst();
             setSong(selectedSongOnPlayList);
         }
         if (selectedSong != null) {
-            if(this.songsTable.getSelectionModel().getFocusedIndex()!=this.songsTable.getItems().size()-1)
-            this.songsTable.getSelectionModel().selectBelowCell();
+            if (this.songsTable.getSelectionModel().getFocusedIndex() != this.songsTable.getItems().size() - 1)
+                this.songsTable.getSelectionModel().selectBelowCell();
             else this.songsTable.getSelectionModel().selectFirst();
             setSong(selectedSong);
         }
@@ -641,6 +659,7 @@ public class MainViewController implements Initializable {
 
     /**
      * Changes the song
+     *
      * @param selectedSong
      */
     private void setSong(Song selectedSong) {
@@ -656,14 +675,14 @@ public class MainViewController implements Initializable {
      */
     public void previousButton() {
         if (selectedSongOnPlayList != null) {
-            if(this.songsOnPlaylistTable.getSelectionModel().getFocusedIndex()!=0)
-            this.songsOnPlaylistTable.getSelectionModel().selectAboveCell();
+            if (this.songsOnPlaylistTable.getSelectionModel().getFocusedIndex() != 0)
+                this.songsOnPlaylistTable.getSelectionModel().selectAboveCell();
             else this.songsOnPlaylistTable.getSelectionModel().selectLast();
             setSong(selectedSongOnPlayList);
         }
         if (selectedSong != null) {
-            if(this.songsTable.getSelectionModel().getFocusedIndex()!=0)
-            this.songsTable.getSelectionModel().selectAboveCell();
+            if (this.songsTable.getSelectionModel().getFocusedIndex() != 0)
+                this.songsTable.getSelectionModel().selectAboveCell();
             else this.songsTable.getSelectionModel().selectLast();
             setSong(selectedSong);
         }
@@ -671,6 +690,7 @@ public class MainViewController implements Initializable {
 
     /**
      * Gets the song manager
+     *
      * @return the songManager
      */
     public SongManager getSongManager() {
@@ -680,6 +700,7 @@ public class MainViewController implements Initializable {
 
     /**
      * Sets the main
+     *
      * @param main the main class
      */
     public void setMain(Main main) {
@@ -747,32 +768,14 @@ public class MainViewController implements Initializable {
 
     /**
      * Creates a song
+     *
      * @param song the song
      */
-    public void createSong(Song song){
+    public void createSong(Song song) {
         try {
             songManager.createSong(song);
         } catch (Exception e) {
             e.printStackTrace();
-        }
-    }
-
-    private void playNextSong() {
-        if(musicPlayer.getMediaPlayer()!=null){
-        musicPlayer.getMediaPlayer().setOnEndOfMedia( () ->{
-            if(selectedSongOnPlayList!=null && playing){
-                nextButton();
-                musicPlayer.setSong(selectedSongOnPlayList);
-                musicPlayer.setVolume(getVolumePercentage());
-                musicPlayer.play();
-            }
-            if(selectedSong!=null && playing){
-                nextButton();
-                musicPlayer.setSong(selectedSong);
-                musicPlayer.setVolume(getVolumePercentage());
-                musicPlayer.play();
-            }
-        });
         }
     }
 }

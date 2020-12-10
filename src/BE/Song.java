@@ -210,7 +210,7 @@ public class Song {
 
                 media.getMetadata().addListener((MapChangeListener.Change<? extends String, ? extends Object> c) -> {
                     if (c.wasAdded()) {
-                        if ("artist".equals(c.getKey()) && getArtist().isEmpty()) {
+                        if ("artist".equals(c.getKey()) && getArtist()!=null && getArtist().isEmpty()) {
                             setArtist(c.getValueAdded().toString());
                         }
                         if ("title".equals(c.getKey()) && getTitle().isEmpty()) {
