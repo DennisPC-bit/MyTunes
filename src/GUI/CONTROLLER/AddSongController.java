@@ -2,8 +2,6 @@ package GUI.CONTROLLER;
 
 import BE.Song;
 import javafx.application.Platform;
-import javafx.collections.MapChangeListener;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -75,12 +73,65 @@ public class AddSongController extends Component implements Initializable {
      */
     public void browse() {
         try {
+            //To allow variable usage in a annonymous lambda, we must create a new object with the required variables.
+            var ref = new Object() {
+                int current_try = 0;
+                int max_tries = 3;
+            };
+
+            Thread songAdderThread = null;
             JFileChooser fileChooser = new JFileChooser();
             int result = fileChooser.showOpenDialog(this);
             if (result == JFileChooser.APPROVE_OPTION) {
                 File selectedFile = fileChooser.getSelectedFile();
-                titleTextField.setText(selectedFile.getName());
-                filePathTextField.setText(selectedFile.getAbsolutePath());
+
+                var fileName = selectedFile.getName();
+                var fileNameNoExt = fileName.lastIndexOf('.') > 0 ? fileName.substring(0, fileName.lastIndexOf('.')) : fileName;
+                var filePath = selectedFile.getAbsolutePath();
+
+                // Some disclaimer.
+                if (fileName.endsWith(".m4a"))
+                    System.out.println("Note: M4a meta tags for some reason can't seem to read properly.");
+
+                songToAdd = new Song();
+                songToAdd.setFilePath(filePath);
+                songToAdd.getMeta();
+
+                try {
+                    songAdderThread = new Thread(() -> {
+                        while (!songToAdd.getIsInitialized()) {
+                            try {
+                                if (ref.current_try < ref.max_tries) {
+                                    ref.current_try++;
+                                    System.out.println("Waiting for media to initialize.");
+                                    Thread.sleep(500);
+                                } else break;
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                        // https://stackoverflow.com/questions/49343256/threads-in-javafx-not-on-fx-application-thread.
+                        // Required for updating GUI stuff from another thread.
+                        Platform.runLater(() -> {
+                            try {
+                                var title = !songToAdd.getTitle().isBlank() ? songToAdd.getTitle() : fileNameNoExt;
+                                titleTextField.setText(title);
+                                filePathTextField.setText(filePath);
+                                artistTextField.setText(songToAdd.getArtist());
+                                System.out.println("Media initialized.");
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        });
+                    });
+                    songAdderThread.start();
+                } catch (
+                        Exception e) {
+                    if (songAdderThread != null)
+                        songAdderThread.interrupt();
+                    e.printStackTrace();
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -106,40 +157,16 @@ public class AddSongController extends Component implements Initializable {
      * Add the new song to database.
      */
     public void addSong() {
-        Thread songAdderThread = null;
         try {
-            songToAdd = new Song(titleTextField.getText(), filePathTextField.getText());
-            songToAdd.setArtist(artistTextField.getText());
-            songToAdd.setCategoryId(getCategoryIdFromName(selectedCategory));
-
-            songAdderThread = new Thread(() -> {
-                while (!songToAdd.getIsInitialized()) {
-                    try {
-                        System.out.println("Waiting for media to initialize.");
-                        Thread.sleep(250);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-
-                // https://stackoverflow.com/questions/49343256/threads-in-javafx-not-on-fx-application-thread.
-                // Required for updating GUI stuff from another thread.
-                Platform.runLater(() -> {
-                    try {
-                        mainViewController.getSongManager().createSong(songToAdd);
-                        mainViewController.reloadSongTable();
-                        close();
-                        System.out.println("Media initialized.");
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                });
-            });
-            songAdderThread.start();
-        } catch (
-                Exception e) {
-            if (songAdderThread != null)
-                songAdderThread.interrupt();
+            if (songToAdd != null) {
+                songToAdd.setTitle(titleTextField.getText());
+                songToAdd.setArtist(artistTextField.getText());
+                songToAdd.setCategoryId(getCategoryIdFromName(selectedCategory));
+                mainViewController.getSongManager().createSong(songToAdd);
+                mainViewController.reloadSongTable();
+                close();
+            }
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
