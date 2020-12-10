@@ -35,7 +35,7 @@
                         <ColumnConstraints hgrow="SOMETIMES" maxWidth="5000.0" minWidth="500.0" prefWidth="700.0" />
                      </columnConstraints>
                      <rowConstraints>
-                        <RowConstraints maxHeight="50.0" minHeight="50.0" prefHeight="50.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="60.0" minHeight="60.0" prefHeight="60.0" vgrow="SOMETIMES" />
                         <RowConstraints maxHeight="5000.0" minHeight="100.0" prefHeight="650.0" vgrow="SOMETIMES" />
                      </rowConstraints>
                      <children>
@@ -233,7 +233,7 @@
                                        <children>
                                           <AnchorPane GridPane.columnIndex="2" GridPane.rowIndex="1">
                                              <children>
-                                                <Button mnemonicParsing="false" onAction="#shufflePlaylist" text="Shuffle" textOverrun="CLIP" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="157.0">
+                                                <Button maxHeight="25.0" maxWidth="50.0" minHeight="25.0" minWidth="50.0" mnemonicParsing="false" onAction="#shufflePlaylist" prefHeight="25.0" prefWidth="50.0" text="Shuffle" textOverrun="CLIP" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="157.0">
                                                    <font>
                                                       <Font size="11.0" />
                                                    </font></Button>
@@ -253,27 +253,27 @@
                         </AnchorPane>
                         <AnchorPane>
                            <children>
-                              <GridPane maxHeight="50.0" minHeight="50.0" prefHeight="50.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                              <GridPane maxHeight="60.0" minHeight="60.0" prefHeight="60.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <columnConstraints>
                                     <ColumnConstraints hgrow="SOMETIMES" prefWidth="300.0" />
                                     <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="50.0" minWidth="50.0" prefWidth="50.0" />
                                     <ColumnConstraints hgrow="SOMETIMES" />
                                  </columnConstraints>
                                  <rowConstraints>
-                                    <RowConstraints maxHeight="50.0" minHeight="50.0" prefHeight="50.0" vgrow="SOMETIMES" />
+                                    <RowConstraints maxHeight="60.0" minHeight="60.0" prefHeight="60.0" vgrow="SOMETIMES" />
                                  </rowConstraints>
                                  <children>
                                     <AnchorPane GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                                        <children>
-                                          <ImageView fx:id="playPauseImg" fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true" x="5.0" y="5.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                          <ImageView fx:id="playPauseImg" fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true" x="5.0" y="5.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="2.5" AnchorPane.rightAnchor="2.5" AnchorPane.topAnchor="5.0">
                                              <image>
-                                                <Image url="@IMG/Button-Play-icon-removebg-preview.png" />
+                                                <Image url="@IMG/PlayButton.png" />
                                              </image>
                                              <viewport>
                                                 <Rectangle2D height="256.0" width="256.0" />
                                              </viewport>
                                           </ImageView>
-                                          <Button alignment="CENTER" contentDisplay="CENTER" maxHeight="50.0" maxWidth="50.0" minHeight="50.0" minWidth="50.0" mnemonicParsing="false" onAction="#playButton" opacity="0.0" pickOnBounds="false" prefHeight="50.0" prefWidth="50.0" textAlignment="CENTER" />
+                                          <Button alignment="CENTER" contentDisplay="CENTER" maxHeight="50.0" maxWidth="50.0" minHeight="50.0" minWidth="50.0" mnemonicParsing="false" onAction="#playButton" opacity="0.0" pickOnBounds="false" prefHeight="50.0" prefWidth="50.0" textAlignment="CENTER" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="2.5" AnchorPane.rightAnchor="2.5" AnchorPane.topAnchor="5.0" />
                                        </children>
                                     </AnchorPane>
                                     <AnchorPane GridPane.columnIndex="2">
@@ -286,7 +286,7 @@
                                                          <children>
                                                             <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
                                                                <image>
-                                                                  <Image url="@IMG/Button-Fast-Forward-icon-removebg-preview.png" />
+                                                                  <Image url="@IMG/NextButton.png" />
                                                                </image>
                                                                <viewport>
                                                                   <Rectangle2D height="256.0" width="256.0" />
@@ -340,7 +340,7 @@
                                                                <children>
                                                                   <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
                                                                      <image>
-                                                                        <Image url="@IMG/Button-Rewind-icon-removebg-preview.png" />
+                                                                        <Image url="@IMG/LastButton.png" />
                                                                      </image>
                                                                      <viewport>
                                                                         <Rectangle2D height="256.0" width="256.0" />
@@ -405,7 +405,7 @@
                            <children>
                               <ImageView fitHeight="25.0" fitWidth="25.0" layoutY="6.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <image>
-                                    <Image url="@IMG/Close-icon.png" />
+                                    <Image url="@IMG/CloseButton.png" />
                                  </image>
                                  <viewport>
                                     <Rectangle2D />
@@ -421,7 +421,7 @@
                            <children>
                               <ImageView fx:id="mbtn" fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <image>
-                                    <Image url="@IMG/Programming-Maximize-Window-icon.png" />
+                                    <Image url="@IMG/MaximizeButton.png" />
                                  </image>
                               </ImageView>
                               <Button mnemonicParsing="false" onAction="#maximizeButton" opacity="0.0" text="M" textAlignment="CENTER" textOverrun="CLIP" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
@@ -434,7 +434,7 @@
                            <children>
                               <ImageView fitHeight="25.0" fitWidth="25.0" layoutX="-87.0" layoutY="-62.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <image>
-                                    <Image url="@IMG/Programming-Minimize-Window-icon.png" />
+                                    <Image url="@IMG/MinimizeButton.png" />
                                  </image>
                               </ImageView>
                               <Button mnemonicParsing="false" onAction="#minimizeButton" opacity="0.0" text="_" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">

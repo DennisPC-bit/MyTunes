@@ -10,7 +10,6 @@ import GUI.Main;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -24,7 +23,6 @@ import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -144,6 +142,10 @@ public class MainViewController implements Initializable {
                 currentSong.setText(selectedSongOnPlayList.getTitle());
                 songPlaying = selectedSongOnPlayList;
                 this.songsTable.getSelectionModel().clearSelection();
+                if(playing){
+                    playButton();
+                    playButton();
+                }
             }
         }));
     }
@@ -158,6 +160,10 @@ public class MainViewController implements Initializable {
                 currentSong.setText(selectedSong.getTitle());
                 songPlaying = selectedSong;
                 this.songsOnPlaylistTable.getSelectionModel().clearSelection();
+                if(playing){
+                    playButton();
+                    playButton();
+                }
             }
         }));
     }
@@ -617,17 +623,17 @@ public class MainViewController implements Initializable {
             musicPlayer.setSong(selectedSongOnPlayList);
             musicPlayer.setVolume(getVolumePercentage());
             musicPlayer.play();
-            playPauseImg.setImage(new Image("GUI/IMG/Button-Pause-icon.png"));
+            playPauseImg.setImage(new Image("GUI/IMG/PauseButton.png"));
             playing = !playing;
         } else if (selectedSong != null && !playing) {
             musicPlayer.setSong(selectedSong);
             musicPlayer.setVolume(getVolumePercentage());
             musicPlayer.play();
-            playPauseImg.setImage(new Image("GUI/IMG/Button-Pause-icon.png"));
+            playPauseImg.setImage(new Image("GUI/IMG/PauseButton.png"));
             playing = !playing;
         } else if (selectedSong != null || selectedSongOnPlayList != null) {
             musicPlayer.pause();
-            playPauseImg.setImage(new Image("GUI/IMG/Button-Play-icon-removebg-preview.png"));
+            playPauseImg.setImage(new Image("GUI/IMG/PlayButton.png"));
             playing = !playing;
         }
         musicPlayer.getMediaPlayer().setOnEndOfMedia( () ->{
@@ -637,6 +643,7 @@ public class MainViewController implements Initializable {
                 playing=!playing;
                 musicPlayer.stop();
                 playButton();
+                return;
             }
             if(selectedSong!=null && playing){
                 if(!autoPlay)
@@ -644,6 +651,7 @@ public class MainViewController implements Initializable {
                 playing=!playing;
                 musicPlayer.stop();
                 playButton();
+                return;
             }
         });
     }
@@ -731,11 +739,11 @@ public class MainViewController implements Initializable {
     public void maximizeButton() {
         if (!isMaximized) {
             main.getPrimaryStage().setFullScreen(true);
-            mbtn.setImage(new Image("GUI/IMG/User-Interface-Restore-Window-icon.png"));
+            mbtn.setImage(new Image("GUI/IMG/RestoreWindowButton.png"));
             isMaximized = true;
         } else {
             main.getPrimaryStage().setFullScreen(false);
-            mbtn.setImage(new Image("GUI/IMG/Programming-Maximize-Window-icon.png"));
+            mbtn.setImage(new Image("GUI/IMG/MaximizeButton.png"));
             isMaximized = false;
         }
     }
