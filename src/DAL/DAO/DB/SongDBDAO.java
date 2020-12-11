@@ -78,7 +78,11 @@ public class SongDBDAO implements SongDAOInterface {
      */
     @Override
     public void createSong(Song song) throws SQLException {
-        var sql = "INSERT INTO song (song_title, song_artist, song_filepath, category_id, song_length) VALUES(?,?,?,?,?);";
+        var sql="";
+        switch(database.getConnectionType()){
+            case(0) -> sql = "INSERT INTO [dbo].[song] ([song_title], [song_artist], [song_filepath], [category_id], [song_length]) VALUES (?,?,?,?,?)";
+            case(1) -> sql = "INSERT INTO song (song_title, song_artist, song_filepath, category_id, song_length) VALUES(?,?,?,?,?);";
+        }
         try (var con = database.getConnection();
              PreparedStatement st = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             st.setString(1, song.getTitle());
