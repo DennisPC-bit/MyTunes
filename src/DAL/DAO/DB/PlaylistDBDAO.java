@@ -80,7 +80,11 @@ public class PlaylistDBDAO implements PlaylistDAOInterface {
      */
     @Override
     public void createPlaylist(String name) throws SQLException {
-        var sql = "INSERT INTO playlist (playlist_name) VALUES(?);";
+        var sql = "";
+        switch (database.getConnectionType()) {
+            case 0 -> sql = "INSERT INTO [dbo].[playlist] ([playlist_name]) VALUES(?);";
+            case 1 -> sql = "INSERT INTO playlist (playlist_name) VALUES(?);";
+        }
         try (var con = database.getConnection();
              PreparedStatement st = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             st.setString(1, name);
@@ -176,7 +180,11 @@ public class PlaylistDBDAO implements PlaylistDAOInterface {
      */
     @Override
     public void AddSongToPlaylist(int playlist_id, int song_id) throws SQLException {
-        var sql = "INSERT INTO playlist_song (playlist_id,song_id) VALUES (?,?);";
+        var sql = "";
+        switch (database.getConnectionType()) {
+            case 0 -> sql = "INSERT INTO [dbo].[playlist_song] ([playlist_id]),([song_id]) VALUES (?,?);";
+            case 1 -> sql = "INSERT INTO playlist_song (playlist_id,song_id) VALUES (?,?);";
+        }
         try (var con = database.getConnection();
              PreparedStatement st = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             st.setInt(1, playlist_id);
@@ -216,8 +224,7 @@ public class PlaylistDBDAO implements PlaylistDAOInterface {
      */
     @Override
     public void updatePlaylist(Playlist playlist) throws SQLException {
-
-        String sql = "UPDATE playlist SET playlist_name=?  WHERE playlist_id=?;";
+        String sql = "UPDATE playlist SET playlist_name=? WHERE playlist_id=?;";
         try (var con = database.getConnection();
              PreparedStatement preparedStatement = con.prepareStatement(sql)) {
             preparedStatement.setString(1, playlist.getPlayListName());
