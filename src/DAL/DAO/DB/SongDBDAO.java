@@ -52,6 +52,7 @@ public class SongDBDAO implements SongDAOInterface {
         try (var con = database.getConnection();
              Statement statement = con.createStatement()) {
             ResultSet rs = statement.executeQuery("SELECT song.*, category.category_name FROM song LEFT OUTER JOIN category ON song.category_id = category.category_id;");
+
             while (rs.next()) {
                 int song_id = rs.getInt("song_id");
                 String song_title = rs.getString("song_title");
@@ -78,10 +79,10 @@ public class SongDBDAO implements SongDAOInterface {
      */
     @Override
     public void createSong(Song song) throws SQLException {
-        var sql="";
-        switch(database.getConnectionType()){
-            case(0) -> sql = "INSERT INTO [dbo].[song] ([song_title], [song_artist], [song_filepath], [category_id], [song_length]) VALUES (?,?,?,?,?)";
-            case(1) -> sql = "INSERT INTO song (song_title, song_artist, song_filepath, category_id, song_length) VALUES(?,?,?,?,?);";
+        var sql = "";
+        switch (database.getConnectionType()) {
+            case (0) -> sql = "INSERT INTO [dbo].[song] ([song_title], [song_artist], [song_filepath], [category_id], [song_length]) VALUES (?,?,?,?,?)";
+            case (1) -> sql = "INSERT INTO song (song_title, song_artist, song_filepath, category_id, song_length) VALUES(?,?,?,?,?);";
         }
         try (var con = database.getConnection();
              PreparedStatement st = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
