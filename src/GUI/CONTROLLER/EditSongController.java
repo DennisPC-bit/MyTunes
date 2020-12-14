@@ -104,7 +104,7 @@ public class EditSongController extends Component implements Initializable {
      */
     public void browse() {
         try {
-            //To allow variable usage in a annonymous lambda, we must create a new object with the required variables.
+            //To allow variable usage in an anonymous lambda, we must create a new Object with the required variables.
             var ref = new Object() {
                 int current_try = 0;
                 int max_tries = 3;
@@ -123,7 +123,7 @@ public class EditSongController extends Component implements Initializable {
 
                 // Some disclaimer.
                 if (fileName.endsWith(".m4a"))
-                    System.out.println("Note: M4a meta tags for some reason can't seem to read properly.");
+                    System.out.println("Note: M4a meta tags for some reason can't seem to read properly. Fields may be empty.");
 
                 modifiedSong = new Song();
                 modifiedSong.setFilePath(filePath);

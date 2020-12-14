@@ -22,6 +22,7 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -34,7 +35,7 @@ public class MainViewController implements Initializable {
     @FXML
     private ImageView repeatPic;
     @FXML
-    private ImageView mbtn;
+    private ImageView maximizeBtn;
     @FXML
     private GridPane borderGridPane;
     @FXML
@@ -80,11 +81,10 @@ public class MainViewController implements Initializable {
     private ObservableList<Song> playlistSongs;
     private boolean playing = false;
     private boolean isMaximized = false;
-    private boolean autoPlay=false;
+    private boolean autoPlay = false;
     private double volumePercentage;
     private static final PlaylistManager playlistManager = new PlaylistManager();
     private static final SongManager songManager = new SongManager();
-    private static final InputAlert inputAlert = new InputAlert();
     private static final MusicPlayer musicPlayer = new MusicPlayer();
 
     /**
@@ -197,7 +197,7 @@ public class MainViewController implements Initializable {
                 currentSong.setText(selectedSongOnPlayList.getTitle());
                 songPlaying = selectedSongOnPlayList;
                 this.songsTable.getSelectionModel().clearSelection();
-                if(playing){
+                if (playing) {
                     changeSong();
                 }
             }
@@ -214,7 +214,7 @@ public class MainViewController implements Initializable {
                 currentSong.setText(selectedSong.getTitle());
                 songPlaying = selectedSong;
                 this.songsOnPlaylistTable.getSelectionModel().clearSelection();
-                if(playing){
+                if (playing) {
                     changeSong();
                 }
             }
@@ -265,6 +265,10 @@ public class MainViewController implements Initializable {
      * and the field change when the volume slider changes.
      */
     private void volumeFieldControl() {
+        // Default value.
+        volumeSlider.setValue(25);
+        volumeSliderField.setText(String.format("%.0f", volumeSlider.getValue()));
+
         volumeSliderField.textProperty().addListener(
                 (observableValue, oldValue, newValue) -> {
                     try {
@@ -524,7 +528,7 @@ public class MainViewController implements Initializable {
                 playlistManager.deleteSongFromPlaylist(selectedPlaylist.getPlaylistId(), selectedSongOnPlayList.getId());
                 reloadSongsOnPlaylist();
                 reloadPlaylistTable();
-                songsOnPlaylistTable.getSelectionModel().select(index>0?index-1:index);
+                songsOnPlaylistTable.getSelectionModel().select(index > 0 ? index - 1 : index);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -622,7 +626,7 @@ public class MainViewController implements Initializable {
      * Deletes the selected song
      */
     public void deleteSongButton() {
-        var result = InputAlert.showMessageBox("Are you sure?", String.format("Deleting %s", selectedSong.getTitle()),
+        var result = InputAlert.showMessageBox("Do you want to delete this song?", String.format("Deleting %s", selectedSong.getTitle()),
                 "You cannot undo this action once it's done!", Alert.AlertType.CONFIRMATION);
         if (result.get() == ButtonType.OK) {
             try {
@@ -642,51 +646,59 @@ public class MainViewController implements Initializable {
      */
     public void playButton() {
         if (selectedSongOnPlayList != null && !playing) {
-            musicPlayer.setSong(selectedSongOnPlayList);
+            songPlaying = selectedSongOnPlayList;
+            musicPlayer.setSong(songPlaying);
             musicPlayer.setVolume(getVolumePercentage());
             musicPlayer.play();
             playPauseImg.setImage(new Image("GUI/IMG/PauseButton.png"));
             playing = !playing;
         } else if (selectedSong != null && !playing) {
-            musicPlayer.setSong(selectedSong);
+            songPlaying = selectedSong;
+            musicPlayer.setSong(songPlaying);
             musicPlayer.setVolume(getVolumePercentage());
             musicPlayer.play();
             playPauseImg.setImage(new Image("GUI/IMG/PauseButton.png"));
             playing = !playing;
-        } else if (selectedSong != null || selectedSongOnPlayList != null) {
+            //} else if (selectedSong != null || selectedSongOnPlayList != null) {
+        } else if (songPlaying != null) {
             musicPlayer.pause();
             playPauseImg.setImage(new Image("GUI/IMG/PlayButton.png"));
             playing = !playing;
         }
-        musicPlayer.getMediaPlayer().setOnEndOfMedia( () ->{
-            if(selectedSongOnPlayList!=null && playing){
-                if(!autoPlay)
-                nextButton();
-                playing=!playing;
-                musicPlayer.stop();
-                playButton();
-                return;
-            }
-            if(selectedSong!=null && playing){
-                if(!autoPlay)
-                nextButton();
-                playing=!playing;
-                musicPlayer.stop();
-                playButton();
-                return;
-            }
-        });
+
+        // Only get the media player reference when we have a song.
+        //if (selectedSongOnPlayList != null || selectedSong != null) {
+        if (songPlaying != null) {
+            musicPlayer.getMediaPlayer().setOnEndOfMedia(() -> {
+//                if (selectedSongOnPlayList != null && playing) {
+//                    if (!autoPlay)
+//                        nextButton();
+//                    playing = !playing;
+//                    musicPlayer.stop();
+//                    playButton();
+//                    return;
+//                }
+                if (songPlaying != null && playing) {
+                    if (!autoPlay)
+                        nextButton();
+                    playing = !playing;
+                    musicPlayer.stop();
+                    playButton();
+                    return;
+                }
+            });
+        }
     }
 
     public void toggleAutoplay() {
-        autoPlay=!autoPlay;
-        if(autoPlay)
+        autoPlay = !autoPlay;
+        if (autoPlay)
             repeatPic.setImage(new Image("GUI/IMG/repeatPressed.png"));
         else
             repeatPic.setImage(new Image("GUI/IMG/repeatNonPressed.png"));
     }
 
-    private void changeSong(){
+    private void changeSong() {
         playButton();
         playButton();
     }
@@ -742,11 +754,11 @@ public class MainViewController implements Initializable {
     public void maximizeButton() {
         if (!isMaximized) {
             main.getPrimaryStage().setFullScreen(true);
-            mbtn.setImage(new Image("GUI/IMG/RestoreWindowButton.png"));
+            maximizeBtn.setImage(new Image("GUI/IMG/RestoreWindowButton.png"));
             isMaximized = true;
         } else {
             main.getPrimaryStage().setFullScreen(false);
-            mbtn.setImage(new Image("GUI/IMG/MaximizeButton.png"));
+            maximizeBtn.setImage(new Image("GUI/IMG/MaximizeButton.png"));
             isMaximized = false;
         }
     }
