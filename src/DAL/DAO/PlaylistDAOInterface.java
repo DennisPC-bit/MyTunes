@@ -43,11 +43,11 @@ public interface PlaylistDAOInterface {
     /**
      * Deletes a playlist
      *
-     * @param   name name of the playlist
+     * @param   playlist the playlist
      * @throws  Exception if something went wrong.
      */
 
-    void deletePlaylist(String name) throws Exception;
+    void deletePlaylist(Playlist playlist) throws Exception;
 
     /**
      * Loads the songs on the playlist

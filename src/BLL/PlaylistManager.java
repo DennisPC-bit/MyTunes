@@ -96,8 +96,8 @@ public class PlaylistManager {
      * @param name
      * @throws Exception
      */
-    public void deletePlaylist(String name) throws Exception {
-        playlistDAO.deletePlaylist(name);
+    public void deletePlaylist(Playlist playlist) throws Exception {
+        playlistDAO.deletePlaylist(playlist);
     }
 
     /**

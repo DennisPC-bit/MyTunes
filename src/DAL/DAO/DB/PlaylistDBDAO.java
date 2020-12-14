@@ -122,14 +122,14 @@ public class PlaylistDBDAO implements PlaylistDAOInterface {
     /**
      * Tries to delete a playlist from the database, does nothing if a playlist with name doesnt exist.
      *
-     * @param name the name of the playlist.
+     * @param playlist the playlist
      * @throws SQLException if it cannot connect to the database or something went wrong.
      */
     @Override
-    public void deletePlaylist(String name) throws SQLException {
+    public void deletePlaylist(Playlist playlist) throws SQLException {
         var sql = "DELETE FROM playlist WHERE playlist_name = ?;";
         try (var con = database.getConnection(); PreparedStatement st = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-            st.setString(1, name);
+            st.setString(1, playlist.getPlayListName());
             st.executeUpdate();
             return;
         } catch (SQLNonTransientConnectionException e) {

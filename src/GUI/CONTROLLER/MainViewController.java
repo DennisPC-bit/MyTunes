@@ -404,7 +404,7 @@ public class MainViewController implements Initializable {
                 "You cannot undo this action once it's done!", Alert.AlertType.CONFIRMATION);
         if (result.get() == ButtonType.OK) {
             try {
-                playlistManager.deletePlaylist(selectedPlaylist.getPlayListName());
+                playlistManager.deletePlaylist(selectedPlaylist);
                 load();
             } catch (Exception e) {
                 e.printStackTrace();

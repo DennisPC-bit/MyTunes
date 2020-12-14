@@ -107,23 +107,16 @@ public class PlaylistLocalDAO implements PlaylistDAOInterface {
     /**
      * Tries to overwrite a playlist with emptyValue, and deletes songs all songs from the playlist.
      *
-     * @param   name the name of the playlist.
+     * @param   playlist the playlist.
      * @throws  IOException if something went wrong.
      */
     @Override
-    public void deletePlaylist(String name) throws IOException {
-        String formattedName = String.format("%-" + PLAYLISTNAMESIZE + "s",name);
+    public void deletePlaylist(Playlist playlist) throws IOException {
         try(RandomAccessFile raf = new RandomAccessFile(new File(LOCAL_PLAYLIST_PATH),"rw")){
             while(raf.getFilePointer()<raf.length()){
-                raf.skipBytes(4);
-                String playlistName="";
-                for(int i=0;i<PLAYLISTNAMESIZE;i++){
-                    playlistName+=raf.readChar();
-                }
-                if(playlistName.equals(formattedName)){
-                    raf.seek(raf.getFilePointer()-PLAYLISTNAMESIZE*2-4);
-                    deleteAllFromPlaylist(raf.readInt());
+                if(raf.readInt()==playlist.getPlaylistId()){
                     raf.writeChars(emptyValue);
+                    break;
                 }
             }
         }
