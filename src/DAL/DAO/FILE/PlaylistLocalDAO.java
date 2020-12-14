@@ -33,11 +33,11 @@ public class PlaylistLocalDAO implements PlaylistDAOInterface {
         String formattedName = String.format("%-" + PLAYLISTNAMESIZE + "s",name).substring(0,PLAYLISTNAMESIZE);
         try(RandomAccessFile raf = new RandomAccessFile(new File(LOCAL_PLAYLIST_PATH),"rw")){
             while(raf.getFilePointer()<raf.length()){
-                String playlistName = "";
+                StringBuilder playlistName = new StringBuilder();
                 raf.skipBytes(4);
                 for(int i=0;i<PLAYLISTNAMESIZE;i++){
-                playlistName+=raf.readChar();
-                if(playlistName.equals(emptyValue)){
+                playlistName.append(raf.readChar());
+                if(playlistName.toString().equals(emptyValue)){
                     raf.seek(raf.getFilePointer()-PLAYLISTNAMESIZE*2);
                     raf.writeChars(formattedName);
                     return;
@@ -69,12 +69,12 @@ public class PlaylistLocalDAO implements PlaylistDAOInterface {
             raf.seek(0);}
             while(raf.getFilePointer()<raf.length()){
                 int playlistId=raf.readInt();
-                String playlistName= "";
+                StringBuilder playlistName= new StringBuilder();
                 for(int i=0;i<PLAYLISTNAMESIZE;i++){
-                    playlistName+=raf.readChar();
+                    playlistName.append(raf.readChar());
                 }
-                if(!playlistName.equals(emptyValue))
-                tmp.add(new Playlist(playlistId, playlistName.trim()));
+                if(!playlistName.toString().equals(emptyValue))
+                tmp.add(new Playlist(playlistId, playlistName.toString().trim()));
             }
             return tmp;
         }
@@ -93,12 +93,12 @@ public class PlaylistLocalDAO implements PlaylistDAOInterface {
         try(RandomAccessFile raf = new RandomAccessFile(new File(LOCAL_PLAYLIST_PATH),"r")){
             while(raf.getFilePointer()<raf.length()){
                 int playlistId=raf.readInt();
-                String playlistName= "";
+                StringBuilder playlistName= new StringBuilder();
                 for(int i=0;i<PLAYLISTNAMESIZE;i++){
-                    playlistName+=raf.readChar();
+                    playlistName.append(raf.readChar());
                 }
-                if(playlistName.equals(formattedName))
-                    return new Playlist(playlistId, playlistName);
+                if(playlistName.toString().equals(formattedName))
+                    return new Playlist(playlistId, playlistName.toString());
             }
             return null;
         }
