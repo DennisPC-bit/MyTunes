@@ -419,7 +419,7 @@
                         </AnchorPane>
                         <AnchorPane GridPane.columnIndex="2">
                            <children>
-                              <ImageView fx:id="mbtn" fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                              <ImageView fx:id="maximizeBtn" fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <image>
                                     <Image url="@IMG/MaximizeButton.png" />
                                  </image>
