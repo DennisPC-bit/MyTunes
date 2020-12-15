@@ -56,8 +56,8 @@ public class PlaylistLocalDAO implements PlaylistDAOInterface {
      * Tries to load playlists, ignores playlists with emptyValue, creates file if the file does not exist.
      * makes sure there is a file to overwrite, when creating a playlist.
      *
-     * @return A list of playlists, an empty list if no playlists exist.
-     * @throws IOException if something went wrong.
+     * @return  A list of playlists, an empty list if no playlists exist.
+     * @throws  IOException if something went wrong.
      */
     @Override
     public List<Playlist> loadPlaylist() throws IOException {
@@ -120,6 +120,7 @@ public class PlaylistLocalDAO implements PlaylistDAOInterface {
                 }
             }
         }
+        deleteAllFromPlaylist(playlist.getPlaylistId());
     }
 
     /**
@@ -228,7 +229,7 @@ public class PlaylistLocalDAO implements PlaylistDAOInterface {
         try(RandomAccessFile raf = new RandomAccessFile(new File(LOCAL_PLAYLIST_SONG),"rw")){
             while (raf.getFilePointer()<raf.length()){
                 if(raf.readInt()==playlist_id){
-                    raf.seek(raf.getFilePointer()-8);
+                    raf.seek(raf.getFilePointer()-4);
                     raf.writeInt(emptyIntValue);
                     raf.writeInt(emptyIntValue);
                 }

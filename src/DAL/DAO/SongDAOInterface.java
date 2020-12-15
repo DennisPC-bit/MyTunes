@@ -50,25 +50,25 @@ public interface SongDAOInterface {
     /**
      * modifies a song
      *
-     * @param modified      the modified song
-     * @throws Exception    if something went wrong
+     * @param   modified     the modified song
+     * @throws  Exception    if something went wrong
      */
     void updateSong(Song modified) throws Exception;
 
     /**
      * Searches for a string
      *
-     * @param searchQuery   the string you are searching
-     * @return              a list of songs, that matches the searchQuery
-     * @throws Exception    if something went wrong
+     * @param   searchQuery     the string you are searching
+     * @return                  a list of songs, that matches the searchQuery
+     * @throws  Exception       if something went wrong
      */
     List<Song> searchSong(String searchQuery) throws Exception;
 
     /**
      * Gets the map of genres
      *
-     * @return a map
-     * @throws Exception if something went wrong
+     * @return  a map of the genres
+     * @throws  Exception if something went wrong
      */
     Map<Integer, String> getGenres() throws Exception;
 }

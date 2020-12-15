@@ -72,8 +72,8 @@ public class PlaylistManager {
     /**
      * Sends information to create playlist
      *
-     * @param name
-     * @throws Exception
+     * @param name          the playlist name
+     * @throws Exception    if something went wrong
      */
     public void createPlaylist(String name) throws Exception {
         playlistDAO.createPlaylist(name);
@@ -82,9 +82,9 @@ public class PlaylistManager {
     /**
      * Get the value of playlist name
      *
-     * @param name new value of name
-     * @return the value of name
-     * @throws Exception
+     * @param name          new value of name
+     * @return              the value of name
+     * @throws Exception    if something went wrong
      */
     public Playlist getPlaylist(String name) throws Exception {
         return playlistDAO.getPlaylist(name);
@@ -93,17 +93,17 @@ public class PlaylistManager {
     /**
      * Sends information to delete playlist
      *
-     * @param name
-     * @throws Exception
+     * @param playlist      the playlist
+     * @throws Exception    if something went wrong.
      */
     public void deletePlaylist(Playlist playlist) throws Exception {
         playlistDAO.deletePlaylist(playlist);
     }
 
     /**
-     * @param playlist_id
-     * @return
-     * @throws Exception
+     * @param playlist_id   the id of the playlist
+     * @return              a list of songs
+     * @throws Exception    if something went wrong
      */
     public List<Song> loadSongsOnPlaylist(int playlist_id) throws Exception {
         return playlistDAO.loadSongsFromPlaylist(playlist_id);
@@ -112,9 +112,9 @@ public class PlaylistManager {
     /**
      * Sends information to add a song to playlist
      *
-     * @param playlist_id
-     * @param song_id
-     * @throws Exception
+     * @param playlist_id   the id of the playlist
+     * @param song_id       the id of the song
+     * @throws Exception    if something went wrong.
      */
     public void addSongsToPlaylist(int playlist_id, int song_id) throws Exception {
         playlistDAO.AddSongToPlaylist(playlist_id, song_id);
@@ -123,9 +123,9 @@ public class PlaylistManager {
     /**
      * Sends information to delete a song from playlist
      *
-     * @param playlist_id
-     * @param song_id
-     * @throws Exception
+     * @param playlist_id   the id of the playlist
+     * @param song_id       the id of the song
+     * @throws Exception    if something went wrong.
      */
     public void deleteSongFromPlaylist(int playlist_id, int song_id) throws Exception {
         playlistDAO.deleteFromPlaylist(playlist_id, song_id);
@@ -134,8 +134,8 @@ public class PlaylistManager {
     /**
      * Sends information to update playlist
      *
-     * @param playlist
-     * @throws Exception
+     * @param playlist      the playlist
+     * @throws Exception    if something went wrong.
      */
     public void updatePlaylist(Playlist playlist) throws Exception {
         playlistDAO.updatePlaylist(playlist);

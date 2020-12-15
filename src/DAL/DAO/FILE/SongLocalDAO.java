@@ -38,8 +38,8 @@ public class SongLocalDAO implements SongDAOInterface {
     /**
      * Loads all songs in the files, makes sure the songs are not equal to the emptyValue
      *
-     * @return A list of songs if there are any in the file or a empty list if there are no songs in the file.
-     * @throws IOException if something went wrong.
+     * @return  A list of songs if there are any in the file or a empty list if there are no songs in the file.
+     * @throws  IOException if something went wrong.
      */
     @Override
     public List<Song> loadSongs() throws Exception {
@@ -71,8 +71,8 @@ public class SongLocalDAO implements SongDAOInterface {
     /**
      * Tries to create a song, overwrites empty values if such exist. Auto increments and adds song if no emptyValues found.
      *
-     * @param song the song.
-     * @throws IOException if something went wrong.
+     * @param   song the song.
+     * @throws  IOException if something went wrong.
      */
     @Override
     public void createSong(Song song) throws IOException {
@@ -116,9 +116,9 @@ public class SongLocalDAO implements SongDAOInterface {
     /**
      * Finds a song in the file.
      *
-     * @param name the name of the song you want to get
-     * @return A song that has the given name.
-     * @throws IOException if something went wrong.
+     * @param   name the name of the song you want to get
+     * @return  A song that has the given name.
+     * @throws  IOException if something went wrong.
      */
     @Override
     public Song getSong(String name) throws Exception {
@@ -145,9 +145,9 @@ public class SongLocalDAO implements SongDAOInterface {
     /**
      * Finds a song in the file.
      *
-     * @param id the id of the song you want to get
-     * @return A song that has the given name.
-     * @throws IOException if something went wrong.
+     * @param   id the id of the song you want to get
+     * @return  A song that has the given name.
+     * @throws  IOException if something went wrong.
      */
     public Song getSong(int id) throws Exception {
         try (RandomAccessFile raf = new RandomAccessFile(new File(LOCAL_SONG_PATH), "r")) {
@@ -173,8 +173,8 @@ public class SongLocalDAO implements SongDAOInterface {
     /**
      * Overwrites a song with matching id with emptyValues. Also overwrites the song matches from playlists with emptyIntValue
      *
-     * @param id the id of the song you want to delete.
-     * @throws IOException if something went wrong.
+     * @param   id the id of the song you want to delete.
+     * @throws  IOException if something went wrong.
      */
     @Override
     public void deleteSong(int id) throws IOException {
@@ -204,8 +204,8 @@ public class SongLocalDAO implements SongDAOInterface {
     /**
      * Overwrites the song with the new values in modified.
      *
-     * @param modified the modified song
-     * @throws IOException if something went wrong.
+     * @param   modified the modified song
+     * @throws  IOException if something went wrong.
      */
     @Override
     public void updateSong(Song modified) throws IOException {
@@ -227,9 +227,9 @@ public class SongLocalDAO implements SongDAOInterface {
     /**
      * Searches for a song in the file
      *
-     * @param searchQuery the string you are searching for
-     * @return A list of songs containing all matches, a empty list if no matches.
-     * @throws IOException if something went wrong.
+     * @param   searchQuery the string you are searching for
+     * @return  A list of songs containing all matches, a empty list if no matches.
+     * @throws  IOException if something went wrong.
      */
     @Override
     public List<Song> searchSong(String searchQuery) throws Exception {
@@ -259,8 +259,8 @@ public class SongLocalDAO implements SongDAOInterface {
     /**
      * gets the map of genres
      *
-     * @return a map of genres
-     * @throws Exception if something went wrong
+     * @return  a map of genres
+     * @throws  Exception if something went wrong
      */
     @Override
     public Map<Integer, String> getGenres() throws Exception {

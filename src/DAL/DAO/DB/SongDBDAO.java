@@ -32,21 +32,18 @@ public class SongDBDAO implements SongDAOInterface {
      *
      * @throws SQLException if it cant get connection to the database or something went wrong.
      */
-    public SongDBDAO() {
+    public SongDBDAO() throws SQLException {
         database = DbConnectionHandler.getInstance();
-        try {
-            if (database.getConnection().isClosed())
-                songManager.goLocal();
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+        if (database.getConnection().isClosed()){
+            throw new SQLException("no connection to database");
         }
     }
 
     /**
      * Tries to load all songs.
      *
-     * @return all songs on the database or if there are no songs on the database an empty list.
-     * @throws SQLException if it cant get connection to the database or something went wrong.
+     * @return  all songs on the database or if there are no songs on the database an empty list.
+     * @throws  SQLException if it cant get connection to the database or something went wrong.
      */
     @Override
     public List<Song> loadSongs() throws SQLException {
@@ -76,8 +73,8 @@ public class SongDBDAO implements SongDAOInterface {
     /**
      * tries to create a song.
      *
-     * @param song the song.
-     * @throws SQLException
+     * @param   song the song.
+     * @throws  SQLException
      */
     @Override
     public void createSong(Song song) throws SQLException {
@@ -102,9 +99,9 @@ public class SongDBDAO implements SongDAOInterface {
     /**
      * Tries to find a song with the given name.
      *
-     * @param name the name of the song.
-     * @return A song with the name.
-     * @throws SQLException if it cant get connection to the database or something went wrong.
+     * @param   name the name of the song.
+     * @return  A song with the name.
+     * @throws  SQLException if it cant get connection to the database or something went wrong.
      */
     @Override
     public Song getSong(String name) throws SQLException {
@@ -131,8 +128,8 @@ public class SongDBDAO implements SongDAOInterface {
     /**
      * Tries to delete a song with the given id.
      *
-     * @param id the id of the song.
-     * @throws SQLException if it cant get connection to the database or something went wrong.
+     * @param   id the id of the song.
+     * @throws  SQLException if it cant get connection to the database or something went wrong.
      */
     @Override
     public void deleteSong(int id) throws SQLException {
@@ -149,8 +146,8 @@ public class SongDBDAO implements SongDAOInterface {
     /**
      * Tries to update a Song.
      *
-     * @param modified the modified version of the song.
-     * @throws SQLException if it cant get connection to the database or something went wrong.
+     * @param   modified the modified version of the song.
+     * @throws  SQLException if it cant get connection to the database or something went wrong.
      */
     @Override
     public void updateSong(Song modified) throws SQLException {
@@ -172,8 +169,8 @@ public class SongDBDAO implements SongDAOInterface {
     /**
      * Tries to find a list of songs that contain search
      *
-     * @param searchQuery the search string
-     * @return A list containing songs that match, or an empty list if no song matches.
+     * @param   searchQuery the search string
+     * @return  A list containing songs that match, or an empty list if no song matches.
      */
     @Override
     public List<Song> searchSong(String searchQuery) {
@@ -210,8 +207,8 @@ public class SongDBDAO implements SongDAOInterface {
     /**
      * Gets the genreMap
      *
-     * @return A map of genres
-     * @throws Exception if something went wrong
+     * @return  A map of genres
+     * @throws  Exception if something went wrong
      */
     @Override
     public Map<Integer, String> getGenres() throws Exception {

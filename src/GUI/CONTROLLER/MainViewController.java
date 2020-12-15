@@ -115,7 +115,7 @@ public class MainViewController implements Initializable {
     }
 
     /**
-     * listens to whatever happens in the window and acts accordingly.
+     * Listens to what happens in the window and acts accordingly.
      */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -139,16 +139,7 @@ public class MainViewController implements Initializable {
             this.songs = FXCollections.observableArrayList(songManager.loadSongs());
             reloadSongTable();
         } catch (Exception e) {
-            try {
-                playlistManager.goLocal();
-                songManager.goLocal();
-                this.playlists = FXCollections.observableArrayList(playlistManager.loadPlaylists());
-                reloadPlaylistTable();
-                this.songs = FXCollections.observableArrayList(songManager.loadSongs());
-                reloadSongTable();
-            } catch (Exception exception) {
-                exception.printStackTrace();
-            }
+            e.printStackTrace();
         }
     }
 
@@ -230,7 +221,7 @@ public class MainViewController implements Initializable {
             this.songsTable.setItems(FXCollections.observableList(songManager.loadSongs()));
             songsTable.getSelectionModel().select(index);
         } catch (Exception exception) {
-            System.out.println("could not load songs");
+            exception.printStackTrace();
         }
     }
 
@@ -243,7 +234,7 @@ public class MainViewController implements Initializable {
             this.songsOnPlaylistTable.setItems(FXCollections.observableList(playlistManager.loadSongsOnPlaylist(selectedPlaylist.getPlaylistId())));
             songsOnPlaylistTable.getSelectionModel().select(index);
         } catch (Exception exception) {
-            System.out.println("could not load playlistTable");
+            exception.printStackTrace();
         }
     }
 
@@ -256,7 +247,7 @@ public class MainViewController implements Initializable {
             this.playlistTable.setItems(FXCollections.observableList(playlistManager.loadPlaylists()));
             playlistTable.getSelectionModel().select(index);
         } catch (Exception exception) {
-            System.out.println("could not load playlistTable");
+            exception.printStackTrace();
         }
     }
 
@@ -344,7 +335,7 @@ public class MainViewController implements Initializable {
     public void addPlaylist(Playlist playlist) {
         try {
             playlistManager.createPlaylist(playlist.getPlayListName());
-            load();
+            reloadPlaylistTable();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -368,7 +359,7 @@ public class MainViewController implements Initializable {
         try {
             selectedPlaylist.setPlayListName(newTitle);
             playlistManager.updatePlaylist(selectedPlaylist);
-            load();
+            reloadPlaylistTable();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -381,7 +372,7 @@ public class MainViewController implements Initializable {
      * @param dialogTitleText The dialog title text
      * @param titleFieldText  The title field text
      * @param mode            The mode
-     * @throws IOException If something went wrong
+     * @throws IOException    If something went wrong
      */
     private void dialog(String labelFieldText, String dialogTitleText, String titleFieldText, int mode) throws IOException {
         FXMLLoader loader = new FXMLLoader(Main.class.getResource("DIALOGUE/AddPlaylist.fxml"));
@@ -409,6 +400,7 @@ public class MainViewController implements Initializable {
         if (result.get() == ButtonType.OK) {
             try {
                 playlistManager.deletePlaylist(selectedPlaylist);
+                reloadSongsOnPlaylist();
                 load();
             } catch (Exception e) {
                 e.printStackTrace();
@@ -426,7 +418,6 @@ public class MainViewController implements Initializable {
                     if (song.getId() == selectedSong.getId()) {
                         if (songsTable.getSelectionModel().getFocusedIndex() == songsTable.getItems().size() - 1) {
                             songsTable.getSelectionModel().select(0);
-                            return;
                         } else
                             songsTable.getSelectionModel().select(songsTable.getSelectionModel().getFocusedIndex() + 1);
                         return;
@@ -612,8 +603,6 @@ public class MainViewController implements Initializable {
                 windowStage.initModality(Modality.APPLICATION_MODAL);
                 windowStage.alwaysOnTopProperty();
                 windowStage.show();
-            } catch (IOException e) {
-                e.printStackTrace();
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -645,7 +634,7 @@ public class MainViewController implements Initializable {
      * Plays from the playlist
      */
     public void playButton() {
-        if (selectedSongOnPlayList != null && !playing) {
+        if (selectedSongOnPlayList != null && selectedSongOnPlayList.getFilePath()!=null && !playing) {
             songPlaying = selectedSongOnPlayList;
             musicPlayer.setSong(songPlaying);
             musicPlayer.setVolume(getVolumePercentage());
@@ -659,25 +648,14 @@ public class MainViewController implements Initializable {
             musicPlayer.play();
             playPauseImg.setImage(new Image("GUI/IMG/PauseButton.png"));
             playing = !playing;
-            //} else if (selectedSong != null || selectedSongOnPlayList != null) {
         } else if (songPlaying != null) {
             musicPlayer.pause();
             playPauseImg.setImage(new Image("GUI/IMG/PlayButton.png"));
             playing = !playing;
         }
 
-        // Only get the media player reference when we have a song.
-        //if (selectedSongOnPlayList != null || selectedSong != null) {
-        if (songPlaying != null) {
+        if (songPlaying != null && musicPlayer.getMediaPlayer()!=null) {
             musicPlayer.getMediaPlayer().setOnEndOfMedia(() -> {
-//                if (selectedSongOnPlayList != null && playing) {
-//                    if (!autoPlay)
-//                        nextButton();
-//                    playing = !playing;
-//                    musicPlayer.stop();
-//                    playButton();
-//                    return;
-//                }
                 if (songPlaying != null && playing) {
                     if (!autoPlay)
                         nextButton();

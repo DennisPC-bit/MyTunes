@@ -17,15 +17,15 @@ public interface PlaylistDAOInterface {
     /**
      * Loads the playlists
      *
-     * @return A list of playlists
-     * @throws Exception if something went wrong.
+     * @return  A list of playlists
+     * @throws  Exception if something went wrong.
      */
     List<Playlist> loadPlaylist() throws Exception;
 
     /**
      * Creates a playlist
      *
-     * @param   name
+     * @param   name the name of the playlist
      * @throws  Exception if something went wrong.
      */
     void createPlaylist(String name) throws Exception;
@@ -84,6 +84,5 @@ public interface PlaylistDAOInterface {
      * @param   playlist    the modified playlist
      * @throws  Exception   if something went wrong.
      */
-
     void updatePlaylist(Playlist playlist) throws Exception;
 }

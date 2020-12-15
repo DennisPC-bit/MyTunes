@@ -63,7 +63,7 @@ public class EditSongController extends Component implements Initializable {
     /**
      * Sets the main view controller
      *
-     * @param mainViewController
+     * @param mainViewController the main view controller
      */
     public void setMainController(MainViewController mainViewController) {
         this.mainViewController = mainViewController;
@@ -73,7 +73,7 @@ public class EditSongController extends Component implements Initializable {
      * Find the specified category name and return its id.
      *
      * @param categoryName The category name to find.
-     * @return
+     * @return the category id
      */
     private int getCategoryIdFromName(String categoryName) {
         for (var category : genres.entrySet()) {
@@ -171,8 +171,6 @@ public class EditSongController extends Component implements Initializable {
 
     /**
      * Saves the changes made to the selected song.
-     *
-     * @throws Exception if something went wrong.
      */
     public void save() {
         try {

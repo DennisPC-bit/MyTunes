@@ -60,7 +60,7 @@ public class AddSongController extends Component implements Initializable {
     }
 
     /**
-     * Sets the maing view controller
+     * Sets the main view controller
      *
      * @param mainViewController
      */
@@ -139,7 +139,7 @@ public class AddSongController extends Component implements Initializable {
     }
 
     /**
-     * Find the specfied category name and return its id.
+     * Find the specified category name and return its id.
      *
      * @param categoryName The category name to find.
      * @return

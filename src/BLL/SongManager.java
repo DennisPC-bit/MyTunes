@@ -1,17 +1,14 @@
 package BLL;
 
-import BE.InputAlert;
 import BE.Song;
 import DAL.DAO.DB.SongDBDAO;
 import DAL.DAO.FILE.SongLocalDAO;
 import DAL.DAO.SongDAOInterface;
 import GUI.CONTROLLER.MainViewController;
-
 import java.util.List;
 import java.util.Map;
 
 public class SongManager {
-    private static InputAlert inputAlert = new InputAlert();
     protected static SongDAOInterface songDAO;
     protected MainViewController mainController;
 
@@ -25,7 +22,7 @@ public class SongManager {
     }
 
     /**
-     * makes is use the local class.
+     * Makes it use the local class.
      */
     public void goLocal() {
         songDAO = new SongLocalDAO();
@@ -61,8 +58,8 @@ public class SongManager {
     /**
      * Loads songs
      *
-     * @return a list of the songs
-     * @throws Exception if something went wrong
+     * @return              a list of the songs
+     * @throws Exception    if something went wrong
      */
     public List<Song> loadSongs() throws Exception {
         return songDAO.loadSongs();
@@ -71,8 +68,8 @@ public class SongManager {
     /**
      * Sends information to create a song
      *
-     * @param song the new song
-     * @throws Exception if something went wrong
+     * @param song          the new song
+     * @throws Exception    if something went wrong
      */
     public void createSong(Song song) throws Exception {
         songDAO.createSong(song);
@@ -81,9 +78,9 @@ public class SongManager {
     /**
      * Gets the value of song name
      *
-     * @param name new value of song name
-     * @return the value of song name
-     * @throws Exception
+     * @param   name new value of song name
+     * @return  the value of song name
+     * @throws Exception if something went wrong
      */
     public Song getSong(String name) throws Exception {
         return songDAO.getSong(name);
