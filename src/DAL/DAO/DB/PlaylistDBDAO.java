@@ -156,10 +156,11 @@ public class PlaylistDBDAO implements PlaylistDAOInterface {
                 String song_filepath = rs.getString("song_filepath");
                 int category_id = rs.getInt("category_id");
                 String category_name = rs.getString("category_name");
+                if(song_filepath!=null)
                 temp.add(new Song(song_id, song_title, song_artist, song_filepath, category_id, category_name));
             }
             return temp;
-        } catch (SQLNonTransientConnectionException e) {
+        } catch (SQLNonTransientConnectionException | NullPointerException e) {
             playlistManager.goLocal();
             return temp;
         }
@@ -205,7 +206,7 @@ public class PlaylistDBDAO implements PlaylistDAOInterface {
             st.setInt(1, playlist_id);
             st.setInt(2, song_id);
             st.executeUpdate();
-        } catch (SQLNonTransientConnectionException e) {
+        } catch (SQLNonTransientConnectionException | NullPointerException e) {
             playlistManager.goLocal();
         }
     }
@@ -227,7 +228,7 @@ public class PlaylistDBDAO implements PlaylistDAOInterface {
             if (preparedStatement.executeUpdate() != 1) {
                 System.out.println("Could not update playlist: " + playlist.toString());
             }
-        } catch (SQLNonTransientConnectionException e) {
+        } catch (SQLNonTransientConnectionException | NullPointerException e) {
             playlistManager.goLocal();
         }
     }
@@ -254,7 +255,7 @@ public class PlaylistDBDAO implements PlaylistDAOInterface {
             }
 
             return totalDuration;
-        } catch (SQLNonTransientConnectionException e) {
+        } catch (SQLNonTransientConnectionException | NullPointerException e) {
             playlistManager.goLocal();
             return 0;
         }
@@ -283,7 +284,7 @@ public class PlaylistDBDAO implements PlaylistDAOInterface {
             }
 
             return totalDuration;
-        } catch (SQLNonTransientConnectionException e) {
+        } catch (SQLNonTransientConnectionException | NullPointerException e) {
             playlistManager.goLocal();
             return 0;
         }

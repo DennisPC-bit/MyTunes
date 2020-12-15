@@ -63,7 +63,7 @@ public class SongDBDAO implements SongDAOInterface {
                 temp.add(new Song(song_id, song_title, song_artist, song_filepath, category_id, category_name));
             }
             return temp;
-        } catch (SQLNonTransientConnectionException e) {
+        } catch (SQLNonTransientConnectionException | NullPointerException e) {
             songManager.goLocal();
             return temp;
         }
@@ -91,7 +91,7 @@ public class SongDBDAO implements SongDAOInterface {
             st.setInt(4, song.getCategoryId());
             st.setDouble(5, (song.getDuration()));
             st.executeUpdate();
-        } catch (SQLNonTransientConnectionException e) {
+        } catch (SQLNonTransientConnectionException | NullPointerException e) {
             songManager.goLocal();
         }
     }
@@ -119,7 +119,7 @@ public class SongDBDAO implements SongDAOInterface {
             var duration = resultSet.getDouble("song_length");
             var song = new Song(id, name1, path, artist, category_id, duration);
             return song;
-        } catch (SQLNonTransientConnectionException e) {
+        } catch (SQLNonTransientConnectionException | NullPointerException e) {
             songManager.goLocal();
             return null;
         }
@@ -138,7 +138,7 @@ public class SongDBDAO implements SongDAOInterface {
              PreparedStatement st = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             st.setInt(1, id);
             st.executeUpdate();
-        } catch (SQLNonTransientConnectionException e) {
+        } catch (SQLNonTransientConnectionException | NullPointerException e) {
             songManager.goLocal();
         }
     }
@@ -161,7 +161,7 @@ public class SongDBDAO implements SongDAOInterface {
             st.setDouble(5, modified.getDuration());
             st.setInt(6, modified.getId());
             st.executeUpdate();
-        } catch (SQLNonTransientConnectionException e) {
+        } catch (SQLNonTransientConnectionException | NullPointerException e) {
             songManager.goLocal();
         }
     }
@@ -196,7 +196,7 @@ public class SongDBDAO implements SongDAOInterface {
             } else {
                 System.out.println(String.format("Couldn't find the song: %s", searchQuery));
             }
-        } catch (SQLNonTransientConnectionException e) {
+        } catch (SQLNonTransientConnectionException | NullPointerException e) {
             songManager.goLocal();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -243,7 +243,7 @@ public class SongDBDAO implements SongDAOInterface {
                 }
             }
             return temp;
-        } catch (SQLNonTransientConnectionException e) {
+        } catch (SQLNonTransientConnectionException | NullPointerException e) {
             songManager.goLocal();
             return temp;
         }

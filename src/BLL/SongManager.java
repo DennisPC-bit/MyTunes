@@ -26,7 +26,6 @@ public class SongManager {
      */
     public void goLocal() {
         songDAO = new SongLocalDAO();
-        mainController.load();
     }
 
 

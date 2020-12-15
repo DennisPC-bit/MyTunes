@@ -221,7 +221,7 @@ public class MainViewController implements Initializable {
             this.songsTable.setItems(FXCollections.observableList(songManager.loadSongs()));
             songsTable.getSelectionModel().select(index);
         } catch (Exception exception) {
-            exception.printStackTrace();
+            System.out.println("could not load song table");
         }
     }
 
@@ -234,7 +234,7 @@ public class MainViewController implements Initializable {
             this.songsOnPlaylistTable.setItems(FXCollections.observableList(playlistManager.loadSongsOnPlaylist(selectedPlaylist.getPlaylistId())));
             songsOnPlaylistTable.getSelectionModel().select(index);
         } catch (Exception exception) {
-            exception.printStackTrace();
+            System.out.println("could not load songs on playlist table");
         }
     }
 
@@ -247,7 +247,7 @@ public class MainViewController implements Initializable {
             this.playlistTable.setItems(FXCollections.observableList(playlistManager.loadPlaylists()));
             playlistTable.getSelectionModel().select(index);
         } catch (Exception exception) {
-            exception.printStackTrace();
+            System.out.println("could not load playlist table");
         }
     }
 

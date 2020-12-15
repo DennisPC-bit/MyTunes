@@ -32,7 +32,6 @@ public class PlaylistManager {
     public void goLocal() {
         inputAlert.showAlert("Couldn't establish connection to the database. Your changes will be done locally.");
         playlistDAO = new PlaylistLocalDAO();
-        mainController.load();
     }
 
     /**
